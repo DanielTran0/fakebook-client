@@ -5,62 +5,59 @@ import { Button, TextField } from '@material-ui/core';
 
 import { sessionRequests } from '../../util/axiosRequests';
 import { setUserDataProp } from '../../util/customPropTypes';
+import useStyles from '../../util/useStylesHook';
 
 const SignIn = ({ setUserData }) => {
 	const { setUser, setToken } = setUserData;
 	const [formValues, setFormValues] = useState({ email: '', password: '' });
-	const [emailError, setEmailError] = useState('');
-	const [passwordError, setPasswordError] = useState('');
+	const [formErrors, setFormErrors] = useState({});
+	const classes = useStyles();
 
 	const handleFormChange = (e) => {
 		const { name, value } = e.target;
 		setFormValues({ ...formValues, [name]: value });
 	};
 
-	const handleFormErrors = (responseError) => {
-		let error = false;
+	const checkFormForErrors = (responseError) => {
+		let errorMsgs = {};
 
-		if (!formValues.email) {
-			error = true;
-			setEmailError('Required Field');
-		}
-		if (!formValues.password) {
-			error = true;
-			setPasswordError('Required Field');
-		}
+		if (!formValues.email) errorMsgs = { email: 'Required field' };
+		if (!formValues.password)
+			errorMsgs = { ...errorMsgs, password: 'Required field' };
 		if (responseError?.[0].param === 'email')
-			setEmailError(responseError[0].msg);
+			errorMsgs = { ...errorMsgs, email: responseError[0].msg };
 		if (responseError?.[0].param === 'password')
-			setPasswordError(responseError[0].msg);
+			errorMsgs = { ...errorMsgs, password: responseError[0].msg };
+		if (Object.keys(errorMsgs).length === 0) return false;
 
-		return error;
+		setFormErrors(errorMsgs);
+
+		return true;
 	};
 
 	const handleFormSubmit = async (e) => {
 		e.preventDefault();
+		setFormErrors({});
 
-		setEmailError('');
-		setPasswordError('');
-
-		if (handleFormErrors()) return null;
+		if (checkFormForErrors()) return null;
 
 		try {
 			const loginResponse = await sessionRequests.postNewSession({
 				...formValues,
 			});
 			const { user, token } = loginResponse.data;
-			console.log(loginResponse);
 
 			setUser(user);
 			return setToken(token);
 		} catch (error) {
-			return handleFormErrors(error.response.data.errors);
+			return checkFormForErrors(error.response.data.errors);
 		}
 	};
 
 	return (
 		<form noValidate onSubmit={handleFormSubmit}>
 			<TextField
+				className={classes.formField}
 				variant='outlined'
 				label='Email'
 				name='email'
@@ -69,10 +66,11 @@ const SignIn = ({ setUserData }) => {
 				fullWidth
 				value={formValues.email}
 				onChange={handleFormChange}
-				error={Boolean(emailError)}
-				helperText={emailError}
+				error={Boolean(formErrors.email)}
+				helperText={formErrors.email}
 			/>
 			<TextField
+				className={classes.formField}
 				variant='outlined'
 				label='Password'
 				name='password'
@@ -81,10 +79,16 @@ const SignIn = ({ setUserData }) => {
 				fullWidth
 				value={formValues.password}
 				onChange={handleFormChange}
-				error={Boolean(passwordError)}
-				helperText={passwordError}
+				error={Boolean(formErrors.password)}
+				helperText={formErrors.password}
 			/>
-			<Button variant='contained' type='submit' color='primary' fullWidth>
+			<Button
+				className={classes.formField}
+				variant='contained'
+				type='submit'
+				color='primary'
+				fullWidth
+			>
 				Log In
 			</Button>
 		</form>
