@@ -16,4 +16,14 @@ const setUserDataProp = {
 	setToken: PropTypes.func.isRequired,
 };
 
-export { userDataProp, setUserDataProp };
+const postProp = {
+	_id: PropTypes.string.isRequired,
+	text: PropTypes.string.isRequired,
+	postImage: PropTypes.string.isRequired,
+	date: PropTypes.string.isRequired,
+	comments: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+	likes: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+	user: PropTypes.shape(userDataProp.user),
+};
+
+export { userDataProp, setUserDataProp, postProp };

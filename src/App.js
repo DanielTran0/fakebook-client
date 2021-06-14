@@ -1,9 +1,11 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
+import AuthenticatedRoutes from './AuthenticatedRoutes';
 import Login from './pages/Login';
 
 import useStateWithLocalStorage from './util/localStorageHook';
+import './styles/App.css';
 
 const App = () => {
 	const [user, setUser] = useStateWithLocalStorage('fakebook-user');
@@ -11,8 +13,6 @@ const App = () => {
 
 	const userData = { user, token };
 	const setUserData = { setUser, setToken };
-
-	console.log(userData);
 
 	return (
 		<div className='app'>
@@ -29,6 +29,7 @@ const App = () => {
 							/>
 						)}
 					/>
+					<AuthenticatedRoutes userData={userData} setUserData={setUserData} />
 				</Switch>
 			</Router>
 		</div>

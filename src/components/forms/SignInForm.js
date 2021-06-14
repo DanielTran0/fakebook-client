@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
-import { Button, TextField } from '@material-ui/core';
+import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
 
 import { sessionRequests } from '../../util/axiosRequests';
 import { setUserDataProp } from '../../util/customPropTypes';
@@ -31,7 +32,6 @@ const SignIn = ({ setUserData }) => {
 		if (Object.keys(errorMsgs).length === 0) return false;
 
 		setFormErrors(errorMsgs);
-
 		return true;
 	};
 

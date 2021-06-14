@@ -1,16 +1,14 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
-import {
-	Button,
-	Card,
-	CardContent,
-	CardHeader,
-	Container,
-	Divider,
-	Modal,
-	TextField,
-} from '@material-ui/core';
+import Button from '@material-ui/core/Button';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import CardHeader from '@material-ui/core/CardHeader';
+import Container from '@material-ui/core/Container';
+import Divider from '@material-ui/core/Divider';
+import Modal from '@material-ui/core/Modal';
+import TextField from '@material-ui/core/TextField';
 
 import { sessionRequests, userRequests } from '../../util/axiosRequests';
 import { setUserDataProp } from '../../util/customPropTypes';
@@ -57,7 +55,6 @@ const ModalSignUpForm = ({ setUserData }) => {
 
 		if (responseError) {
 			responseError.forEach((error) => {
-				console.log(error);
 				errorMsgs = {
 					...errorMsgs,
 					[error.param]: `${
@@ -70,7 +67,6 @@ const ModalSignUpForm = ({ setUserData }) => {
 		if (Object.keys(errorMsgs).length === 0) return false;
 
 		setFormErrors(errorMsgs);
-
 		return true;
 	};
 
@@ -82,7 +78,6 @@ const ModalSignUpForm = ({ setUserData }) => {
 
 		try {
 			await userRequests.postNewUser({ ...formValues });
-
 			const { email, password } = formValues;
 			const loginResponse = await sessionRequests.postNewSession({
 				email,
@@ -101,6 +96,7 @@ const ModalSignUpForm = ({ setUserData }) => {
 		<Container maxWidth='sm' className={classes.modal}>
 			<Card>
 				<CardHeader title='Sign Up' subheader='It’s quick and easy.' />
+
 				<Divider />
 				<CardContent>
 					<form noValidate onSubmit={handleFormSubmit}>
@@ -167,6 +163,7 @@ const ModalSignUpForm = ({ setUserData }) => {
 							error={Boolean(formErrors.passwordConfirmation)}
 							helperText={formErrors.passwordConfirmation}
 						/>
+
 						<Button variant='contained' type='submit' color='primary' fullWidth>
 							Sign Up
 						</Button>
@@ -177,7 +174,7 @@ const ModalSignUpForm = ({ setUserData }) => {
 	);
 
 	return (
-		<div>
+		<div className='modal-sign-up'>
 			<Button variant='contained' onClick={handleModalOpen}>
 				Create New Account
 			</Button>

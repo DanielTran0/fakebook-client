@@ -4,7 +4,6 @@ import axios from './axiosRequests';
 
 const useStateWithLocalStorage = (localStorageKey) => {
 	const initialState = localStorageKey === 'fakebook-user' ? {} : '';
-
 	const [value, setValue] = useState(
 		JSON.parse(localStorage.getItem(localStorageKey)) || initialState
 	);

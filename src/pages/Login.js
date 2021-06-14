@@ -2,7 +2,10 @@ import React from 'react';
 import { Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
-import { Container, Divider, Typography } from '@material-ui/core';
+import Container from '@material-ui/core/Container';
+import Divider from '@material-ui/core/Divider';
+import Typography from '@material-ui/core/Typography';
+
 import SignInForm from '../components/forms/SignInForm';
 import ModalSignUpForm from '../components/forms/ModalSignUpForm';
 

@@ -11,6 +11,17 @@ const useStyles = makeStyles((theme) => {
 			left: '50%',
 			transform: `translate(-50%, -50%)`,
 		},
+		postImage: {
+			height: 100,
+			width: 100,
+		},
+		postButtons: {
+			margin: 'auto',
+		},
+		postInfo: {
+			display: 'flex',
+			justifyContent: 'space-between',
+		},
 	};
 });
 
