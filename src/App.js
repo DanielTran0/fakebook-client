@@ -29,6 +29,7 @@ const App = () => {
 							/>
 						)}
 					/>
+
 					<AuthenticatedRoutes userData={userData} setUserData={setUserData} />
 				</Switch>
 			</Router>

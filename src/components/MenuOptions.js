@@ -98,6 +98,7 @@ const MenuOptions = ({ isPost, post, allPosts, setAllPosts }) => {
 						subheader={`Are you sure you want to delete this ${phrasing}?`}
 					/>
 				)}
+
 				<Divider />
 
 				{deleteError[0] && (
@@ -105,6 +106,7 @@ const MenuOptions = ({ isPost, post, allPosts, setAllPosts }) => {
 						<Typography color='secondary'>{deleteError[0].msg}</Typography>
 					</Container>
 				)}
+
 				{isFormTypeEdit ? (
 					<CardContent>{editForm}</CardContent>
 				) : (
@@ -130,6 +132,7 @@ const MenuOptions = ({ isPost, post, allPosts, setAllPosts }) => {
 			<IconButton onClick={handleMenuOpen}>
 				<MoreHorizOutlinedIcon />
 			</IconButton>
+
 			<Menu
 				anchorEl={menuAnchor}
 				open={Boolean(menuAnchor)}
@@ -142,6 +145,7 @@ const MenuOptions = ({ isPost, post, allPosts, setAllPosts }) => {
 					Delete {phrasing}
 				</MenuItem>
 			</Menu>
+
 			<Modal open={isModalOpen} onClose={handleModalClose}>
 				{modalBody}
 			</Modal>

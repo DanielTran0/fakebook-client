@@ -16,20 +16,50 @@ const CommentForm = ({ post, allPosts, setAllPosts }) => {
 		setFormValues({ ...formValues, [name]: value });
 	};
 
+	const checkFormForErrors = (responseError) => {
+		let errorMsgs = {};
+
+		if (responseError) {
+			responseError.forEach((error) => {
+				errorMsgs = {
+					...errorMsgs,
+					[error.param]: `${
+						errorMsgs[error.param] ? errorMsgs[error.param] : ''
+					} ${error.msg || error.message}`,
+				};
+			});
+		}
+
+		if (Object.keys(errorMsgs).length === 0) return false;
+
+		setFormErrors(errorMsgs);
+		return true;
+	};
+
 	const handleFormSubmit = async (e) => {
 		e.preventDefault();
+		setFormErrors({});
+
+		if (checkFormForErrors()) return null;
 
 		try {
 			const commentResponse = await commentRequests.postNewComment(post._id, {
 				...formValues,
 			});
 			const { comments } = commentResponse.data.post;
+			const newAllPosts = [...allPosts];
+			const updatedPostIndex = newAllPosts.findIndex(
+				(singlePost) => singlePost._id === post._id
+			);
 
-			// setCommentsArray(newComments);
-			// setCommentFormValues({ text: '' });
-			// setCommentFormErrors([]);
+			if (updatedPostIndex === -1) return null;
+
+			newAllPosts[updatedPostIndex].comments = comments;
+
+			setAllPosts(newAllPosts);
+			return setFormValues({ text: '' });
 		} catch (error) {
-			// setCommentFormErrors(error.response.data.errors);
+			return checkFormForErrors(error.response.data.errors);
 		}
 	};
 

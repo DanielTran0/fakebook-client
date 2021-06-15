@@ -98,6 +98,7 @@ const ModalSignUpForm = ({ setUserData }) => {
 				<CardHeader title='Sign Up' subheader='It’s quick and easy.' />
 
 				<Divider />
+
 				<CardContent>
 					<form noValidate onSubmit={handleFormSubmit}>
 						<TextField

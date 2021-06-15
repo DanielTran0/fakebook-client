@@ -24,12 +24,14 @@ const Comments = ({ userData, post, allPosts, setAllPosts }) => {
 			<Container className={classes.bottomSpacing} key={comment._id}>
 				<div className={classes.flex}>
 					<Avatar src={setUserImageSource(user)} />
+
 					<Container>
 						<div className={classes.flex}>
 							<div className={classes.commentText}>
 								<Typography variant='subtitle2'>{`${user.firstName} ${user.lastName}`}</Typography>
 								<Typography>{text}</Typography>
 							</div>
+
 							{user._id === userData.user._id && (
 								<div className={classes.commentOptions}>
 									<MenuOptions
@@ -41,6 +43,7 @@ const Comments = ({ userData, post, allPosts, setAllPosts }) => {
 								</div>
 							)}
 						</div>
+
 						<div className={classes.commentFooter}>
 							<Button
 								className={classes.commentLikeButton}
