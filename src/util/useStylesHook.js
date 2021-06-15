@@ -8,6 +8,9 @@ const useStyles = makeStyles((theme) => {
 		bottomSpacing: {
 			marginBottom: theme.spacing(2),
 		},
+		sideSpacing: {
+			marginRight: theme.spacing(1),
+		},
 		buttonSpaceEnd: {
 			display: 'flex',
 			justifyContent: 'space-between',
@@ -43,6 +46,11 @@ const useStyles = makeStyles((theme) => {
 			display: 'flex',
 			alignItems: 'center',
 			marginLeft: -10,
+		},
+		commentLikesNumber: {
+			display: 'flex',
+			position: 'absolute',
+			alignSelf: 'flex-end',
 		},
 	};
 });

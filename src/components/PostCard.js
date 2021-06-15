@@ -112,6 +112,7 @@ const PostCard = ({ userData, post, allPosts, setAllPosts }) => {
 					post={post}
 					allPosts={allPosts}
 					setAllPosts={setAllPosts}
+					isPost
 				/>
 				<Button
 					className={classes.postButtons}
