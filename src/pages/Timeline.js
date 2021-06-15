@@ -38,6 +38,7 @@ const Timeline = ({ userData }) => {
 
 	return (
 		<div className='timeline'>
+			{/* TODO make mobile post touch end of screen */}
 			<Container maxWidth='sm'>{postCardComponents}</Container>
 		</div>
 	);

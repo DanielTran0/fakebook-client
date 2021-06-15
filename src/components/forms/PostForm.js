@@ -86,13 +86,13 @@ const PostForm = ({ post, handleModalClose, allPosts, setAllPosts }) => {
 	return (
 		<form noValidate onSubmit={handleFormSubmit}>
 			{formErrors.general && (
-				<Typography className={classes.formField} color='secondary'>
+				<Typography className={classes.bottomSpacing} color='secondary'>
 					{formErrors.general}
 				</Typography>
 			)}
 
 			<TextField
-				className={classes.formField}
+				className={classes.bottomSpacing}
 				variant='outlined'
 				label='Text'
 				name='text'
@@ -104,7 +104,7 @@ const PostForm = ({ post, handleModalClose, allPosts, setAllPosts }) => {
 				onChange={handleFormChange}
 			/>
 
-			<FormControl className={classes.formField}>
+			<FormControl className={classes.bottomSpacing}>
 				<FormLabel>Post Image</FormLabel>
 				<RadioGroup
 					name='lastImage'
@@ -133,23 +133,26 @@ const PostForm = ({ post, handleModalClose, allPosts, setAllPosts }) => {
 							hidden
 						/>
 					</Button>
-					<Typography className={classes.formField} noWrap>
+					<Typography className={classes.bottomSpacing} noWrap>
 						{imageFile && imageFile.name}
 					</Typography>
 				</div>
 			)}
 
-			<Divider className={classes.formField} />
-			<Button variant='contained' type='submit' onClick={handleModalClose}>
-				Cancel
-			</Button>
-			<Button
-				variant='contained'
-				type='submit'
-				startIcon={<SaveOutlinedIcon />}
-			>
-				Save
-			</Button>
+			<Divider className={classes.bottomSpacing} />
+
+			<div className={classes.buttonSpaceEnd}>
+				<Button variant='contained' type='submit' onClick={handleModalClose}>
+					Cancel
+				</Button>
+				<Button
+					variant='contained'
+					type='submit'
+					startIcon={<SaveOutlinedIcon />}
+				>
+					Save
+				</Button>
+			</div>
 		</form>
 	);
 };

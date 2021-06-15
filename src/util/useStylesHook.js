@@ -2,8 +2,17 @@ import { makeStyles } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => {
 	return {
-		formField: {
+		flex: {
+			display: 'flex',
+		},
+		bottomSpacing: {
 			marginBottom: theme.spacing(2),
+		},
+		buttonSpaceEnd: {
+			display: 'flex',
+			justifyContent: 'space-between',
+			marginLeft: 10,
+			marginRight: 10,
 		},
 		modal: {
 			position: 'absolute',
@@ -11,16 +20,29 @@ const useStyles = makeStyles((theme) => {
 			left: '50%',
 			transform: `translate(-50%, -50%)`,
 		},
-		postImage: {
-			height: 100,
-			width: 100,
+		postSpacing: {
+			marginBottom: theme.spacing(4),
 		},
 		postButtons: {
 			margin: 'auto',
 		},
-		postInfo: {
+		commentOptions: {
+			marginTop: -15,
+			marginRight: -35,
+		},
+		commentText: {
+			display: 'inline-block',
+			padding: 8,
+			borderRadius: 10,
+			backgroundColor: '#ebebeb',
+			marginTop: -5,
+			marginLeft: -10,
+			marginBottom: 5,
+		},
+		commentFooter: {
 			display: 'flex',
-			justifyContent: 'space-between',
+			alignItems: 'center',
+			marginLeft: -10,
 		},
 	};
 });

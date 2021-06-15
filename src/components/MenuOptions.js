@@ -12,13 +12,14 @@ import IconButton from '@material-ui/core/IconButton';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import Modal from '@material-ui/core/Modal';
+import Typography from '@material-ui/core/Typography';
 
 import DeleteOutlineOutlinedIcon from '@material-ui/icons/DeleteOutlineOutlined';
 import MoreHorizOutlinedIcon from '@material-ui/icons/MoreHorizOutlined';
 
 import PostForm from './forms/PostForm';
 
-import { postRequests, commentRequests } from '../util/axiosRequests';
+import { postRequests } from '../util/axiosRequests';
 import { postProp } from '../util/customPropTypes';
 import useStyles from '../util/useStylesHook';
 
@@ -26,7 +27,10 @@ const MenuOptions = ({ isPost, post, allPosts, setAllPosts }) => {
 	const [menuAnchor, setMenuAnchor] = useState(null);
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [isFormTypeEdit, setIsFormTypeEdit] = useState(true);
+	const [deleteError, setDeleteError] = useState([]);
 	const classes = useStyles();
+
+	console.log(deleteError);
 
 	const handleMenuOpen = (e) => {
 		setMenuAnchor(e.currentTarget);
@@ -39,6 +43,7 @@ const MenuOptions = ({ isPost, post, allPosts, setAllPosts }) => {
 	const handleModalOpen = (isEdit) => {
 		handleMenuClose();
 		setIsFormTypeEdit(isEdit);
+		setDeleteError([]);
 		setIsModalOpen(true);
 	};
 
@@ -60,8 +65,7 @@ const MenuOptions = ({ isPost, post, allPosts, setAllPosts }) => {
 				newAllPosts.splice(deletePostIndex, 1);
 				return setAllPosts(newAllPosts);
 			} catch (error) {
-				// TODO handle error
-				return console.log(error.response.data.errors);
+				return setDeleteError(error.response.data.errors);
 			}
 		}
 
@@ -96,10 +100,15 @@ const MenuOptions = ({ isPost, post, allPosts, setAllPosts }) => {
 				)}
 				<Divider />
 
+				{deleteError[0] && (
+					<Container className={classes.bottomSpacing}>
+						<Typography color='secondary'>{deleteError[0].msg}</Typography>
+					</Container>
+				)}
 				{isFormTypeEdit ? (
 					<CardContent>{editForm}</CardContent>
 				) : (
-					<CardActions>
+					<CardActions className={classes.buttonSpaceEnd}>
 						<Button variant='contained' onClick={handleModalClose}>
 							Cancel
 						</Button>

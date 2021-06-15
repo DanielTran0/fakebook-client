@@ -1,12 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
+import Container from '@material-ui/core/Container';
 import Divider from '@material-ui/core/Divider';
 import Typography from '@material-ui/core/Typography';
 
@@ -14,6 +14,8 @@ import ChatBubbleOutlineOutlinedIcon from '@material-ui/icons/ChatBubbleOutlineO
 import ThumbUpAltOutlinedIcon from '@material-ui/icons/ThumbUpAltOutlined';
 
 import MenuOptions from './MenuOptions';
+import Comments from './Comments';
+import CommentForm from './forms/CommentForm';
 
 import formatDate from '../util/formatDate';
 import setUserImageSource from '../util/setUserImageSource';
@@ -23,29 +25,41 @@ import useStyles from '../util/useStylesHook';
 const PostCard = ({ userData, post, allPosts, setAllPosts }) => {
 	const { user } = userData;
 	const { text, postImage, date, comments, likes, user: postUser } = post;
+	const [isCommentsOpen, setIsCommentsOpen] = useState(true);
+	const [isAddCommentOpen, setIsAddCommentsOpen] = useState(true);
 	const classes = useStyles();
 
+	const handleCommentOpenToggle = () => {
+		setIsCommentsOpen(!isCommentsOpen);
+	};
+
+	const handleAddCommentOpenToggle = () => {
+		setIsAddCommentsOpen(!isAddCommentOpen);
+	};
+
 	return (
-		<Card>
+		<Card className={classes.postSpacing}>
 			<CardHeader
 				// TODO linkable image and name
 				avatar={<Avatar src={setUserImageSource(user)} />}
 				title={`${postUser.firstName} ${postUser.lastName}`}
 				subheader={formatDate(date)}
 				action={
-					<MenuOptions
-						isPost
-						post={post}
-						allPosts={allPosts}
-						setAllPosts={setAllPosts}
-					/>
+					post.user._id === userData._id && (
+						<MenuOptions
+							isPost
+							post={post}
+							allPosts={allPosts}
+							setAllPosts={setAllPosts}
+						/>
+					)
 				}
 			/>
 
 			{text && (
-				<CardContent>
+				<Container>
 					<Typography>{text}</Typography>
-				</CardContent>
+				</Container>
 			)}
 
 			{postImage && (
@@ -56,27 +70,25 @@ const PostCard = ({ userData, post, allPosts, setAllPosts }) => {
 			)}
 
 			{likes.length || comments.length ? (
-				<CardContent className={classes.postInfo}>
+				<div className={classes.buttonSpaceEnd}>
 					<div>
-						<Button
-							className={classes.postButtons}
-							startIcon={<ThumbUpAltOutlinedIcon />}
-						>
+						<Button startIcon={<ThumbUpAltOutlinedIcon />}>
 							{likes.length}
 						</Button>
 					</div>
 					<div>
 						<Button
-							className={classes.postButtons}
 							startIcon={<ChatBubbleOutlineOutlinedIcon />}
+							onClick={handleCommentOpenToggle}
 						>
 							{comments.length}
 						</Button>
 					</div>
-				</CardContent>
+				</div>
 			) : null}
 
 			<Divider variant='middle' />
+
 			<CardActions>
 				<Button
 					className={classes.postButtons}
@@ -87,11 +99,35 @@ const PostCard = ({ userData, post, allPosts, setAllPosts }) => {
 				<Button
 					className={classes.postButtons}
 					startIcon={<ChatBubbleOutlineOutlinedIcon />}
+					onClick={handleAddCommentOpenToggle}
 				>
 					Comment
 				</Button>
 			</CardActions>
-			<Divider variant='middle' />
+
+			{((isCommentsOpen && post.comments.length > 0) || isAddCommentOpen) && (
+				<Divider variant='middle' className={classes.bottomSpacing} />
+			)}
+
+			{isCommentsOpen && (
+				<Comments
+					userData={userData}
+					post={post}
+					allPosts={allPosts}
+					setAllPosts={setAllPosts}
+				/>
+			)}
+
+			{isAddCommentOpen && (
+				<Container>
+					<CommentForm
+						userData={userData}
+						post={post}
+						allPosts={allPosts}
+						setAllPosts={setAllPosts}
+					/>
+				</Container>
+			)}
 		</Card>
 	);
 };

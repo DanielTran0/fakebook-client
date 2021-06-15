@@ -57,7 +57,7 @@ const SignIn = ({ setUserData }) => {
 	return (
 		<form noValidate onSubmit={handleFormSubmit}>
 			<TextField
-				className={classes.formField}
+				className={classes.bottomSpacing}
 				variant='outlined'
 				label='Email'
 				name='email'
@@ -70,7 +70,7 @@ const SignIn = ({ setUserData }) => {
 				helperText={formErrors.email}
 			/>
 			<TextField
-				className={classes.formField}
+				className={classes.bottomSpacing}
 				variant='outlined'
 				label='Password'
 				name='password'
@@ -83,7 +83,7 @@ const SignIn = ({ setUserData }) => {
 				helperText={formErrors.password}
 			/>
 			<Button
-				className={classes.formField}
+				className={classes.bottomSpacing}
 				variant='contained'
 				type='submit'
 				color='primary'

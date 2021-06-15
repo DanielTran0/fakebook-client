@@ -31,7 +31,9 @@ const Login = ({ userData, setUserData }) => {
 
 			<Container maxWidth='xs'>
 				<SignInForm setUserData={setUserData} />
-				<Divider className={classes.formField} />
+
+				<Divider className={classes.bottomSpacing} />
+
 				<ModalSignUpForm setUserData={setUserData} />
 			</Container>
 		</div>

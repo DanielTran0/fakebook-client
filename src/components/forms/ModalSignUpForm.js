@@ -101,7 +101,7 @@ const ModalSignUpForm = ({ setUserData }) => {
 				<CardContent>
 					<form noValidate onSubmit={handleFormSubmit}>
 						<TextField
-							className={classes.formField}
+							className={classes.bottomSpacing}
 							variant='outlined'
 							label='First name'
 							name='firstName'
@@ -113,7 +113,7 @@ const ModalSignUpForm = ({ setUserData }) => {
 							helperText={formErrors.firstName}
 						/>
 						<TextField
-							className={classes.formField}
+							className={classes.bottomSpacing}
 							variant='outlined'
 							label='Last name'
 							name='lastName'
@@ -125,7 +125,7 @@ const ModalSignUpForm = ({ setUserData }) => {
 							helperText={formErrors.lastName}
 						/>
 						<TextField
-							className={classes.formField}
+							className={classes.bottomSpacing}
 							variant='outlined'
 							label='Email'
 							name='email'
@@ -138,7 +138,7 @@ const ModalSignUpForm = ({ setUserData }) => {
 							helperText={formErrors.email}
 						/>
 						<TextField
-							className={classes.formField}
+							className={classes.bottomSpacing}
 							variant='outlined'
 							label='Password'
 							name='password'
@@ -151,7 +151,7 @@ const ModalSignUpForm = ({ setUserData }) => {
 							helperText={formErrors.password}
 						/>
 						<TextField
-							className={classes.formField}
+							className={classes.bottomSpacing}
 							variant='outlined'
 							label='Password confirmation'
 							name='passwordConfirmation'
