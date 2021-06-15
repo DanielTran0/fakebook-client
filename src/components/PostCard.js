@@ -14,7 +14,7 @@ import ChatBubbleOutlineOutlinedIcon from '@material-ui/icons/ChatBubbleOutlineO
 import ThumbUpAltOutlinedIcon from '@material-ui/icons/ThumbUpAltOutlined';
 
 import MenuOptions from './MenuOptions';
-import Comments from './Comments';
+import Comment from './Comment';
 import CommentForm from './forms/CommentForm';
 
 import formatDate from '../util/formatDate';
@@ -27,6 +27,7 @@ const PostCard = ({ userData, post, allPosts, setAllPosts }) => {
 	const { text, postImage, date, comments, likes, user: postUser } = post;
 	const [isCommentsOpen, setIsCommentsOpen] = useState(true);
 	const [isAddCommentOpen, setIsAddCommentsOpen] = useState(true);
+	const [showMultipleComments, setShowMultipleComments] = useState(false);
 	const classes = useStyles();
 
 	const handleCommentOpenToggle = () => {
@@ -36,6 +37,21 @@ const PostCard = ({ userData, post, allPosts, setAllPosts }) => {
 	const handleAddCommentOpenToggle = () => {
 		setIsAddCommentsOpen(!isAddCommentOpen);
 	};
+
+	const handleShowMoreCommentsToggle = () => {
+		setShowMultipleComments(!showMultipleComments);
+	};
+
+	const commentComponents = post.comments.map((comment) => (
+		<Comment
+			userData={userData}
+			post={post}
+			allPosts={allPosts}
+			setAllPosts={setAllPosts}
+			comment={comment}
+			key={comment._id}
+		/>
+	));
 
 	return (
 		<Card className={classes.postSpacing}>
@@ -109,14 +125,18 @@ const PostCard = ({ userData, post, allPosts, setAllPosts }) => {
 				<Divider variant='middle' className={classes.bottomSpacing} />
 			)}
 
-			{isCommentsOpen && (
-				<Comments
-					userData={userData}
-					post={post}
-					allPosts={allPosts}
-					setAllPosts={setAllPosts}
-				/>
+			{isCommentsOpen && comments.length > 1 && !showMultipleComments && (
+				<Container>
+					<Button
+						className={classes.bottomSpacing}
+						onClick={handleShowMoreCommentsToggle}
+					>{`View ${comments.length - 1} more comments`}</Button>
+				</Container>
 			)}
+
+			{isCommentsOpen && showMultipleComments
+				? commentComponents
+				: isCommentsOpen && commentComponents[post.comments.length - 1]}
 
 			{isAddCommentOpen && (
 				<Container>

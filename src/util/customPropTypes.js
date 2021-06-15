@@ -26,4 +26,12 @@ const postProp = {
 	user: PropTypes.shape(userDataProp.user),
 };
 
-export { userDataProp, setUserDataProp, postProp };
+const commentProp = {
+	_id: PropTypes.string.isRequired,
+	text: PropTypes.string.isRequired,
+	date: PropTypes.string.isRequired,
+	user: PropTypes.shape(userDataProp.user).isRequired,
+	likes: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+};
+
+export { userDataProp, setUserDataProp, postProp, commentProp };

@@ -19,18 +19,16 @@ import MoreHorizOutlinedIcon from '@material-ui/icons/MoreHorizOutlined';
 
 import PostForm from './forms/PostForm';
 
-import { postRequests } from '../util/axiosRequests';
-import { postProp } from '../util/customPropTypes';
+import { postRequests, commentRequests } from '../util/axiosRequests';
+import { postProp, commentProp } from '../util/customPropTypes';
 import useStyles from '../util/useStylesHook';
 
-const MenuOptions = ({ isPost, post, allPosts, setAllPosts }) => {
+const MenuOptions = ({ isPost, post, allPosts, setAllPosts, comment }) => {
 	const [menuAnchor, setMenuAnchor] = useState(null);
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [isFormTypeEdit, setIsFormTypeEdit] = useState(true);
 	const [deleteError, setDeleteError] = useState([]);
 	const classes = useStyles();
-
-	console.log(deleteError);
 
 	const handleMenuOpen = (e) => {
 		setMenuAnchor(e.currentTarget);
@@ -69,9 +67,25 @@ const MenuOptions = ({ isPost, post, allPosts, setAllPosts }) => {
 			}
 		}
 
-		// TODO comment delete
+		try {
+			const deleteResponse = await commentRequests.deleteComment(
+				post._id,
+				comment._id
+			);
+			const { comments } = deleteResponse.data.post;
+			const newAllPosts = [...allPosts];
+			const updatedPostIndex = newAllPosts.findIndex(
+				(singlePost) => singlePost._id === post._id
+			);
 
-		return null;
+			if (updatedPostIndex === -1) return null;
+
+			newAllPosts[updatedPostIndex].comments = comments;
+
+			return setAllPosts(newAllPosts);
+		} catch (error) {
+			return setDeleteError(error.response.data.errors);
+		}
 	};
 
 	const phrasing = isPost ? 'Post' : 'Comment';
@@ -154,10 +168,16 @@ const MenuOptions = ({ isPost, post, allPosts, setAllPosts }) => {
 };
 
 MenuOptions.propTypes = {
-	isPost: PropTypes.bool.isRequired,
+	isPost: PropTypes.bool,
 	post: PropTypes.shape(postProp).isRequired,
 	allPosts: PropTypes.arrayOf(PropTypes.shape(postProp)).isRequired,
 	setAllPosts: PropTypes.func.isRequired,
+	comment: PropTypes.shape(commentProp),
+};
+
+MenuOptions.defaultProps = {
+	isPost: false,
+	comment: {},
 };
 
 export default MenuOptions;
