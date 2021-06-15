@@ -1,15 +1,21 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 
 import { commentRequests } from '../../util/axiosRequests';
-import { postProp } from '../../util/customPropTypes';
+import useStyles from '../../util/useStylesHook';
+import { postProp, commentProp } from '../../util/customPropTypes';
 
-const CommentForm = ({ post, allPosts, setAllPosts }) => {
+const CommentForm = ({ post, allPosts, setAllPosts, comment }) => {
 	const [formValues, setFormValues] = useState({ text: '' });
 	const [formErrors, setFormErrors] = useState({});
+	const classes = useStyles();
+
+	useEffect(() => {
+		if (comment) setFormValues({ text: comment.text });
+	}, [comment]);
 
 	const handleFormChange = (e) => {
 		const { name, value } = e.target;
@@ -42,6 +48,29 @@ const CommentForm = ({ post, allPosts, setAllPosts }) => {
 
 		if (checkFormForErrors()) return null;
 
+		if (comment) {
+			try {
+				const editResponse = await commentRequests.putEditComment(
+					post._id,
+					comment._id,
+					{ ...formValues }
+				);
+				const { comments } = editResponse.data.post;
+				const newAllPosts = [...allPosts];
+				const updatedPostIndex = newAllPosts.findIndex(
+					(singlePost) => singlePost._id === post._id
+				);
+
+				if (updatedPostIndex === -1) return null;
+
+				newAllPosts[updatedPostIndex].comments = comments;
+
+				return setAllPosts(newAllPosts);
+			} catch (error) {
+				return checkFormForErrors(error.response.data.errors);
+			}
+		}
+
 		try {
 			const commentResponse = await commentRequests.postNewComment(post._id, {
 				...formValues,
@@ -65,6 +94,12 @@ const CommentForm = ({ post, allPosts, setAllPosts }) => {
 
 	return (
 		<form noValidate onSubmit={handleFormSubmit}>
+			{formErrors.general && (
+				<Typography className={classes.bottomSpacing} color='secondary'>
+					{formErrors.general}
+				</Typography>
+			)}
+
 			<TextField
 				variant='outlined'
 				label='Write a comment...'
@@ -76,6 +111,7 @@ const CommentForm = ({ post, allPosts, setAllPosts }) => {
 				error={Boolean(formErrors.text)}
 				helperText={formErrors.text}
 			/>
+
 			<Typography variant='caption'>Press Enter to post.</Typography>
 		</form>
 	);
@@ -85,6 +121,11 @@ CommentForm.propTypes = {
 	post: PropTypes.shape(postProp).isRequired,
 	allPosts: PropTypes.arrayOf(PropTypes.shape(postProp)).isRequired,
 	setAllPosts: PropTypes.func.isRequired,
+	comment: PropTypes.shape(commentProp),
+};
+
+CommentForm.defaultProps = {
+	comment: null,
 };
 
 export default CommentForm;

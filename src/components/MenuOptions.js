@@ -18,6 +18,7 @@ import DeleteOutlineOutlinedIcon from '@material-ui/icons/DeleteOutlineOutlined'
 import MoreHorizOutlinedIcon from '@material-ui/icons/MoreHorizOutlined';
 
 import PostForm from './forms/PostForm';
+import CommentForm from './forms/CommentForm';
 
 import { postRequests, commentRequests } from '../util/axiosRequests';
 import { postProp, commentProp } from '../util/customPropTypes';
@@ -96,7 +97,14 @@ const MenuOptions = ({ isPost, post, allPosts, setAllPosts, comment }) => {
 			allPosts={allPosts}
 			setAllPosts={setAllPosts}
 		/>
-	) : null;
+	) : (
+		<CommentForm
+			post={post}
+			allPosts={allPosts}
+			setAllPosts={setAllPosts}
+			comment={comment}
+		/>
+	);
 
 	const modalBody = (
 		<Container maxWidth='sm' className={classes.modal}>
