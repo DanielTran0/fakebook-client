@@ -8,14 +8,14 @@ import { commentRequests } from '../../util/axiosRequests';
 import useStyles from '../../util/useStylesHook';
 import { postProp, commentProp } from '../../util/customPropTypes';
 
-const CommentForm = ({ post, allPosts, setAllPosts, comment }) => {
+const CommentForm = ({ post, allPosts, setAllPosts, comment, isEdit }) => {
 	const [formValues, setFormValues] = useState({ text: '' });
 	const [formErrors, setFormErrors] = useState({});
 	const classes = useStyles();
 
 	useEffect(() => {
-		if (comment) setFormValues({ text: comment.text });
-	}, [comment]);
+		if (isEdit) setFormValues({ text: comment.text });
+	}, [isEdit, comment]);
 
 	const handleFormChange = (e) => {
 		const { name, value } = e.target;
@@ -48,7 +48,7 @@ const CommentForm = ({ post, allPosts, setAllPosts, comment }) => {
 
 		if (checkFormForErrors()) return null;
 
-		if (comment) {
+		if (isEdit) {
 			try {
 				const editResponse = await commentRequests.putEditComment(
 					post._id,
@@ -122,10 +122,12 @@ CommentForm.propTypes = {
 	allPosts: PropTypes.arrayOf(PropTypes.shape(postProp)).isRequired,
 	setAllPosts: PropTypes.func.isRequired,
 	comment: PropTypes.shape(commentProp),
+	isEdit: PropTypes.bool,
 };
 
 CommentForm.defaultProps = {
 	comment: null,
+	isEdit: false,
 };
 
 export default CommentForm;

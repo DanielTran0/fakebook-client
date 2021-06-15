@@ -16,6 +16,7 @@ import ThumbUpAltOutlinedIcon from '@material-ui/icons/ThumbUpAltOutlined';
 import MenuOptions from './MenuOptions';
 import Comment from './Comment';
 import CommentForm from './forms/CommentForm';
+import LikeButton from './LikeButton';
 
 import formatDate from '../util/formatDate';
 import setUserImageSource from '../util/setUserImageSource';
@@ -61,7 +62,7 @@ const PostCard = ({ userData, post, allPosts, setAllPosts }) => {
 				title={`${postUser.firstName} ${postUser.lastName}`}
 				subheader={formatDate(date)}
 				action={
-					post.user._id === userData._id && (
+					post.user._id === userData.user._id && (
 						<MenuOptions
 							isPost
 							post={post}
@@ -106,12 +107,12 @@ const PostCard = ({ userData, post, allPosts, setAllPosts }) => {
 			<Divider variant='middle' />
 
 			<CardActions>
-				<Button
-					className={classes.postButtons}
-					startIcon={<ThumbUpAltOutlinedIcon />}
-				>
-					Like
-				</Button>
+				<LikeButton
+					userData={userData}
+					post={post}
+					allPosts={allPosts}
+					setAllPosts={setAllPosts}
+				/>
 				<Button
 					className={classes.postButtons}
 					startIcon={<ChatBubbleOutlineOutlinedIcon />}

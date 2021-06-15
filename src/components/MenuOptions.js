@@ -96,6 +96,7 @@ const MenuOptions = ({ isPost, post, allPosts, setAllPosts, comment }) => {
 			handleModalClose={handleModalClose}
 			allPosts={allPosts}
 			setAllPosts={setAllPosts}
+			isEdit
 		/>
 	) : (
 		<CommentForm
@@ -103,6 +104,7 @@ const MenuOptions = ({ isPost, post, allPosts, setAllPosts, comment }) => {
 			allPosts={allPosts}
 			setAllPosts={setAllPosts}
 			comment={comment}
+			isEdit
 		/>
 	);
 
@@ -185,7 +187,7 @@ MenuOptions.propTypes = {
 
 MenuOptions.defaultProps = {
 	isPost: false,
-	comment: {},
+	comment: null,
 };
 
 export default MenuOptions;

@@ -17,7 +17,13 @@ import { postRequests } from '../../util/axiosRequests';
 import useStyles from '../../util/useStylesHook';
 import { postProp } from '../../util/customPropTypes';
 
-const PostForm = ({ post, handleModalClose, allPosts, setAllPosts }) => {
+const PostForm = ({
+	post,
+	handleModalClose,
+	allPosts,
+	setAllPosts,
+	isEdit,
+}) => {
 	const { _id, text } = post;
 	const [formValues, setFormValues] = useState({ text, lastImage: 'keep' });
 	const [imageFile, setImageFile] = useState(null);
@@ -59,28 +65,33 @@ const PostForm = ({ post, handleModalClose, allPosts, setAllPosts }) => {
 
 		if (checkFormForErrors()) return null;
 
-		try {
-			const editResponse = await postRequests.putEditPost({
-				postId: _id,
-				text: formValues.text,
-				postImage: imageFile,
-				lastImage: formValues.lastImage,
-			});
-			const { post: updatedPost } = editResponse.data;
-			const newAllPosts = [...allPosts];
-			const updatedPostIndex = newAllPosts.findIndex(
-				(singlePost) => singlePost._id === _id
-			);
+		if (isEdit) {
+			try {
+				const editResponse = await postRequests.putEditPost({
+					postId: _id,
+					text: formValues.text,
+					postImage: imageFile,
+					lastImage: formValues.lastImage,
+				});
+				const { post: updatedPost } = editResponse.data;
+				const newAllPosts = [...allPosts];
+				const updatedPostIndex = newAllPosts.findIndex(
+					(singlePost) => singlePost._id === _id
+				);
 
-			if (updatedPostIndex === -1) return null;
+				if (updatedPostIndex === -1) return null;
 
-			newAllPosts[updatedPostIndex] = updatedPost;
+				newAllPosts[updatedPostIndex] = updatedPost;
 
-			setAllPosts(newAllPosts);
-			return handleModalClose();
-		} catch (error) {
-			return checkFormForErrors(error.response.data.errors);
+				setAllPosts(newAllPosts);
+				return handleModalClose();
+			} catch (error) {
+				return checkFormForErrors(error.response.data.errors);
+			}
 		}
+
+		// TODO POST create post submit
+		return null;
 	};
 
 	return (
@@ -104,24 +115,34 @@ const PostForm = ({ post, handleModalClose, allPosts, setAllPosts }) => {
 				onChange={handleFormChange}
 			/>
 
-			<FormControl className={classes.bottomSpacing}>
-				<FormLabel>Post Image</FormLabel>
-				<RadioGroup
-					name='lastImage'
-					value={formValues.lastImage}
-					onChange={handleFormChange}
-				>
-					<FormControlLabel
-						value='keep'
-						control={<Radio />}
-						label='Use previous image'
-					/>
-					<FormControlLabel value='' control={<Radio />} label='Use no image' />
-					<FormControlLabel value='new' control={<Radio />} label='New image' />
-				</RadioGroup>
-			</FormControl>
+			{isEdit && (
+				<FormControl className={classes.bottomSpacing}>
+					<FormLabel>Post Image</FormLabel>
+					<RadioGroup
+						name='lastImage'
+						value={formValues.lastImage}
+						onChange={handleFormChange}
+					>
+						<FormControlLabel
+							value='keep'
+							control={<Radio />}
+							label='Use previous image'
+						/>
+						<FormControlLabel
+							value=''
+							control={<Radio />}
+							label='Use no image'
+						/>
+						<FormControlLabel
+							value='new'
+							control={<Radio />}
+							label='New image'
+						/>
+					</RadioGroup>
+				</FormControl>
+			)}
 
-			{formValues.lastImage === 'new' && (
+			{isEdit && formValues.lastImage === 'new' && (
 				<div>
 					<Button variant='contained' component='label' fullWidth>
 						Upload Image
@@ -141,18 +162,20 @@ const PostForm = ({ post, handleModalClose, allPosts, setAllPosts }) => {
 
 			<Divider className={classes.bottomSpacing} />
 
-			<div className={classes.buttonSpaceEnd}>
-				<Button variant='contained' type='submit' onClick={handleModalClose}>
-					Cancel
-				</Button>
-				<Button
-					variant='contained'
-					type='submit'
-					startIcon={<SaveOutlinedIcon />}
-				>
-					Save
-				</Button>
-			</div>
+			{isEdit && (
+				<div className={classes.buttonSpaceEnd}>
+					<Button variant='contained' type='submit' onClick={handleModalClose}>
+						Cancel
+					</Button>
+					<Button
+						variant='contained'
+						type='submit'
+						startIcon={<SaveOutlinedIcon />}
+					>
+						Save
+					</Button>
+				</div>
+			)}
 		</form>
 	);
 };
@@ -162,6 +185,11 @@ PostForm.propTypes = {
 	handleModalClose: PropTypes.func.isRequired,
 	allPosts: PropTypes.arrayOf(PropTypes.shape(postProp)).isRequired,
 	setAllPosts: PropTypes.func.isRequired,
+	isEdit: PropTypes.bool,
+};
+
+PostForm.defaultProps = {
+	isEdit: false,
 };
 
 export default PostForm;
