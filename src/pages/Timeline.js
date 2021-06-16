@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
 import Container from '@material-ui/core/Container';
@@ -6,26 +6,10 @@ import useMediaQuery from '@material-ui/core/useMediaQuery';
 
 import PostCard from '../components/PostCard';
 
-import { postRequests } from '../util/axiosRequests';
-import { userDataProp } from '../util/customPropTypes';
+import { userDataProp, postProp } from '../util/customPropTypes';
 
-const Timeline = ({ userData }) => {
-	const [allPosts, setAllPosts] = useState([]);
+const Timeline = ({ userData, allPosts, setAllPosts }) => {
 	const isMobile = useMediaQuery('(max-width: 425px)');
-
-	const fetchData = async () => {
-		try {
-			const postsResponse = await postRequests.getUserAndFriendPosts();
-			setAllPosts(postsResponse.data.posts);
-		} catch (error) {
-			// TODO handle error
-			console.log(error.response);
-		}
-	};
-
-	useEffect(() => {
-		fetchData();
-	}, []);
 
 	const postCardComponents = allPosts.map((post) => (
 		<PostCard
@@ -48,6 +32,8 @@ const Timeline = ({ userData }) => {
 
 Timeline.propTypes = {
 	userData: PropTypes.shape(userDataProp).isRequired,
+	allPosts: PropTypes.arrayOf(PropTypes.shape(postProp)).isRequired,
+	setAllPosts: PropTypes.func.isRequired,
 };
 
 export default Timeline;

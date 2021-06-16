@@ -11,10 +11,10 @@ import Brightness2Icon from '@material-ui/icons/Brightness2';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import SettingsIcon from '@material-ui/icons/Settings';
 
-import { userDataProp, setUserDataProp } from '../util/customPropTypes';
+import { setUserDataProp } from '../util/customPropTypes';
 import useStyles from '../util/useStylesHook';
 
-const NavMenu = ({ userData, setUserData }) => {
+const NavMenu = ({ setUserData }) => {
 	const { setUser, setToken } = setUserData;
 	const [menuAnchor, setMenuAnchor] = useState(null);
 	const classes = useStyles();
@@ -65,7 +65,6 @@ const NavMenu = ({ userData, setUserData }) => {
 };
 
 NavMenu.propTypes = {
-	userData: PropTypes.shape(userDataProp).isRequired,
 	setUserData: PropTypes.shape(setUserDataProp).isRequired,
 };
 

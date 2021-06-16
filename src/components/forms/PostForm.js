@@ -98,10 +98,12 @@ const PostForm = ({
 				text: formValues.text,
 				postImage: imageFile,
 			});
+			const { post: newPost } = createResponse.data;
+			const newAllPosts = [...allPosts];
+			newAllPosts.unshift(newPost);
 
-			console.log(createResponse);
-
-			return 1;
+			setAllPosts(newAllPosts);
+			return handleModalClose();
 		} catch (error) {
 			return checkFormForErrors(error.response.data.errors);
 		}
@@ -189,15 +191,14 @@ const PostForm = ({
 PostForm.propTypes = {
 	post: PropTypes.shape(postProp),
 	handleModalClose: PropTypes.func.isRequired,
-	allPosts: PropTypes.arrayOf(PropTypes.shape(postProp)),
-	setAllPosts: PropTypes.func,
+	allPosts: PropTypes.arrayOf(PropTypes.shape(postProp)).isRequired,
+	setAllPosts: PropTypes.func.isRequired,
 	isEdit: PropTypes.bool,
 };
 
 PostForm.defaultProps = {
 	post: null,
-	allPosts: null,
-	setAllPosts: null,
+
 	isEdit: false,
 };
 
