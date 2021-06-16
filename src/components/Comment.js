@@ -27,7 +27,10 @@ const Comments = ({ userData, post, allPosts, setAllPosts, comment }) => {
 				<Container>
 					<div className={classes.flex}>
 						<div className={classes.commentText}>
-							<Typography variant='subtitle2'>{`${user.firstName} ${user.lastName}`}</Typography>
+							<Typography
+								className={classes.capitalize}
+								variant='subtitle2'
+							>{`${user.firstName} ${user.lastName}`}</Typography>
 							<Typography>{text}</Typography>
 						</div>
 

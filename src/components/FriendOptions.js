@@ -2,13 +2,12 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
 
 import { friendRequests } from '../util/axiosRequests';
 import { userDataProp, friendsListProp } from '../util/customPropTypes';
 import useStyles from '../util/useStylesHook';
 
-const FriendOptions = ({ user, friendsList }) => {
+const FriendOptions = ({ user, friendsList, setFriendsList }) => {
 	const [friendStatus, setFriendStatus] = useState('');
 	const classes = useStyles();
 
@@ -35,8 +34,22 @@ const FriendOptions = ({ user, friendsList }) => {
 		try {
 			await friendRequests.putChangeFriendRequest(user._id, 'accept');
 			setFriendStatus('friends');
+
+			if (setFriendsList) {
+				const newFriendsList = [...friendsList];
+				const friendIndex = friendsList.findIndex(
+					(friend) => friend.user._id === user._id
+				);
+
+				if (friendIndex === -1) return null;
+
+				newFriendsList[friendIndex].status = 'friends';
+
+				setFriendsList(newFriendsList);
+			}
+			return null;
 		} catch (error) {
-			console.log(error.response.data.errors);
+			return console.log(error.response.data.errors);
 		}
 	};
 
@@ -44,8 +57,22 @@ const FriendOptions = ({ user, friendsList }) => {
 		try {
 			await friendRequests.putChangeFriendRequest(user._id, 'reject');
 			setFriendStatus('');
+
+			if (setFriendsList) {
+				const newFriendsList = [...friendsList];
+				const friendIndex = friendsList.findIndex(
+					(friend) => friend.user._id === user._id
+				);
+
+				if (friendIndex === -1) return null;
+
+				newFriendsList.splice(friendIndex, 1);
+
+				setFriendsList(newFriendsList);
+			}
+			return null;
 		} catch (error) {
-			console.log(error.response.data.errors);
+			return console.log(error.response.data.errors);
 		}
 	};
 
@@ -53,8 +80,23 @@ const FriendOptions = ({ user, friendsList }) => {
 		try {
 			await friendRequests.deleteFriendOrRequest(user._id);
 			setFriendStatus('');
+
+			if (setFriendsList) {
+				const newFriendsList = [...friendsList];
+				const friendIndex = friendsList.findIndex(
+					(friend) => friend.user._id === user._id
+				);
+
+				if (friendIndex === -1) return null;
+
+				newFriendsList.splice(friendIndex, 1);
+
+				setFriendsList(newFriendsList);
+			}
+
+			return null;
 		} catch (error) {
-			console.log(error.response.data.errors);
+			return console.log(error.response.data.errors);
 		}
 	};
 
@@ -64,31 +106,27 @@ const FriendOptions = ({ user, friendsList }) => {
 			size='small'
 			color='primary'
 			onClick={handleAddFriend}
-			fullWidth
 		>
-			Add Friend
+			Add
 		</Button>
 	);
 
 	if (friendStatus === 'outgoing') {
 		friendOption = (
-			<div className={classes.friendOption}>
-				<Typography className={classes.sideSpacing}>Pending</Typography>
-				<Button
-					variant='contained'
-					size='small'
-					color='secondary'
-					onClick={handleCancelPendingOrDeleteFriend}
-				>
-					Cancel
-				</Button>
-			</div>
+			<Button
+				variant='contained'
+				size='small'
+				color='secondary'
+				onClick={handleCancelPendingOrDeleteFriend}
+			>
+				Cancel
+			</Button>
 		);
 	}
 
 	if (friendStatus === 'incoming') {
 		friendOption = (
-			<div className={classes.friendOption}>
+			<div className={classes.friendIncoming}>
 				<Button
 					variant='contained'
 					size='small'
@@ -106,16 +144,13 @@ const FriendOptions = ({ user, friendsList }) => {
 
 	if (friendStatus === 'friends') {
 		friendOption = (
-			<div className={classes.friendOption}>
-				<Button
-					variant='contained'
-					size='small'
-					onClick={handleCancelPendingOrDeleteFriend}
-					fullWidth
-				>
-					Remove
-				</Button>
-			</div>
+			<Button
+				variant='contained'
+				size='small'
+				onClick={handleCancelPendingOrDeleteFriend}
+			>
+				Remove
+			</Button>
 		);
 	}
 	return <div>{friendOption}</div>;
@@ -124,6 +159,11 @@ const FriendOptions = ({ user, friendsList }) => {
 FriendOptions.propTypes = {
 	user: PropTypes.shape(userDataProp.user).isRequired,
 	friendsList: PropTypes.arrayOf(PropTypes.shape(friendsListProp)).isRequired,
+	setFriendsList: PropTypes.func,
+};
+
+FriendOptions.defaultProps = {
+	setFriendsList: null,
 };
 
 export default FriendOptions;

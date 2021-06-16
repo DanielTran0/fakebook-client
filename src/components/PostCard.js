@@ -86,7 +86,11 @@ const PostCard = ({ userData, post, allPosts, setAllPosts }) => {
 			<CardHeader
 				// TODO linkable image and name
 				avatar={<Avatar src={setUserImageSource(user)} />}
-				title={`${postUser.firstName} ${postUser.lastName}`}
+				title={
+					<Typography className={classes.capitalize}>
+						{`${postUser.firstName} ${postUser.lastName}`}
+					</Typography>
+				}
 				subheader={formatDate(date)}
 				action={
 					post.user._id === userData.user._id && (

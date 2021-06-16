@@ -12,25 +12,30 @@ import setUserImageSource from '../util/setUserImageSource';
 import { userDataProp, friendsListProp } from '../util/customPropTypes';
 import useStyles from '../util/useStylesHook';
 
-const UserCard = ({ user, friendsList }) => {
+const UserCard = ({ user, friendsList, setFriendsList }) => {
 	const { firstName, lastName } = user;
 	const classes = useStyles();
 
 	return (
-		<Container maxWidth='xs'>
+		<Container className={classes.bottomSpacing} maxWidth='xs'>
 			<Paper className={classes.userCardPaper}>
-				<Container>
+				<Container className={classes.userCardSpacing}>
 					<div className={classes.userCardInfo}>
 						<Avatar
-							src={setUserImageSource(user)}
 							className={classes.sideSpacing}
+							src={setUserImageSource(user)}
 						/>
-						<Typography noWrap>{`${firstName} ${lastName}`}</Typography>
+
+						<Typography className={classes.capitalize} noWrap>
+							{`${firstName} ${lastName}`}
+						</Typography>
 					</div>
 
-					<div>
-						<FriendOptions user={user} friendsList={friendsList} />
-					</div>
+					<FriendOptions
+						user={user}
+						friendsList={friendsList}
+						setFriendsList={setFriendsList}
+					/>
 				</Container>
 			</Paper>
 		</Container>
@@ -40,6 +45,11 @@ const UserCard = ({ user, friendsList }) => {
 UserCard.propTypes = {
 	user: PropTypes.shape(userDataProp.user).isRequired,
 	friendsList: PropTypes.arrayOf(PropTypes.shape(friendsListProp)).isRequired,
+	setFriendsList: PropTypes.func,
+};
+
+UserCard.defaultProps = {
+	setFriendsList: PropTypes.null,
 };
 
 export default UserCard;

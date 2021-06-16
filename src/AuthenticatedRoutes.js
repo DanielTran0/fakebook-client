@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Route, Switch, Redirect } from 'react-router-dom';
 
 import AllUsers from './pages/AllUsers';
+import Friends from './pages/Friends';
 import Navbar from './components/Navbar';
 import Timeline from './pages/Timeline';
 
@@ -12,23 +13,24 @@ import { userDataProp, setUserDataProp } from './util/customPropTypes';
 const AuthenticatedRoutes = ({ userData, setUserData }) => {
 	const [allPosts, setAllPosts] = useState([]);
 
-	const fetchData = async () => {
-		try {
-			const postsResponse = await postRequests.getUserAndFriendPosts();
-			setAllPosts(postsResponse.data.posts);
-		} catch (error) {
-			// TODO handle error
-			console.log(error.response);
-		}
-	};
-
 	useEffect(() => {
+		const fetchData = async () => {
+			try {
+				const postsResponse = await postRequests.getUserAndFriendPosts();
+				setAllPosts(postsResponse.data.posts);
+			} catch (error) {
+				// TODO handle error
+				console.log(error.response);
+			}
+		};
+
 		fetchData();
 	}, []);
 
 	const pageRoutes = [
 		{ page: Timeline, path: '/' },
 		{ page: AllUsers, path: '/users' },
+		{ page: Friends, path: '/friends' },
 	];
 
 	const pageRouteComponents = pageRoutes.map((pageRoute) => (

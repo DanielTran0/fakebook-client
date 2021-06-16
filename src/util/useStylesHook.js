@@ -5,6 +5,9 @@ const useStyles = makeStyles((theme) => {
 		flex: {
 			display: 'flex',
 		},
+		capitalize: {
+			textTransform: 'capitalize',
+		},
 		bottomSpacing: {
 			marginBottom: theme.spacing(2),
 		},
@@ -53,19 +56,22 @@ const useStyles = makeStyles((theme) => {
 			alignSelf: 'flex-end',
 		},
 		userCardPaper: {
-			marginBottom: theme.spacing(2),
-			paddingTop: theme.spacing(1),
-			paddingBottom: theme.spacing(1),
+			paddingTop: theme.spacing(1.5),
+			paddingBottom: theme.spacing(1.5),
+		},
+		userCardSpacing: {
+			display: 'flex',
+			alignItems: 'center',
+			justifyContent: 'space-between',
 		},
 		userCardInfo: {
 			display: 'flex',
 			alignItems: 'center',
-			marginBottom: theme.spacing(1),
+			maxWidth: '65%',
 		},
-		friendOption: {
+		friendIncoming: {
 			display: 'flex',
-			alignItems: 'center',
-			justifyContent: 'center',
+			flexDirection: 'column',
 		},
 	};
 });
