@@ -8,6 +8,10 @@ import CardActions from '@material-ui/core/CardActions';
 import CardHeader from '@material-ui/core/CardHeader';
 import Container from '@material-ui/core/Container';
 import Divider from '@material-ui/core/Divider';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 
 import ChatBubbleOutlineOutlinedIcon from '@material-ui/icons/ChatBubbleOutlineOutlined';
@@ -29,6 +33,7 @@ const PostCard = ({ userData, post, allPosts, setAllPosts }) => {
 	const [isCommentsOpen, setIsCommentsOpen] = useState(true);
 	const [isAddCommentOpen, setIsAddCommentsOpen] = useState(true);
 	const [showMultipleComments, setShowMultipleComments] = useState(false);
+	const [isToolBarOpen, setIsToolBarOpen] = useState(false);
 	const classes = useStyles();
 
 	const handleCommentOpenToggle = () => {
@@ -43,6 +48,14 @@ const PostCard = ({ userData, post, allPosts, setAllPosts }) => {
 		setShowMultipleComments(!showMultipleComments);
 	};
 
+	const handleLikeToolBarOpen = () => {
+		setIsToolBarOpen(true);
+	};
+
+	const handleLikeToolBarClose = () => {
+		setIsToolBarOpen(false);
+	};
+
 	const commentComponents = post.comments.map((comment) => (
 		<Comment
 			userData={userData}
@@ -53,6 +66,20 @@ const PostCard = ({ userData, post, allPosts, setAllPosts }) => {
 			key={comment._id}
 		/>
 	));
+
+	const postLikedNames = (
+		<List disablePadding>
+			{post.likes.map((like) => (
+				<ListItem className={classes.noMargin} disableGutters key={like._id}>
+					<ListItemText
+						className={classes.noMargin}
+						primary={`${like.user.firstName} ${like.user.lastName}`}
+						primaryTypographyProps={{ variant: 'subtitle2' }}
+					/>
+				</ListItem>
+			))}
+		</List>
+	);
 
 	return (
 		<Card className={classes.postSpacing}>
@@ -88,19 +115,23 @@ const PostCard = ({ userData, post, allPosts, setAllPosts }) => {
 
 			{likes.length || comments.length ? (
 				<div className={classes.buttonSpaceEnd}>
-					<div>
-						<Button startIcon={<ThumbUpAltOutlinedIcon />}>
+					<Tooltip title={postLikedNames} open={isToolBarOpen} arrow>
+						<Button
+							startIcon={<ThumbUpAltOutlinedIcon />}
+							onClick={handleLikeToolBarOpen}
+							onMouseEnter={handleLikeToolBarOpen}
+							onMouseLeave={handleLikeToolBarClose}
+						>
 							{likes.length}
 						</Button>
-					</div>
-					<div>
-						<Button
-							startIcon={<ChatBubbleOutlineOutlinedIcon />}
-							onClick={handleCommentOpenToggle}
-						>
-							{comments.length}
-						</Button>
-					</div>
+					</Tooltip>
+
+					<Button
+						startIcon={<ChatBubbleOutlineOutlinedIcon />}
+						onClick={handleCommentOpenToggle}
+					>
+						{comments.length}
+					</Button>
 				</div>
 			) : null}
 

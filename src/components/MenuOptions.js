@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
 import Button from '@material-ui/core/Button';
-import Container from '@material-ui/core/Container';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardContent from '@material-ui/core/CardContent';
+import Container from '@material-ui/core/Container';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import Menu from '@material-ui/core/Menu';
@@ -14,6 +14,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Modal from '@material-ui/core/Modal';
 import Typography from '@material-ui/core/Typography';
 
+import CloseIcon from '@material-ui/icons/Close';
 import DeleteOutlineOutlinedIcon from '@material-ui/icons/DeleteOutlineOutlined';
 import MoreHorizOutlinedIcon from '@material-ui/icons/MoreHorizOutlined';
 
@@ -115,11 +116,21 @@ const MenuOptions = ({ isPost, post, allPosts, setAllPosts, comment }) => {
 					<CardHeader
 						title={`Edit ${phrasing}`}
 						subheader={isPost ? 'Max image size of 1.5 MB' : null}
+						action={
+							<IconButton onClick={handleModalClose}>
+								<CloseIcon />
+							</IconButton>
+						}
 					/>
 				) : (
 					<CardHeader
 						title={`Delete ${phrasing}`}
 						subheader={`Are you sure you want to delete this ${phrasing}?`}
+						action={
+							<IconButton onClick={handleModalClose}>
+								<CloseIcon />
+							</IconButton>
+						}
 					/>
 				)}
 
@@ -134,14 +145,12 @@ const MenuOptions = ({ isPost, post, allPosts, setAllPosts, comment }) => {
 				{isFormTypeEdit ? (
 					<CardContent>{editForm}</CardContent>
 				) : (
-					<CardActions className={classes.buttonSpaceEnd}>
-						<Button variant='contained' onClick={handleModalClose}>
-							Cancel
-						</Button>
+					<CardActions>
 						<Button
 							variant='contained'
 							startIcon={<DeleteOutlineOutlinedIcon />}
 							onClick={handleDeleteClick}
+							fullWidth
 						>
 							Delete
 						</Button>
@@ -165,6 +174,7 @@ const MenuOptions = ({ isPost, post, allPosts, setAllPosts, comment }) => {
 				<MenuItem onClick={() => handleModalOpen(true)}>
 					Edit {phrasing}
 				</MenuItem>
+
 				<MenuItem onClick={() => handleModalOpen(false)}>
 					Delete {phrasing}
 				</MenuItem>

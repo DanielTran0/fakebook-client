@@ -24,8 +24,11 @@ const PostForm = ({
 	setAllPosts,
 	isEdit,
 }) => {
-	const { _id, text } = post;
-	const [formValues, setFormValues] = useState({ text, lastImage: 'keep' });
+	const { _id, text } = post || {};
+	const [formValues, setFormValues] = useState({
+		text: text || '',
+		lastImage: 'keep',
+	});
 	const [imageFile, setImageFile] = useState(null);
 	const [formErrors, setFormErrors] = useState({});
 	const classes = useStyles();
@@ -90,8 +93,18 @@ const PostForm = ({
 			}
 		}
 
-		// TODO POST create post submit
-		return null;
+		try {
+			const createResponse = await postRequests.postNewPost({
+				text: formValues.text,
+				postImage: imageFile,
+			});
+
+			console.log(createResponse);
+
+			return 1;
+		} catch (error) {
+			return checkFormForErrors(error.response.data.errors);
+		}
 	};
 
 	return (
@@ -107,7 +120,6 @@ const PostForm = ({
 				variant='outlined'
 				label='Text'
 				name='text'
-				required
 				fullWidth
 				multiline
 				rows={3}
@@ -142,7 +154,7 @@ const PostForm = ({
 				</FormControl>
 			)}
 
-			{isEdit && formValues.lastImage === 'new' && (
+			{(!isEdit || formValues.lastImage === 'new') && (
 				<div>
 					<Button variant='contained' component='label' fullWidth>
 						Upload Image
@@ -162,33 +174,30 @@ const PostForm = ({
 
 			<Divider className={classes.bottomSpacing} />
 
-			{isEdit && (
-				<div className={classes.buttonSpaceEnd}>
-					<Button variant='contained' type='submit' onClick={handleModalClose}>
-						Cancel
-					</Button>
-					<Button
-						variant='contained'
-						type='submit'
-						startIcon={<SaveOutlinedIcon />}
-					>
-						Save
-					</Button>
-				</div>
-			)}
+			<Button
+				variant='contained'
+				type='submit'
+				startIcon={isEdit && <SaveOutlinedIcon />}
+				fullWidth
+			>
+				{isEdit ? 'Save' : 'Post'}
+			</Button>
 		</form>
 	);
 };
 
 PostForm.propTypes = {
-	post: PropTypes.shape(postProp).isRequired,
+	post: PropTypes.shape(postProp),
 	handleModalClose: PropTypes.func.isRequired,
-	allPosts: PropTypes.arrayOf(PropTypes.shape(postProp)).isRequired,
-	setAllPosts: PropTypes.func.isRequired,
+	allPosts: PropTypes.arrayOf(PropTypes.shape(postProp)),
+	setAllPosts: PropTypes.func,
 	isEdit: PropTypes.bool,
 };
 
 PostForm.defaultProps = {
+	post: null,
+	allPosts: null,
+	setAllPosts: null,
 	isEdit: false,
 };
 

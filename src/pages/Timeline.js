@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import Container from '@material-ui/core/Container';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 
 import PostCard from '../components/PostCard';
 
@@ -10,7 +11,7 @@ import { userDataProp } from '../util/customPropTypes';
 
 const Timeline = ({ userData }) => {
 	const [allPosts, setAllPosts] = useState([]);
-	console.log(allPosts);
+	const isMobile = useMediaQuery('(max-width: 425px)');
 
 	const fetchData = async () => {
 		try {
@@ -38,8 +39,9 @@ const Timeline = ({ userData }) => {
 
 	return (
 		<div className='timeline'>
-			{/* TODO make mobile post touch end of screen */}
-			<Container maxWidth='sm'>{postCardComponents}</Container>
+			<Container disableGutters={isMobile} maxWidth='sm'>
+				{postCardComponents}
+			</Container>
 		</div>
 	);
 };

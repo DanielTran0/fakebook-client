@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Route, Switch, Redirect } from 'react-router-dom';
 
+import Navbar from './components/Navbar';
 import Timeline from './pages/Timeline';
 
 import { userDataProp, setUserDataProp } from './util/customPropTypes';
@@ -25,7 +26,11 @@ const AuthenticatedRoutes = ({ userData, setUserData }) => {
 
 	if (!userData.token) return <Redirect to='/login' />;
 
-	return <Switch>{pageRouteComponents}</Switch>;
+	return (
+		<Navbar userData={userData} setUserData={setUserData}>
+			<Switch>{pageRouteComponents}</Switch>
+		</Navbar>
+	);
 };
 
 AuthenticatedRoutes.propTypes = {

@@ -34,4 +34,9 @@ img {
   height: auto;
 }
 
+a {
+  text-decoration: none;
+  color: rgba(0, 0, 0, 0.87);
+}
+
 /*# sourceMappingURL=App.css.map */
