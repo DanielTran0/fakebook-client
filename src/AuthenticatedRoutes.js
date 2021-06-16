@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Route, Switch, Redirect } from 'react-router-dom';
 
+import AllUsers from './pages/AllUsers';
 import Navbar from './components/Navbar';
 import Timeline from './pages/Timeline';
 
@@ -25,7 +26,11 @@ const AuthenticatedRoutes = ({ userData, setUserData }) => {
 		fetchData();
 	}, []);
 
-	const pageRoutes = [{ page: Timeline, path: '/' }];
+	const pageRoutes = [
+		{ page: Timeline, path: '/' },
+		{ page: AllUsers, path: '/users' },
+	];
+
 	const pageRouteComponents = pageRoutes.map((pageRoute) => (
 		<Route
 			key={pageRoute.path}
@@ -35,7 +40,7 @@ const AuthenticatedRoutes = ({ userData, setUserData }) => {
 				<pageRoute.page
 					{...routeProps}
 					userData={userData}
-					serData={setUserData}
+					setUserData={setUserData}
 					allPosts={allPosts}
 					setAllPosts={setAllPosts}
 				/>

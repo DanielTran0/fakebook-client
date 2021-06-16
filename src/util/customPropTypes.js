@@ -34,4 +34,15 @@ const commentProp = {
 	likes: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
 };
 
-export { userDataProp, setUserDataProp, postProp, commentProp };
+const friendsListProp = {
+	user: PropTypes.shape(userDataProp.user).isRequired,
+	status: PropTypes.string.isRequired,
+};
+
+export {
+	userDataProp,
+	setUserDataProp,
+	postProp,
+	commentProp,
+	friendsListProp,
+};

@@ -52,6 +52,21 @@ const useStyles = makeStyles((theme) => {
 			position: 'absolute',
 			alignSelf: 'flex-end',
 		},
+		userCardPaper: {
+			marginBottom: theme.spacing(2),
+			paddingTop: theme.spacing(1),
+			paddingBottom: theme.spacing(1),
+		},
+		userCardInfo: {
+			display: 'flex',
+			alignItems: 'center',
+			marginBottom: theme.spacing(1),
+		},
+		friendOption: {
+			display: 'flex',
+			alignItems: 'center',
+			justifyContent: 'center',
+		},
 	};
 });
 
