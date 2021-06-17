@@ -123,8 +123,6 @@ const PostForm = ({
 				label='Text'
 				name='text'
 				fullWidth
-				multiline
-				rows={3}
 				value={formValues.text}
 				onChange={handleFormChange}
 			/>

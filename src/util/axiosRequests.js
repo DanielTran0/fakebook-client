@@ -24,10 +24,14 @@ const userRequests = { getAllUsers, getAnotherUser, postNewUser };
 
 // Session requests
 const postNewSession = (loginDetails) => {
-	return axiosInstance.post(`/sessions`, { ...loginDetails });
+	return axiosInstance.post(`/sessions/email`, { ...loginDetails });
 };
 
-const sessionRequests = { postNewSession };
+const postFacebookLogin = () => {
+	return axiosInstance.post(`/sessions/facebook`);
+};
+
+const sessionRequests = { postNewSession, postFacebookLogin };
 
 // Friend requests
 const getUserFriends = () => {

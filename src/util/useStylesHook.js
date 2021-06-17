@@ -20,6 +20,10 @@ const useStyles = makeStyles((theme) => {
 			marginLeft: 10,
 			marginRight: 10,
 		},
+		buttonPadding: {
+			paddingTop: theme.spacing(1),
+			paddingBottom: theme.spacing(1),
+		},
 		modal: {
 			position: 'absolute',
 			top: '50%',

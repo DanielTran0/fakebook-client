@@ -6,6 +6,7 @@ import AllUsers from './pages/AllUsers';
 import Friends from './pages/Friends';
 import Navbar from './components/Navbar';
 import Timeline from './pages/Timeline';
+import Settings from './pages/Settings';
 
 import { postRequests } from './util/axiosRequests';
 import { userDataProp, setUserDataProp } from './util/customPropTypes';
@@ -31,6 +32,7 @@ const AuthenticatedRoutes = ({ userData, setUserData }) => {
 		{ page: Timeline, path: '/' },
 		{ page: AllUsers, path: '/users' },
 		{ page: Friends, path: '/friends' },
+		{ page: Settings, path: '/settings' },
 	];
 
 	const pageRouteComponents = pageRoutes.map((pageRoute) => (

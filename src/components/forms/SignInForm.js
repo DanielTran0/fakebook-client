@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
+import Typography from '@material-ui/core/Typography';
 
 import { sessionRequests } from '../../util/axiosRequests';
 import { setUserDataProp } from '../../util/customPropTypes';
@@ -82,14 +83,15 @@ const SignIn = ({ setUserData }) => {
 				error={Boolean(formErrors.password)}
 				helperText={formErrors.password}
 			/>
+
 			<Button
-				className={classes.bottomSpacing}
+				className={`${classes.buttonPadding} ${classes.bottomSpacing}`}
 				variant='contained'
 				type='submit'
 				color='primary'
 				fullWidth
 			>
-				Log In
+				<Typography variant='h6'>Log In</Typography>
 			</Button>
 		</form>
 	);

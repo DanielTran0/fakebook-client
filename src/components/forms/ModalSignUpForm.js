@@ -176,7 +176,12 @@ const ModalSignUpForm = ({ setUserData }) => {
 
 	return (
 		<div className='modal-sign-up'>
-			<Button variant='contained' onClick={handleModalOpen}>
+			<Button
+				className={classes.bottomSpacing}
+				variant='contained'
+				onClick={handleModalOpen}
+				fullWidth
+			>
 				Create New Account
 			</Button>
 

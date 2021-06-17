@@ -11,10 +11,10 @@ import Brightness2Icon from '@material-ui/icons/Brightness2';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import SettingsIcon from '@material-ui/icons/Settings';
 
-import { setUserDataProp } from '../util/customPropTypes';
+import { userDataProp, setUserDataProp } from '../util/customPropTypes';
 import useStyles from '../util/useStylesHook';
 
-const NavMenu = ({ setUserData }) => {
+const NavMenu = ({ userData, setUserData }) => {
 	const { setUser, setToken } = setUserData;
 	const [menuAnchor, setMenuAnchor] = useState(null);
 	const classes = useStyles();
@@ -28,6 +28,8 @@ const NavMenu = ({ setUserData }) => {
 	};
 
 	const handleLogOut = () => {
+		if (userData.facebookId) window.FB.logout();
+
 		setUser({});
 		setToken('');
 	};
@@ -65,6 +67,7 @@ const NavMenu = ({ setUserData }) => {
 };
 
 NavMenu.propTypes = {
+	userData: PropTypes.shape(userDataProp).isRequired,
 	setUserData: PropTypes.shape(setUserDataProp).isRequired,
 };
 
