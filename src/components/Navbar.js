@@ -24,14 +24,10 @@ import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import NavMenu from './NavMenu';
 import PostForm from './forms/PostForm';
 
-import {
-	userDataProp,
-	setUserDataProp,
-	postProp,
-} from '../util/customPropTypes';
+import { userDataProp, setUserDataProp } from '../util/customPropTypes';
 import useStyles from '../util/useStylesHook';
 
-const Navbar = ({ children, userData, setUserData, allPosts, setAllPosts }) => {
+const Navbar = ({ children, userData, setUserData }) => {
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const isMobile = useMediaQuery('(max-width: 425px)');
 	const classes = useStyles();
@@ -60,11 +56,7 @@ const Navbar = ({ children, userData, setUserData, allPosts, setAllPosts }) => {
 				<Divider />
 
 				<CardContent>
-					<PostForm
-						handleModalClose={handleModalClose}
-						allPosts={allPosts}
-						setAllPosts={setAllPosts}
-					/>
+					<PostForm handleModalClose={handleModalClose} />
 				</CardContent>
 			</Card>
 		</Container>
@@ -125,8 +117,6 @@ Navbar.propTypes = {
 	children: PropTypes.element.isRequired,
 	userData: PropTypes.shape(userDataProp).isRequired,
 	setUserData: PropTypes.shape(setUserDataProp).isRequired,
-	allPosts: PropTypes.arrayOf(PropTypes.shape(postProp)).isRequired,
-	setAllPosts: PropTypes.func.isRequired,
 };
 
 export default Navbar;

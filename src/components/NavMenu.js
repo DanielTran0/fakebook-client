@@ -28,10 +28,9 @@ const NavMenu = ({ userData, setUserData }) => {
 	};
 
 	const handleLogOut = () => {
-		if (userData.facebookId) window.FB.logout();
-
 		setUser({});
 		setToken('');
+		localStorage.clear();
 	};
 
 	return (

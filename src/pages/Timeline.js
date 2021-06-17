@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import Container from '@material-ui/core/Container';
@@ -9,7 +9,9 @@ import PostCard from '../components/PostCard';
 import { postRequests } from '../util/axiosRequests';
 import { userDataProp, postProp } from '../util/customPropTypes';
 
-const Timeline = ({ userData, allPosts, setAllPosts }) => {
+const Timeline = ({ userData }) => {
+	const [allPosts, setAllPosts] = useState([]);
+
 	const isMobile = useMediaQuery('(max-width: 425px)');
 
 	useEffect(() => {

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import axios from './axiosRequests';
+import axiosInstance from './axiosRequests';
 
 const useStateWithLocalStorage = (localStorageKey) => {
 	const initialState = localStorageKey === 'fakebook-user' ? {} : '';
@@ -13,7 +13,7 @@ const useStateWithLocalStorage = (localStorageKey) => {
 	}, [value, localStorageKey]);
 
 	if (localStorageKey === 'fakebook-token' && value !== '')
-		axios.defaults.headers.common.Authorization = `Bearer ${value}`;
+		axiosInstance.defaults.headers.common.Authorization = `Bearer ${value}`;
 
 	return [value, setValue];
 };

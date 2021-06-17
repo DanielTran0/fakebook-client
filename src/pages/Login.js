@@ -6,7 +6,7 @@ import Container from '@material-ui/core/Container';
 import Divider from '@material-ui/core/Divider';
 import Typography from '@material-ui/core/Typography';
 
-import Facebook from '../components/Facebook';
+import FacebookSignIn from '../components/FacebookSignIn';
 import SignInForm from '../components/forms/SignInForm';
 import ModalSignUpForm from '../components/forms/ModalSignUpForm';
 
@@ -38,7 +38,7 @@ const Login = ({ userData, setUserData }) => {
 				<Container>
 					<ModalSignUpForm setUserData={setUserData} />
 
-					<Facebook setUserData={setUserData} />
+					<FacebookSignIn setUserData={setUserData} />
 				</Container>
 			</Container>
 		</div>

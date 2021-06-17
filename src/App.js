@@ -26,8 +26,6 @@ const App = () => {
 	const userData = { user, token };
 	const setUserData = { setUser, setToken };
 
-	console.log(window);
-
 	return (
 		<div className='app'>
 			<Router>

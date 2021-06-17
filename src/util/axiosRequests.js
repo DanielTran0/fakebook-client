@@ -31,7 +31,10 @@ const postFacebookLogin = () => {
 	return axiosInstance.post(`/sessions/facebook`);
 };
 
-const sessionRequests = { postNewSession, postFacebookLogin };
+const sessionRequests = {
+	postNewSession,
+	postFacebookLogin,
+};
 
 // Friend requests
 const getUserFriends = () => {
