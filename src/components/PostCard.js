@@ -150,7 +150,7 @@ const PostCard = ({ userData, post, allPosts, setAllPosts }) => {
 					isPost
 				/>
 				<Button
-					className={classes.postButtons}
+					className={classes.center}
 					startIcon={<ChatBubbleOutlineOutlinedIcon />}
 					onClick={handleAddCommentOpenToggle}
 				>

@@ -15,7 +15,8 @@ const FacebookSignIn = ({ setUserData }) => {
 		setToken(response.accessToken);
 
 		try {
-			const userDataResponse = await sessionRequests.postFacebookGoogleLogin();
+			const userDataResponse = await sessionRequests.postFacebookLogin();
+			console.log(userDataResponse);
 			return setUser(userDataResponse.data.user);
 		} catch (error) {
 			// TODO handle error

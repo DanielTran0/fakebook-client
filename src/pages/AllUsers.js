@@ -7,11 +7,14 @@ import Typography from '@material-ui/core/Typography';
 import UserCard from '../components/UserCard';
 
 import { userRequests, friendRequests } from '../util/axiosRequests';
-import { userDataProp } from '../util/customPropTypes';
+import { userDataProp, setUserDataProp } from '../util/customPropTypes';
+import handleErrors from '../util/handleErrors';
 
-const AllUsers = ({ userData }) => {
+const AllUsers = ({ userData, setUserData }) => {
 	const [users, setUsers] = useState([]);
 	const [friendsList, setFriendsList] = useState([]);
+
+	console.log(users);
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -23,7 +26,7 @@ const AllUsers = ({ userData }) => {
 				const currentUserIndex = newUsers.findIndex(
 					(user) => user._id === userData.user._id
 				);
-
+				console.log(newUsers, currentUserIndex);
 				if (currentUserIndex === -1) return null;
 
 				newUsers.splice(currentUserIndex, 1);
@@ -31,13 +34,12 @@ const AllUsers = ({ userData }) => {
 				setFriendsList(friendResponse.data.friends);
 				return setUsers(newUsers);
 			} catch (error) {
-				// TODO handle error
-				return console.log(error.response);
+				return handleErrors(error, setUserData);
 			}
 		};
 
 		fetchData();
-	}, [userData]);
+	}, [userData, setUserData]);
 
 	const userCardComponents = users.map((user) => (
 		<UserCard user={user} key={user._id} friendsList={friendsList} />
@@ -55,6 +57,7 @@ const AllUsers = ({ userData }) => {
 
 AllUsers.propTypes = {
 	userData: PropTypes.shape(userDataProp).isRequired,
+	setUserData: PropTypes.shape(setUserDataProp).isRequired,
 };
 
 export default AllUsers;

@@ -8,6 +8,9 @@ const useStyles = makeStyles((theme) => {
 		capitalize: {
 			textTransform: 'capitalize',
 		},
+		center: {
+			margin: 'auto',
+		},
 		bottomSpacing: {
 			marginBottom: theme.spacing(2),
 		},
@@ -32,9 +35,6 @@ const useStyles = makeStyles((theme) => {
 		},
 		postSpacing: {
 			marginBottom: theme.spacing(4),
-		},
-		postButtons: {
-			margin: 'auto',
 		},
 		commentOptions: {
 			marginTop: -15,

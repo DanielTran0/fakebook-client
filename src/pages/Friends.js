@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
@@ -7,9 +8,11 @@ import useMediaQuery from '@material-ui/core/useMediaQuery';
 import UserCard from '../components/UserCard';
 
 import { friendRequests } from '../util/axiosRequests';
+import { setUserDataProp } from '../util/customPropTypes';
 import useStyles from '../util/useStylesHook';
+import handleErrors from '../util/handleErrors';
 
-const Friends = () => {
+const Friends = ({ setUserData }) => {
 	const [friendsList, setFriendsList] = useState([]);
 	const [currentFriends, setCurrentFriends] = useState([]);
 	const [pendingFriends, setPendingFriends] = useState([]);
@@ -26,13 +29,12 @@ const Friends = () => {
 				);
 				setFriendsList(friends);
 			} catch (error) {
-				// TODO handle error
-				console.log(error.response);
+				handleErrors(error, setUserData);
 			}
 		};
 
 		fetchData();
-	}, []);
+	}, [setUserData]);
 
 	useEffect(() => {
 		const current = [];
@@ -97,6 +99,10 @@ const Friends = () => {
 			</div>
 		</Container>
 	);
+};
+
+Friends.propTypes = {
+	setUserData: PropTypes.shape(setUserDataProp).isRequired,
 };
 
 export default Friends;

@@ -1,32 +1,60 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
+import CircularProgress from '@material-ui/core/CircularProgress';
 import Container from '@material-ui/core/Container';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 
 import PostCard from '../components/PostCard';
 
 import { postRequests } from '../util/axiosRequests';
-import { userDataProp, postProp } from '../util/customPropTypes';
+import { userDataProp, setUserDataProp } from '../util/customPropTypes';
+import useStyles from '../util/useStylesHook';
+import handleErrors from '../util/handleErrors';
 
-const Timeline = ({ userData }) => {
+const Timeline = ({ userData, setUserData }) => {
 	const [allPosts, setAllPosts] = useState([]);
-
+	const [skip, setSkip] = useState(0);
+	const [isLoading, setILoading] = useState(true);
 	const isMobile = useMediaQuery('(max-width: 425px)');
+	const classes = useStyles();
 
 	useEffect(() => {
+		const handleScrollLoading = () => {
+			if (skip === allPosts.length) return null;
+
+			if (window.innerHeight + window.scrollY >= document.body.scrollHeight) {
+				setSkip(allPosts.length);
+			}
+
+			return null;
+		};
+
+		window.addEventListener('scroll', handleScrollLoading);
+
+		return () => window.removeEventListener('scroll', handleScrollLoading);
+	}, [allPosts.length, skip]);
+
+	useEffect(() => {
+		setILoading(true);
+
 		const fetchData = async () => {
 			try {
-				const postsResponse = await postRequests.getUserAndFriendPosts();
-				setAllPosts(postsResponse.data.posts);
+				const postsResponse = await postRequests.getUserAndFriendPosts(skip);
+				const { posts } = postsResponse.data;
+
+				if (skip === 0) setAllPosts(posts);
+				if (skip !== 0)
+					setAllPosts((oldAllPosts) => [...oldAllPosts, ...posts]);
+
+				setILoading(false);
 			} catch (error) {
-				// TODO handle error
-				console.log(error.response);
+				handleErrors(error, setUserData);
 			}
 		};
 
 		fetchData();
-	}, [setAllPosts]);
+	}, [skip, setUserData]);
 
 	const postCardComponents = allPosts.map((post) => (
 		<PostCard
@@ -41,7 +69,13 @@ const Timeline = ({ userData }) => {
 	return (
 		<div className='timeline'>
 			<Container disableGutters={isMobile} maxWidth='sm'>
-				{postCardComponents}
+				<div>{postCardComponents}</div>
+
+				{isLoading && (
+					<div className={classes.flex}>
+						<CircularProgress className={classes.center} />
+					</div>
+				)}
 			</Container>
 		</div>
 	);
@@ -49,8 +83,7 @@ const Timeline = ({ userData }) => {
 
 Timeline.propTypes = {
 	userData: PropTypes.shape(userDataProp).isRequired,
-	allPosts: PropTypes.arrayOf(PropTypes.shape(postProp)).isRequired,
-	setAllPosts: PropTypes.func.isRequired,
+	setUserData: PropTypes.shape(setUserDataProp).isRequired,
 };
 
 export default Timeline;

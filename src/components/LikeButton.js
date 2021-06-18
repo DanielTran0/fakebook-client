@@ -95,7 +95,7 @@ const LikeButton = ({
 
 	return isPost ? (
 		<Button
-			className={classes.postButtons}
+			className={classes.center}
 			onClick={handleLikeToggle}
 			startIcon={
 				isLiked ? <ThumbUpIcon color='primary' /> : <ThumbUpAltOutlinedIcon />

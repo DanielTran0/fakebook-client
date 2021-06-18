@@ -66,8 +66,9 @@ const friendRequests = {
 };
 
 // Post requests
-const getUserAndFriendPosts = () => {
-	return axiosInstance.get(`/posts`);
+const getUserAndFriendPosts = (skip) => {
+	console.log(skip);
+	return axiosInstance.get(`/posts/`, { params: { skip } });
 };
 
 const getAnotherUserPosts = (userId) => {

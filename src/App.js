@@ -11,7 +11,6 @@ import './styles/App.css';
 dark mode
 settings
 navbar - alignment and active color
-post - skip and bottom page loading
 user pages 
 delete 
 decode text

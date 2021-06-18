@@ -93,7 +93,6 @@ const PostForm = ({
 			}
 		}
 
-		// TODO fix
 		try {
 			await postRequests.postNewPost({
 				text: formValues.text,
