@@ -11,6 +11,7 @@ const FacebookSignIn = ({ setUserData }) => {
 	const responseFacebook = async (response) => {
 		if (!response.id) return null;
 
+		console.log(response);
 		setToken(response.accessToken);
 
 		try {

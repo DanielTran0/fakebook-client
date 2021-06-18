@@ -9,14 +9,13 @@ import './styles/App.css';
 
 /* TODO
 dark mode
-settings
-navbar - alignment and active color
-user pages 
+navbar - tabs
+not found page
 delete 
 decode text
 test user
 auto add my account
-post upload
+post creation no refresh
 handle errors and forms
 
 chat

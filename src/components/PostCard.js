@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import Avatar from '@material-ui/core/Avatar';
@@ -29,7 +30,6 @@ import { userDataProp, postProp } from '../util/customPropTypes';
 import useStyles from '../util/useStylesHook';
 
 const PostCard = ({ userData, post, allPosts, setAllPosts }) => {
-	const { user } = userData;
 	const [displayOptions] = useStateWithLocalStorage('displayOptions', {
 		showAddComment: true,
 		showLastComment: true,
@@ -94,12 +94,17 @@ const PostCard = ({ userData, post, allPosts, setAllPosts }) => {
 	return (
 		<Card className={classes.postSpacing}>
 			<CardHeader
-				// TODO linkable image and name
-				avatar={<Avatar src={setUserImageSource(user)} />}
+				avatar={
+					<Link to={`/user/${postUser._id}`}>
+						<Avatar src={setUserImageSource(postUser)} />
+					</Link>
+				}
 				title={
-					<Typography className={classes.capitalize}>
-						{`${postUser.firstName} ${postUser.lastName}`}
-					</Typography>
+					<Link to={`/user/${postUser._id}`}>
+						<Typography className={classes.capitalize}>
+							{`${postUser.firstName} ${postUser.lastName}`}
+						</Typography>
+					</Link>
 				}
 				subheader={formatDate(date)}
 				action={

@@ -11,6 +11,9 @@ const useStyles = makeStyles((theme) => {
 		center: {
 			margin: 'auto',
 		},
+		bold: {
+			fontWeight: 'bold',
+		},
 		bottomSpacing: {
 			marginBottom: theme.spacing(2),
 		},
@@ -77,8 +80,12 @@ const useStyles = makeStyles((theme) => {
 			display: 'flex',
 			flexDirection: 'column',
 		},
-		bold: {
-			fontWeight: 'bold',
+
+		avatarLargeMobile: {
+			margin: 'auto',
+			width: theme.spacing(10),
+			height: theme.spacing(10),
+			marginBottom: theme.spacing(1),
 		},
 	};
 });

@@ -178,15 +178,6 @@ const putLikeComment = (postId, commentId) => {
 
 const likeRequests = { putLikePost, putLikeComment };
 
-// Combinations
-// const getAnotherUserDetails = (userId) => {
-// 	return Promise.all([
-// 		getAnotherUser(userId),
-// 		getAnotherUserFriends(userId),
-// 		getAnotherUserPosts(userId),
-// 	]);
-// };
-
 export default axiosInstance;
 export {
 	userRequests,

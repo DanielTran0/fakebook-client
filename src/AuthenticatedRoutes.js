@@ -7,6 +7,7 @@ import Friends from './pages/Friends';
 import Navbar from './components/Navbar';
 import Timeline from './pages/Timeline';
 import Settings from './pages/Settings';
+import UserPage from './pages/UserPage';
 
 import { userDataProp, setUserDataProp } from './util/customPropTypes';
 
@@ -37,7 +38,19 @@ const AuthenticatedRoutes = ({ userData, setUserData }) => {
 
 	return (
 		<Navbar userData={userData} setUserData={setUserData}>
-			<Switch>{pageRouteComponents}</Switch>
+			<Switch>
+				{pageRouteComponents}
+				<Route
+					path='/user/:userId'
+					render={(routeProps) => (
+						<UserPage
+							{...routeProps}
+							userData={userData}
+							setUserData={setUserData}
+						/>
+					)}
+				/>
+			</Switch>
 		</Navbar>
 	);
 };

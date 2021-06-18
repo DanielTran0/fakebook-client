@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import Avatar from '@material-ui/core/Avatar';
@@ -22,15 +23,19 @@ const Comments = ({ userData, post, allPosts, setAllPosts, comment }) => {
 	return (
 		<Container className={classes.bottomSpacing} key={comment._id}>
 			<div className={classes.flex}>
-				<Avatar src={setUserImageSource(user)} />
+				<Link to={`/user/${user._id}`}>
+					<Avatar src={setUserImageSource(user)} />
+				</Link>
 
 				<Container>
 					<div className={classes.flex}>
 						<div className={classes.commentText}>
-							<Typography
-								className={classes.capitalize}
-								variant='subtitle2'
-							>{`${user.firstName} ${user.lastName}`}</Typography>
+							<Link to={`/user/${user._id}`}>
+								<Typography
+									className={classes.capitalize}
+									variant='subtitle2'
+								>{`${user.firstName} ${user.lastName}`}</Typography>
+							</Link>
 							<Typography>{text}</Typography>
 						</div>
 

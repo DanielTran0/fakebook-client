@@ -46,7 +46,15 @@ const UserUpdateForm = () => {
 	};
 
 	const checkFormForErrors = (responseError) => {
-		const { firstName, lastName, email, lastImage } = formValues;
+		const {
+			firstName,
+			lastName,
+			email,
+			lastImage,
+			password,
+			newPassword,
+			newPasswordConfirmation,
+		} = formValues;
 		let errorMsgs = {};
 
 		if (
@@ -54,7 +62,10 @@ const UserUpdateForm = () => {
 			lastName === user.lastName &&
 			email === user.email &&
 			lastImage !== '' &&
-			!imageFile
+			!imageFile &&
+			!password &&
+			!newPassword &&
+			!newPasswordConfirmation
 		) {
 			errorMsgs = { general: 'Fields are unchanged' };
 		}
