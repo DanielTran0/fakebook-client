@@ -9,6 +9,7 @@ import Container from '@material-ui/core/Container';
 import Divider from '@material-ui/core/Divider';
 import Modal from '@material-ui/core/Modal';
 import TextField from '@material-ui/core/TextField';
+import Typography from '@material-ui/core/Typography';
 
 import { sessionRequests, userRequests } from '../../util/axiosRequests';
 import { setUserDataProp } from '../../util/customPropTypes';
@@ -138,6 +139,7 @@ const ModalSignUpForm = ({ setUserData }) => {
 							error={Boolean(formErrors.email)}
 							helperText={formErrors.email}
 						/>
+						<Typography>Min Length 8, 1 Capital Letter, 1 Number</Typography>
 						<TextField
 							className={classes.bottomSpacing}
 							variant='outlined'

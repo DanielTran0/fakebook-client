@@ -20,7 +20,43 @@ const postNewUser = (accountDetails) => {
 	});
 };
 
-const userRequests = { getAllUsers, getAnotherUser, postNewUser };
+const putUpdateUser = (
+	userId,
+	{
+		firstName,
+		lastName,
+		email,
+		password,
+		newPassword,
+		newPasswordConfirmation,
+		lastImage,
+		userImage,
+	}
+) => {
+	const bodyFormData = new FormData();
+	bodyFormData.append('firstName', firstName);
+	bodyFormData.append('lastName', lastName);
+	bodyFormData.append('email', email);
+	bodyFormData.append('password', password);
+	bodyFormData.append('newPassword', newPassword);
+	bodyFormData.append('newPasswordConfirmation', newPasswordConfirmation);
+	bodyFormData.append('lastImage', lastImage);
+	bodyFormData.append('userImage', userImage);
+
+	return axiosInstance({
+		method: 'put',
+		url: `/users/${userId}`,
+		data: bodyFormData,
+		headers: { 'Content-Type': 'multipart/form-data' },
+	});
+};
+
+const userRequests = {
+	getAllUsers,
+	getAnotherUser,
+	postNewUser,
+	putUpdateUser,
+};
 
 // Session requests
 const postNewSession = (loginDetails) => {
@@ -67,7 +103,6 @@ const friendRequests = {
 
 // Post requests
 const getUserAndFriendPosts = (skip) => {
-	console.log(skip);
 	return axiosInstance.get(`/posts/`, { params: { skip } });
 };
 

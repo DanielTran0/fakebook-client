@@ -14,8 +14,6 @@ const AllUsers = ({ userData, setUserData }) => {
 	const [users, setUsers] = useState([]);
 	const [friendsList, setFriendsList] = useState([]);
 
-	console.log(users);
-
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
@@ -26,7 +24,7 @@ const AllUsers = ({ userData, setUserData }) => {
 				const currentUserIndex = newUsers.findIndex(
 					(user) => user._id === userData.user._id
 				);
-				console.log(newUsers, currentUserIndex);
+
 				if (currentUserIndex === -1) return null;
 
 				newUsers.splice(currentUserIndex, 1);

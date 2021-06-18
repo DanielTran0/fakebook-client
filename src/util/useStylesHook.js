@@ -77,6 +77,9 @@ const useStyles = makeStyles((theme) => {
 			display: 'flex',
 			flexDirection: 'column',
 		},
+		bold: {
+			fontWeight: 'bold',
+		},
 	};
 });
 

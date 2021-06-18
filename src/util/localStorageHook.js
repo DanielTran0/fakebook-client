@@ -2,8 +2,11 @@ import { useEffect, useState } from 'react';
 
 import axiosInstance from './axiosRequests';
 
-const useStateWithLocalStorage = (localStorageKey) => {
-	const initialState = localStorageKey === 'fakebook-user' ? {} : '';
+const useStateWithLocalStorage = (localStorageKey, initialValue) => {
+	let initialState = localStorageKey === 'fakebook-user' ? {} : '';
+
+	if (initialValue) initialState = initialValue;
+
 	const [value, setValue] = useState(
 		JSON.parse(localStorage.getItem(localStorageKey)) || initialState
 	);

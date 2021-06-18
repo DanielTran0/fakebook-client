@@ -65,6 +65,7 @@ const Navbar = ({ children, userData, setUserData }) => {
 	return (
 		<div>
 			<AppBar
+				className={classes.bottomSpacing}
 				position={isMobile ? 'static' : 'sticky'}
 				color='default'
 				elevation={0}

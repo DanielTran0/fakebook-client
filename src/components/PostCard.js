@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import Avatar from '@material-ui/core/Avatar';
@@ -22,6 +22,7 @@ import Comment from './Comment';
 import CommentForm from './forms/CommentForm';
 import LikeButton from './LikeButton';
 
+import useStateWithLocalStorage from '../util/localStorageHook';
 import formatDate from '../util/formatDate';
 import setUserImageSource from '../util/setUserImageSource';
 import { userDataProp, postProp } from '../util/customPropTypes';
@@ -29,12 +30,21 @@ import useStyles from '../util/useStylesHook';
 
 const PostCard = ({ userData, post, allPosts, setAllPosts }) => {
 	const { user } = userData;
+	const [displayOptions] = useStateWithLocalStorage('displayOptions', {
+		showAddComment: true,
+		showLastComment: true,
+	});
 	const { text, postImage, date, comments, likes, user: postUser } = post;
 	const [isCommentsOpen, setIsCommentsOpen] = useState(true);
 	const [isAddCommentOpen, setIsAddCommentsOpen] = useState(true);
 	const [showMultipleComments, setShowMultipleComments] = useState(false);
 	const [isToolBarOpen, setIsToolBarOpen] = useState(false);
 	const classes = useStyles();
+
+	useEffect(() => {
+		setIsAddCommentsOpen(displayOptions.showAddComment);
+		setIsCommentsOpen(displayOptions.showLastComment);
+	}, [displayOptions]);
 
 	const handleCommentOpenToggle = () => {
 		setIsCommentsOpen(!isCommentsOpen);

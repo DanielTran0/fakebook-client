@@ -11,12 +11,10 @@ const FacebookSignIn = ({ setUserData }) => {
 	const responseFacebook = async (response) => {
 		if (!response.id) return null;
 
-		console.log(response);
 		setToken(response.accessToken);
 
 		try {
 			const userDataResponse = await sessionRequests.postFacebookLogin();
-			console.log(userDataResponse);
 			return setUser(userDataResponse.data.user);
 		} catch (error) {
 			// TODO handle error

@@ -1,46 +1,52 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 
-import Button from '@material-ui/core/Button';
 import Container from '@material-ui/core/Container';
 import Paper from '@material-ui/core/Paper';
-import TextField from '@material-ui/core/TextField';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+import TabContext from '@material-ui/lab/TabContext';
+import TabPanel from '@material-ui/lab/TabPanel';
 import Typography from '@material-ui/core/Typography';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 
-import useStateWithLocalStorage from '../util/localStorageHook';
+import DisplayOptions from '../components/DisplayOptions';
+import UserUpdateForm from '../components/forms/UserUpdateForm';
+
 import useStyles from '../util/useStylesHook';
 
-const Settings = (props) => {
+const Settings = () => {
+	const [tabValue, setTabValue] = useState('0');
 	const isMobile = useMediaQuery('(max-width: 425px)');
 	const classes = useStyles();
 
+	const handleTabChange = (e, newTabValue) => {
+		setTabValue(newTabValue);
+	};
+
 	return (
 		<Container maxWidth='sm'>
-			<Paper>
-				<Container maxWidth='sm'>
-					<Typography
-						className={classes.bottomSpacing}
-						variant={isMobile ? 'h5' : 'h4'}
-					>
-						Settings
-					</Typography>
+			<Typography variant={isMobile ? 'h5' : 'h4'} align='center'>
+				Settings
+			</Typography>
 
-					<div>
-						<Typography
-							className={classes.bottomSpacing}
-							variant={isMobile ? 'h6' : 'h5'}
-						>
-							Home/Timeline
-						</Typography>
-						<Typography variant='body1'>Show last comment</Typography>
-					</div>
-				</Container>
+			<Paper>
+				<TabContext value={tabValue}>
+					<Tabs value={tabValue} onChange={handleTabChange} centered>
+						<Tab label='Display Options' value='0' />
+						<Tab label='Account' value='1' />
+					</Tabs>
+
+					<TabPanel value='0'>
+						<DisplayOptions />
+					</TabPanel>
+
+					<TabPanel value='1'>
+						<UserUpdateForm />
+					</TabPanel>
+				</TabContext>
 			</Paper>
 		</Container>
 	);
 };
-
-Settings.propTypes = {};
 
 export default Settings;

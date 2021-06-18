@@ -14,6 +14,10 @@ navbar - alignment and active color
 user pages 
 delete 
 decode text
+test user
+auto add my account
+post upload
+handle errors and forms
 
 chat
 */

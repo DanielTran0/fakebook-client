@@ -51,7 +51,11 @@ const SignIn = ({ setUserData }) => {
 			setUser(user);
 			return setToken(token);
 		} catch (error) {
-			return checkFormForErrors(error.response.data.errors);
+			if (error.response.data) {
+				return checkFormForErrors(error.response.data.errors);
+			}
+
+			return console.log(error.response);
 		}
 	};
 
