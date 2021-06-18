@@ -30,6 +30,7 @@ const UserPage = ({ match, userData }) => {
 	const [userInfo, setUserInfo] = useState({});
 	const [userPosts, setUserPosts] = useState([]);
 	const [userFriends, setUserFriends] = useState([]);
+	const [currentUserFriends, setCurrentUserFriends] = useState([]);
 	const [tabValue, setTabValue] = useState('0');
 	const isMobile = useMediaQuery('(max-width: 425px)');
 	const classes = useStyles();
@@ -41,11 +42,13 @@ const UserPage = ({ match, userData }) => {
 					userRequests.getAnotherUser(params.userId),
 					postRequests.getAnotherUserPosts(params.userId),
 					friendRequests.getAnotherUserFriends(params.userId),
+					friendRequests.getUserFriends(),
 				]);
 
 				setUserInfo(response[0].data.user);
 				setUserPosts(response[1].data.posts);
 				setUserFriends(response[2].data.friends);
+				setCurrentUserFriends(response[3].data.friends);
 				setILoading(false);
 			} catch (error) {
 				console.log(error);
@@ -73,7 +76,7 @@ const UserPage = ({ match, userData }) => {
 		<UserCard
 			user={friend.user}
 			key={friend.user._id}
-			friendsList={userFriends}
+			friendsList={currentUserFriends}
 		/>
 	));
 

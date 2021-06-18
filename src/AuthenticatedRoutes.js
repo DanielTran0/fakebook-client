@@ -5,8 +5,9 @@ import { Route, Switch, Redirect } from 'react-router-dom';
 import AllUsers from './pages/AllUsers';
 import Friends from './pages/Friends';
 import Navbar from './components/Navbar';
-import Timeline from './pages/Timeline';
+import NotFound from './pages/NotFound';
 import Settings from './pages/Settings';
+import Timeline from './pages/Timeline';
 import UserPage from './pages/UserPage';
 
 import { userDataProp, setUserDataProp } from './util/customPropTypes';
@@ -50,6 +51,7 @@ const AuthenticatedRoutes = ({ userData, setUserData }) => {
 						/>
 					)}
 				/>
+				<Route component={NotFound} />
 			</Switch>
 		</Navbar>
 	);
