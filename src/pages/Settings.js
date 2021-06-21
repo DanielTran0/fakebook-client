@@ -14,12 +14,10 @@ import DisplayOptions from '../components/DisplayOptions';
 import UserUpdateForm from '../components/forms/UserUpdateForm';
 
 import { setUserDataProp } from '../util/customPropTypes';
-import useStyles from '../util/useStylesHook';
 
 const Settings = ({ setUserData }) => {
 	const [tabValue, setTabValue] = useState('0');
 	const isMobile = useMediaQuery('(max-width: 425px)');
-	const classes = useStyles();
 
 	const handleTabChange = (e, newTabValue) => {
 		setTabValue(newTabValue);
@@ -34,7 +32,7 @@ const Settings = ({ setUserData }) => {
 			<Paper>
 				<TabContext value={tabValue}>
 					<Tabs value={tabValue} onChange={handleTabChange} centered>
-						<Tab label='Display Options' value='0' />
+						<Tab label='Display' value='0' />
 						<Tab label='Account' value='1' />
 					</Tabs>
 

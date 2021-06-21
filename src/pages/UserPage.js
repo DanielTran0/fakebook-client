@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Container from '@material-ui/core/Container';
 import Paper from '@material-ui/core/Paper';
@@ -121,9 +120,14 @@ const UserPage = ({ match, userData, setUserData }) => {
 			<div className={classes.background}>
 				<img src={setUserImageSource(userInfo, true)} alt='background' />
 
-				<div className={classes.imageButton}>
-					<ModalBackgroundForm userData={userData} setUserData={setUserData} />
-				</div>
+				{userData.user._id === userInfo._id && (
+					<div className={classes.imageButton}>
+						<ModalBackgroundForm
+							userData={userData}
+							setUserData={setUserData}
+						/>
+					</div>
+				)}
 			</div>
 
 			<Avatar

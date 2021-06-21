@@ -9,9 +9,7 @@ import './styles/App.css';
 
 /* TODO
 CLIENT
-	delete account 
 	handle errors and forms
-	background image
 	
 SERVER
 	test user

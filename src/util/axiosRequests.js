@@ -53,11 +53,16 @@ const putUpdateUser = (
 	});
 };
 
+// const deleteUser = (password) => {
+// 	return axiosInstance.delete('/users', { data: { password } });
+// };
+
 const userRequests = {
 	getAllUsers,
 	getAnotherUser,
 	postNewUser,
 	putUpdateUser,
+	deleteUser,
 };
 
 // Session requests

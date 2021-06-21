@@ -102,6 +102,7 @@ const UserUpdateForm = ({ setUserData }) => {
 				{
 					...formValues,
 					userImage: imageFile,
+					isBackground: false,
 				}
 			);
 			const { user: updatedUser } = userUpdateResponse.data;
