@@ -81,9 +81,7 @@ const Friends = ({ setUserData }) => {
 				{currentFriends.length > 0 ? (
 					friendUserCardComponents
 				) : (
-					<Typography>
-						Find friends by checking out all fakebook users
-					</Typography>
+					<Typography>Find friends by browsing the all users page</Typography>
 				)}
 			</div>
 

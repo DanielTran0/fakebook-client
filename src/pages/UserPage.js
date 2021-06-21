@@ -80,8 +80,6 @@ const UserPage = ({ match, userData }) => {
 		/>
 	));
 
-	console.log(userFriends);
-
 	return isLoading ? (
 		<div className={classes.flex}>
 			<CircularProgress className={classes.center} />

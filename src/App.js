@@ -8,15 +8,19 @@ import useStateWithLocalStorage from './util/localStorageHook';
 import './styles/App.css';
 
 /* TODO
-dark mode
-navbar - tabs
-not found page
-delete 
-decode text
-test user
-auto add my account
-post creation no refresh
-handle errors and forms
+CLIENT
+	dark mode
+	delete account 
+	post creation no refresh
+	handle errors and forms
+	background image
+	
+SERVER
+	decode text
+	test user
+	auto add my account
+
+
 
 chat
 */

@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import AppBar from '@material-ui/core/AppBar';
+import Avatar from '@material-ui/core/Avatar';
+import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardContent from '@material-ui/core/CardContent';
@@ -10,6 +12,7 @@ import Container from '@material-ui/core/Container';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import Modal from '@material-ui/core/Modal';
+import Paper from '@material-ui/core/Paper';
 import Toolbar from '@material-ui/core/Toolbar';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
@@ -24,10 +27,11 @@ import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import NavMenu from './NavMenu';
 import PostForm from './forms/PostForm';
 
+import setUserImageSource from '../util/setUserImageSource';
 import { userDataProp, setUserDataProp } from '../util/customPropTypes';
 import useStyles from '../util/useStylesHook';
 
-const Navbar = ({ children, userData, setUserData }) => {
+const Navbar = ({ children, userData, setUserData, darkMode }) => {
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const isMobile = useMediaQuery('(max-width: 425px)');
 	const classes = useStyles();
@@ -95,13 +99,37 @@ const Navbar = ({ children, userData, setUserData }) => {
 						</Link>
 					</Tooltip>
 
+					<Tooltip
+						title={<Typography variant='body2'>Profile Page</Typography>}
+					>
+						<Link to={`/user/${userData.user._id}`}>
+							<Paper className={classes.userCardSpacing}>
+								<IconButton>
+									<Avatar
+										className={classes.avatarNav}
+										src={setUserImageSource(userData.user)}
+									/>
+								</IconButton>
+								{!isMobile && (
+									<Typography className={classes.capitalize}>
+										{userData.user.firstName} {userData.user.lastName}
+									</Typography>
+								)}
+							</Paper>
+						</Link>
+					</Tooltip>
+
 					<Tooltip title={<Typography variant='body2'>Create Post</Typography>}>
 						<IconButton onClick={handleModalOpen}>
 							<AddCircleIcon />
 						</IconButton>
 					</Tooltip>
 
-					<NavMenu userData={userData} setUserData={setUserData} />
+					<NavMenu
+						userData={userData}
+						setUserData={setUserData}
+						darkMode={darkMode}
+					/>
 				</Toolbar>
 			</AppBar>
 

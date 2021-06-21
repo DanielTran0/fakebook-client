@@ -14,7 +14,8 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import { setUserDataProp } from '../util/customPropTypes';
 import useStyles from '../util/useStylesHook';
 
-const NavMenu = ({ setUserData }) => {
+const NavMenu = ({ setUserData, darkMode }) => {
+	const { isDarkMode, setIsDarkMode } = darkMode;
 	const { setUser, setToken } = setUserData;
 	const [menuAnchor, setMenuAnchor] = useState(null);
 	const classes = useStyles();
@@ -30,6 +31,13 @@ const NavMenu = ({ setUserData }) => {
 	const handleLogOut = () => {
 		setUser({});
 		setToken('');
+		localStorage.clear();
+	};
+
+	const handleDarkModeToggle = () => {
+		if (isDarkMode === 'false') return setIsDarkMode('true');
+
+		return setIsDarkMode('false');
 	};
 
 	return (
@@ -50,7 +58,7 @@ const NavMenu = ({ setUserData }) => {
 					</MenuItem>
 				</Link>
 
-				<MenuItem>
+				<MenuItem onClick={handleDarkModeToggle}>
 					<Brightness2Icon className={classes.sideSpacing} />
 					Dark Mode
 				</MenuItem>

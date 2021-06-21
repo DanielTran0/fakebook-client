@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { Route, Switch, Redirect } from 'react-router-dom';
+
+import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 
 import AllUsers from './pages/AllUsers';
 import Friends from './pages/Friends';
@@ -10,9 +12,23 @@ import Settings from './pages/Settings';
 import Timeline from './pages/Timeline';
 import UserPage from './pages/UserPage';
 
+import useStateWithLocalStorage from './util/localStorageHook';
 import { userDataProp, setUserDataProp } from './util/customPropTypes';
 
 const AuthenticatedRoutes = ({ userData, setUserData }) => {
+	const [isDarkMode, setIsDarkMode] = useStateWithLocalStorage(
+		'dark-mode',
+		'false'
+	);
+
+	const theme = createMuiTheme({
+		palette: {
+			type: isDarkMode === 'true' ? 'dark' : 'light',
+		},
+	});
+
+	console.log(isDarkMode);
+
 	const pageRoutes = [
 		{ page: Timeline, path: '/' },
 		{ page: AllUsers, path: '/users' },
@@ -38,22 +54,28 @@ const AuthenticatedRoutes = ({ userData, setUserData }) => {
 	if (!userData.token) return <Redirect to='/login' />;
 
 	return (
-		<Navbar userData={userData} setUserData={setUserData}>
-			<Switch>
-				{pageRouteComponents}
-				<Route
-					path='/user/:userId'
-					render={(routeProps) => (
-						<UserPage
-							{...routeProps}
-							userData={userData}
-							setUserData={setUserData}
-						/>
-					)}
-				/>
-				<Route component={NotFound} />
-			</Switch>
-		</Navbar>
+		<ThemeProvider theme={theme}>
+			<Navbar
+				userData={userData}
+				setUserData={setUserData}
+				darkMode={{ isDarkMode, setIsDarkMode }}
+			>
+				<Switch>
+					{pageRouteComponents}
+					<Route
+						path='/user/:userId'
+						render={(routeProps) => (
+							<UserPage
+								{...routeProps}
+								userData={userData}
+								setUserData={setUserData}
+							/>
+						)}
+					/>
+					<Route component={NotFound} />
+				</Switch>
+			</Navbar>
+		</ThemeProvider>
 	);
 };
 

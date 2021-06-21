@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Container from '@material-ui/core/Container';
+import Typography from '@material-ui/core/Typography';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 
 import PostCard from '../components/PostCard';
@@ -69,7 +70,12 @@ const Timeline = ({ userData, setUserData }) => {
 	return (
 		<div className='timeline'>
 			<Container disableGutters={isMobile} maxWidth='sm'>
-				<div>{postCardComponents}</div>
+				{allPosts.length === 0 && !isLoading && (
+					<Typography variant={isMobile ? 'h6' : 'h5'} align='center'>
+						No Posts Available. Create one or add friends to view posts.
+					</Typography>
+				)}
+				{postCardComponents}
 
 				{isLoading && (
 					<div className={classes.flex}>
