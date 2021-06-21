@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 
 import Container from '@material-ui/core/Container';
 import Paper from '@material-ui/core/Paper';
@@ -12,9 +13,10 @@ import useMediaQuery from '@material-ui/core/useMediaQuery';
 import DisplayOptions from '../components/DisplayOptions';
 import UserUpdateForm from '../components/forms/UserUpdateForm';
 
+import { setUserDataProp } from '../util/customPropTypes';
 import useStyles from '../util/useStylesHook';
 
-const Settings = () => {
+const Settings = ({ setUserData }) => {
 	const [tabValue, setTabValue] = useState('0');
 	const isMobile = useMediaQuery('(max-width: 425px)');
 	const classes = useStyles();
@@ -41,12 +43,16 @@ const Settings = () => {
 					</TabPanel>
 
 					<TabPanel value='1'>
-						<UserUpdateForm />
+						<UserUpdateForm setUserData={setUserData} />
 					</TabPanel>
 				</TabContext>
 			</Paper>
 		</Container>
 	);
+};
+
+Settings.propTypes = {
+	setUserData: PropTypes.shape(setUserDataProp).isRequired,
 };
 
 export default Settings;

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useHistory, useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import Button from '@material-ui/core/Button';
@@ -31,6 +32,8 @@ const PostForm = ({
 	});
 	const [imageFile, setImageFile] = useState(null);
 	const [formErrors, setFormErrors] = useState({});
+	const history = useHistory();
+	const location = useLocation();
 	const classes = useStyles();
 
 	const handleFormChange = (e) => {
@@ -99,7 +102,11 @@ const PostForm = ({
 				postImage: imageFile,
 			});
 
-			return handleModalClose();
+			handleModalClose();
+
+			if (location.pathname !== '/') return history.push('/');
+
+			return window.location.reload();
 		} catch (error) {
 			return checkFormForErrors(error.response.data.errors);
 		}

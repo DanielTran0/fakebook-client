@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 
 import Button from '@material-ui/core/Button';
 import FormControl from '@material-ui/core/FormControl';
@@ -10,18 +11,19 @@ import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 
-import { userRequests } from '../../util/axiosRequests';
 import useStateWithLocalStorage from '../../util/localStorageHook';
+import { userRequests } from '../../util/axiosRequests';
+import { setUserDataProp } from '../../util/customPropTypes';
 import useStyles from '../../util/useStylesHook';
 
-const UserUpdateForm = () => {
-	const [user, setUser] = useStateWithLocalStorage('fakebook-user');
+const UserUpdateForm = ({ setUserData }) => {
+	const [userDetails] = useStateWithLocalStorage('fakebook-user');
 	const [showPasswordChange, setShowPasswordChange] = useState(false);
 	const [successMessage, setSuccessMessage] = useState(false);
 	const [formValues, setFormValues] = useState({
-		firstName: user.firstName,
-		lastName: user.lastName,
-		email: user.email,
+		firstName: userDetails.firstName,
+		lastName: userDetails.lastName,
+		email: userDetails.email,
 		password: '',
 		newPassword: '',
 		newPasswordConfirmation: '',
@@ -58,9 +60,9 @@ const UserUpdateForm = () => {
 		let errorMsgs = {};
 
 		if (
-			firstName === user.firstName &&
-			lastName === user.lastName &&
-			email === user.email &&
+			firstName === userDetails.firstName &&
+			lastName === userDetails.lastName &&
+			email === userDetails.email &&
 			lastImage !== '' &&
 			!imageFile &&
 			!password &&
@@ -95,16 +97,19 @@ const UserUpdateForm = () => {
 		if (checkFormForErrors()) return null;
 
 		try {
-			const userUpdateResponse = await userRequests.putUpdateUser(user._id, {
-				...formValues,
-				userImage: imageFile,
-			});
+			const userUpdateResponse = await userRequests.putUpdateUser(
+				userDetails._id,
+				{
+					...formValues,
+					userImage: imageFile,
+				}
+			);
 			const { user: updatedUser } = userUpdateResponse.data;
 
 			setShowPasswordChange(false);
 			setImageFile(null);
 			setSuccessMessage(true);
-			return setUser(updatedUser);
+			return setUserData.setUser(updatedUser);
 		} catch (error) {
 			return checkFormForErrors(error.response.data.errors);
 		}
@@ -147,7 +152,7 @@ const UserUpdateForm = () => {
 				/>
 			</div>
 
-			{!user.facebookId && (
+			{!userDetails.facebookId && (
 				<TextField
 					className={classes.bottomSpacing}
 					variant='outlined'
@@ -204,7 +209,7 @@ const UserUpdateForm = () => {
 				</div>
 			)}
 
-			{!user.facebookId && (
+			{!userDetails.facebookId && (
 				<Button
 					className={classes.bottomSpacing}
 					variant='contained'
@@ -214,7 +219,7 @@ const UserUpdateForm = () => {
 				</Button>
 			)}
 
-			{showPasswordChange && !user.facebookId && (
+			{showPasswordChange && !userDetails.facebookId && (
 				<div>
 					<Typography className={classes.bottomSpacing}>
 						Min Length 8, 1 Capital Letter, 1 Number
@@ -279,6 +284,10 @@ const UserUpdateForm = () => {
 			)}
 		</form>
 	);
+};
+
+UserUpdateForm.propTypes = {
+	setUserData: PropTypes.shape(setUserDataProp).isRequired,
 };
 
 export default UserUpdateForm;

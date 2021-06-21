@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 
 import AppBar from '@material-ui/core/AppBar';
 import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardContent from '@material-ui/core/CardContent';
@@ -146,6 +145,10 @@ Navbar.propTypes = {
 	children: PropTypes.element.isRequired,
 	userData: PropTypes.shape(userDataProp).isRequired,
 	setUserData: PropTypes.shape(setUserDataProp).isRequired,
+	darkMode: PropTypes.shape({
+		isDarkMode: PropTypes.string,
+		setIsDarkMode: PropTypes.func,
+	}).isRequired,
 };
 
 export default Navbar;

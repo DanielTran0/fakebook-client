@@ -31,6 +31,7 @@ const putUpdateUser = (
 		newPasswordConfirmation,
 		lastImage,
 		userImage,
+		isBackground,
 	}
 ) => {
 	const bodyFormData = new FormData();
@@ -42,6 +43,7 @@ const putUpdateUser = (
 	bodyFormData.append('newPasswordConfirmation', newPasswordConfirmation);
 	bodyFormData.append('lastImage', lastImage);
 	bodyFormData.append('userImage', userImage);
+	bodyFormData.append('isBackground', isBackground);
 
 	return axiosInstance({
 		method: 'put',

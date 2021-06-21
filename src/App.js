@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { HashRouter as Router, Route, Switch } from 'react-router-dom';
 
 import AuthenticatedRoutes from './AuthenticatedRoutes';
 import Login from './pages/Login';
@@ -9,18 +9,13 @@ import './styles/App.css';
 
 /* TODO
 CLIENT
-	dark mode
 	delete account 
-	post creation no refresh
 	handle errors and forms
 	background image
 	
 SERVER
-	decode text
 	test user
 	auto add my account
-
-
 
 chat
 */

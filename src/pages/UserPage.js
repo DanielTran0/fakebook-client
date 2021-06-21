@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import Avatar from '@material-ui/core/Avatar';
+import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Container from '@material-ui/core/Container';
 import Paper from '@material-ui/core/Paper';
@@ -11,9 +12,11 @@ import TabContext from '@material-ui/lab/TabContext';
 import TabPanel from '@material-ui/lab/TabPanel';
 import Typography from '@material-ui/core/Typography';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
+import { makeStyles } from '@material-ui/core';
 
 import PostCard from '../components/PostCard';
 import UserCard from '../components/UserCard';
+import ModalBackgroundForm from '../components/forms/ModalBackgroundForm';
 
 import {
 	userRequests,
@@ -21,10 +24,39 @@ import {
 	friendRequests,
 } from '../util/axiosRequests';
 import setUserImageSource from '../util/setUserImageSource';
-import { userDataProp } from '../util/customPropTypes';
-import useStyles from '../util/useStylesHook';
+import { userDataProp, setUserDataProp } from '../util/customPropTypes';
 
-const UserPage = ({ match, userData }) => {
+const useStyles = makeStyles((theme) => {
+	return {
+		flex: {
+			display: 'flex',
+		},
+		capitalize: {
+			textTransform: 'capitalize',
+		},
+		center: {
+			margin: 'auto',
+		},
+		avatarLargeMobile: {
+			margin: 'auto',
+			marginTop: -theme.spacing(8),
+			width: theme.spacing(13),
+			height: theme.spacing(13),
+			marginBottom: theme.spacing(1),
+			border: '3px solid black',
+		},
+		background: {
+			position: 'relative',
+		},
+		imageButton: {
+			position: 'absolute',
+			bottom: '5%',
+			right: '2%',
+		},
+	};
+});
+
+const UserPage = ({ match, userData, setUserData }) => {
 	const { params } = match;
 	const [isLoading, setILoading] = useState(true);
 	const [userInfo, setUserInfo] = useState({});
@@ -86,10 +118,19 @@ const UserPage = ({ match, userData }) => {
 		</div>
 	) : (
 		<Container maxWidth='sm' disableGutters={isMobile}>
+			<div className={classes.background}>
+				<img src={setUserImageSource(userInfo, true)} alt='background' />
+
+				<div className={classes.imageButton}>
+					<ModalBackgroundForm userData={userData} setUserData={setUserData} />
+				</div>
+			</div>
+
 			<Avatar
 				className={classes.avatarLargeMobile}
 				src={setUserImageSource(userInfo)}
 			/>
+
 			<Typography className={classes.capitalize} variant='h6' align='center'>
 				{userInfo.firstName} {userInfo.lastName}
 			</Typography>
@@ -118,6 +159,7 @@ UserPage.propTypes = {
 		params: PropTypes.shape({ userId: PropTypes.string }),
 	}).isRequired,
 	userData: PropTypes.shape(userDataProp).isRequired,
+	setUserData: PropTypes.shape(setUserDataProp).isRequired,
 };
 
 export default UserPage;

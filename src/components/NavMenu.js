@@ -53,7 +53,10 @@ const NavMenu = ({ setUserData, darkMode }) => {
 			>
 				<Link to='/settings'>
 					<MenuItem>
-						<SettingsIcon className={classes.sideSpacing} />
+						<SettingsIcon
+							className={classes.sideSpacing}
+							setUserData={setUserData}
+						/>
 						Settings
 					</MenuItem>
 				</Link>
@@ -74,6 +77,10 @@ const NavMenu = ({ setUserData, darkMode }) => {
 
 NavMenu.propTypes = {
 	setUserData: PropTypes.shape(setUserDataProp).isRequired,
+	darkMode: PropTypes.shape({
+		isDarkMode: PropTypes.string,
+		setIsDarkMode: PropTypes.func,
+	}).isRequired,
 };
 
 export default NavMenu;

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { Route, Switch, Redirect } from 'react-router-dom';
 
@@ -26,8 +26,6 @@ const AuthenticatedRoutes = ({ userData, setUserData }) => {
 			type: isDarkMode === 'true' ? 'dark' : 'light',
 		},
 	});
-
-	console.log(isDarkMode);
 
 	const pageRoutes = [
 		{ page: Timeline, path: '/' },
