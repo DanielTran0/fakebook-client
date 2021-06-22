@@ -10,7 +10,10 @@ import './styles/App.css';
 /* TODO
 CLIENT
 	handle errors and forms
-	
+
+	fix all use effects/ use state combos
+	change router link to material ui link
+
 SERVER
 	test user
 	auto add my account

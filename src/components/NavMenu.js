@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import IconButton from '@material-ui/core/IconButton';
+import Link from '@material-ui/core/Link';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
+import Typography from '@material-ui/core/Typography';
 
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import Brightness2Icon from '@material-ui/icons/Brightness2';
@@ -51,15 +52,18 @@ const NavMenu = ({ setUserData, darkMode }) => {
 				open={Boolean(menuAnchor)}
 				onClose={handleMenuClose}
 			>
-				<Link to='/settings'>
-					<MenuItem>
-						<SettingsIcon
-							className={classes.sideSpacing}
-							setUserData={setUserData}
-						/>
-						Settings
-					</MenuItem>
-				</Link>
+				{/* TODO style flex align center remove underline */}
+				<MenuItem>
+					<Link href='#/settings'>
+						<Typography color='textPrimary'>
+							<SettingsIcon
+								className={classes.sideSpacing}
+								setUserData={setUserData}
+							/>
+							Settings
+						</Typography>
+					</Link>
+				</MenuItem>
 
 				<MenuItem onClick={handleDarkModeToggle}>
 					<Brightness2Icon className={classes.sideSpacing} />

@@ -62,7 +62,6 @@ const userRequests = {
 	getAnotherUser,
 	postNewUser,
 	putUpdateUser,
-	deleteUser,
 };
 
 // Session requests

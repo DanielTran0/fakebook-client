@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import AppBar from '@material-ui/core/AppBar';
@@ -9,6 +8,7 @@ import CardHeader from '@material-ui/core/CardHeader';
 import CardContent from '@material-ui/core/CardContent';
 import Container from '@material-ui/core/Container';
 import Divider from '@material-ui/core/Divider';
+import Link from '@material-ui/core/Link';
 import IconButton from '@material-ui/core/IconButton';
 import Modal from '@material-ui/core/Modal';
 import Paper from '@material-ui/core/Paper';
@@ -18,6 +18,7 @@ import Typography from '@material-ui/core/Typography';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 
 import AddCircleIcon from '@material-ui/icons/AddCircle';
+import ChatIcon from '@material-ui/icons/Chat';
 import CloseIcon from '@material-ui/icons/Close';
 import HomeIcon from '@material-ui/icons/Home';
 import PeopleIcon from '@material-ui/icons/People';
@@ -75,7 +76,7 @@ const Navbar = ({ children, userData, setUserData, darkMode }) => {
 			>
 				<Toolbar>
 					<Tooltip title={<Typography variant='body2'>Home</Typography>}>
-						<Link to='/'>
+						<Link href='/'>
 							<IconButton>
 								<HomeIcon />
 							</IconButton>
@@ -83,7 +84,7 @@ const Navbar = ({ children, userData, setUserData, darkMode }) => {
 					</Tooltip>
 
 					<Tooltip title={<Typography variant='body2'>Friends</Typography>}>
-						<Link to='/friends'>
+						<Link href='#/friends'>
 							<IconButton>
 								<PeopleIcon />
 							</IconButton>
@@ -91,9 +92,17 @@ const Navbar = ({ children, userData, setUserData, darkMode }) => {
 					</Tooltip>
 
 					<Tooltip title={<Typography variant='body2'>All Users</Typography>}>
-						<Link to='/users'>
+						<Link href='#/users'>
 							<IconButton>
 								<PersonAddIcon />
+							</IconButton>
+						</Link>
+					</Tooltip>
+
+					<Tooltip title={<Typography variant='body2'>Chat</Typography>}>
+						<Link href='#/chat'>
+							<IconButton>
+								<ChatIcon />
 							</IconButton>
 						</Link>
 					</Tooltip>
@@ -101,7 +110,7 @@ const Navbar = ({ children, userData, setUserData, darkMode }) => {
 					<Tooltip
 						title={<Typography variant='body2'>Profile Page</Typography>}
 					>
-						<Link to={`/user/${userData.user._id}`}>
+						<Link href={`#/user/${userData.user._id}`}>
 							<Paper className={classes.userCardSpacing}>
 								<IconButton>
 									<Avatar

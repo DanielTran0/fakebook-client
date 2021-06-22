@@ -1,10 +1,11 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Route, Switch, Redirect } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 
 import AllUsers from './pages/AllUsers';
+import Chatroom from './pages/Chatroom';
 import Friends from './pages/Friends';
 import Navbar from './components/Navbar';
 import NotFound from './pages/NotFound';
@@ -32,6 +33,7 @@ const AuthenticatedRoutes = ({ userData, setUserData }) => {
 		{ page: AllUsers, path: '/users' },
 		{ page: Friends, path: '/friends' },
 		{ page: Settings, path: '/settings' },
+		{ page: Chatroom, path: '/chat' },
 	];
 
 	const pageRouteComponents = pageRoutes.map((pageRoute) => (
