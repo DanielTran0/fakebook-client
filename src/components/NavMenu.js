@@ -15,8 +15,8 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import { setUserDataProp } from '../util/customPropTypes';
 import useStyles from '../util/useStylesHook';
 
-const NavMenu = ({ setUserData, darkMode }) => {
-	const { isDarkMode, setIsDarkMode } = darkMode;
+const NavMenu = ({ setUserData, colourModeObject }) => {
+	const { colourMode, setColourMode } = colourModeObject;
 	const { setUser, setToken } = setUserData;
 	const [menuAnchor, setMenuAnchor] = useState(null);
 	const classes = useStyles();
@@ -36,9 +36,9 @@ const NavMenu = ({ setUserData, darkMode }) => {
 	};
 
 	const handleDarkModeToggle = () => {
-		if (isDarkMode === 'false') return setIsDarkMode('true');
+		if (colourMode === 'dark') return setColourMode('light');
 
-		return setIsDarkMode('false');
+		return setColourMode('dark');
 	};
 
 	return (
@@ -81,9 +81,9 @@ const NavMenu = ({ setUserData, darkMode }) => {
 
 NavMenu.propTypes = {
 	setUserData: PropTypes.shape(setUserDataProp).isRequired,
-	darkMode: PropTypes.shape({
-		isDarkMode: PropTypes.string,
-		setIsDarkMode: PropTypes.func,
+	colourModeObject: PropTypes.shape({
+		colourMode: PropTypes.string,
+		setColourMode: PropTypes.func,
 	}).isRequired,
 };
 

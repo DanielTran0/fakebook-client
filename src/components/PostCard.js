@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
@@ -36,15 +36,14 @@ const PostCard = ({ userData, post, allPosts, setAllPosts }) => {
 	});
 	const { text, postImage, date, comments, likes, user: postUser } = post;
 	const [isCommentsOpen, setIsCommentsOpen] = useState(true);
-	const [isAddCommentOpen, setIsAddCommentsOpen] = useState(true);
-	const [showMultipleComments, setShowMultipleComments] = useState(false);
+	const [isAddCommentOpen, setIsAddCommentsOpen] = useState(
+		displayOptions.showAddComment
+	);
+	const [showMultipleComments, setShowMultipleComments] = useState(
+		displayOptions.showLastComment
+	);
 	const [isToolBarOpen, setIsToolBarOpen] = useState(false);
 	const classes = useStyles();
-
-	useEffect(() => {
-		setIsAddCommentsOpen(displayOptions.showAddComment);
-		setIsCommentsOpen(displayOptions.showLastComment);
-	}, [displayOptions]);
 
 	const handleCommentOpenToggle = () => {
 		setIsCommentsOpen(!isCommentsOpen);

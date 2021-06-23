@@ -17,7 +17,7 @@ import { setUserDataProp } from '../../util/customPropTypes';
 import useStyles from '../../util/useStylesHook';
 
 const UserUpdateForm = ({ setUserData }) => {
-	const [userDetails] = useStateWithLocalStorage('fakebook-user');
+	const [userDetails] = useStateWithLocalStorage('user', {});
 	const [showPasswordChange, setShowPasswordChange] = useState(false);
 	const [successMessage, setSuccessMessage] = useState(false);
 	const [formValues, setFormValues] = useState({

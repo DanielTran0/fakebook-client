@@ -22,9 +22,8 @@ chat
 */
 
 const App = () => {
-	const [user, setUser] = useStateWithLocalStorage('fakebook-user');
-	const [token, setToken] = useStateWithLocalStorage('fakebook-token');
-
+	const [user, setUser] = useStateWithLocalStorage('user', {});
+	const [token, setToken] = useStateWithLocalStorage('token', '');
 	const userData = { user, token };
 	const setUserData = { setUser, setToken };
 

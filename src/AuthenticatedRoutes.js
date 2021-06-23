@@ -17,14 +17,14 @@ import useStateWithLocalStorage from './util/localStorageHook';
 import { userDataProp, setUserDataProp } from './util/customPropTypes';
 
 const AuthenticatedRoutes = ({ userData, setUserData }) => {
-	const [isDarkMode, setIsDarkMode] = useStateWithLocalStorage(
-		'dark-mode',
-		'false'
+	const [colourMode, setColourMode] = useStateWithLocalStorage(
+		'colourMode',
+		'light'
 	);
 
 	const theme = createMuiTheme({
 		palette: {
-			type: isDarkMode === 'true' ? 'dark' : 'light',
+			type: colourMode === 'dark' ? 'dark' : 'light',
 		},
 	});
 
@@ -58,7 +58,7 @@ const AuthenticatedRoutes = ({ userData, setUserData }) => {
 			<Navbar
 				userData={userData}
 				setUserData={setUserData}
-				darkMode={{ isDarkMode, setIsDarkMode }}
+				colourModeObject={{ colourMode, setColourMode }}
 			>
 				<Switch>
 					{pageRouteComponents}

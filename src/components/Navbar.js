@@ -31,7 +31,7 @@ import setUserImageSource from '../util/setUserImageSource';
 import { userDataProp, setUserDataProp } from '../util/customPropTypes';
 import useStyles from '../util/useStylesHook';
 
-const Navbar = ({ children, userData, setUserData, darkMode }) => {
+const Navbar = ({ children, userData, setUserData, colourModeObject }) => {
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const isMobile = useMediaQuery('(max-width: 425px)');
 	const classes = useStyles();
@@ -136,7 +136,7 @@ const Navbar = ({ children, userData, setUserData, darkMode }) => {
 					<NavMenu
 						userData={userData}
 						setUserData={setUserData}
-						darkMode={darkMode}
+						colourModeObject={colourModeObject}
 					/>
 				</Toolbar>
 			</AppBar>
@@ -154,9 +154,9 @@ Navbar.propTypes = {
 	children: PropTypes.element.isRequired,
 	userData: PropTypes.shape(userDataProp).isRequired,
 	setUserData: PropTypes.shape(setUserDataProp).isRequired,
-	darkMode: PropTypes.shape({
-		isDarkMode: PropTypes.string,
-		setIsDarkMode: PropTypes.func,
+	colourModeObject: PropTypes.shape({
+		colourMode: PropTypes.string,
+		setColourMode: PropTypes.func,
 	}).isRequired,
 };
 
