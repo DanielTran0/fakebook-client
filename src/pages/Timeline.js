@@ -13,7 +13,12 @@ import PostCard from '../components/PostCard';
 import { postRequests } from '../util/axiosRequests';
 import { userDataProp, setUserDataProp } from '../util/customPropTypes';
 
-const useStyles = makeStyles({});
+const useStyles = makeStyles({
+	center: {
+		display: 'flex',
+		justifyContent: 'center',
+	},
+});
 
 const Timeline = ({ userData, setUserData }) => {
 	const { setUser, setToken } = setUserData;
@@ -25,6 +30,8 @@ const Timeline = ({ userData, setUserData }) => {
 	const classes = useStyles();
 
 	useEffect(() => {
+		setILoading(true);
+
 		const fetchData = async () => {
 			try {
 				const postsResponse = await postRequests.getUserAndFriendPosts(skip);
@@ -82,11 +89,12 @@ const Timeline = ({ userData, setUserData }) => {
 					No Posts Available. Create one or add friends to view posts.
 				</Typography>
 			)}
+
 			{postCardComponents}
 
 			{isLoading && (
-				<div className={classes.flex}>
-					<CircularProgress className={classes.center} />
+				<div className={classes.center}>
+					<CircularProgress />
 				</div>
 			)}
 		</Container>

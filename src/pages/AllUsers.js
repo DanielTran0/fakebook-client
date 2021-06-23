@@ -8,7 +8,6 @@ import UserCard from '../components/UserCard';
 
 import { userRequests, friendRequests } from '../util/axiosRequests';
 import { userDataProp, setUserDataProp } from '../util/customPropTypes';
-import handleErrors from '../util/handleErrors';
 
 const AllUsers = ({ userData, setUserData }) => {
 	const [users, setUsers] = useState([]);
@@ -32,7 +31,7 @@ const AllUsers = ({ userData, setUserData }) => {
 				setFriendsList(friendResponse.data.friends);
 				return setUsers(newUsers);
 			} catch (error) {
-				return handleErrors(error, setUserData);
+				return console.log(error);
 			}
 		};
 

@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import Avatar from '@material-ui/core/Avatar';
@@ -9,11 +8,13 @@ import CardActions from '@material-ui/core/CardActions';
 import CardHeader from '@material-ui/core/CardHeader';
 import Container from '@material-ui/core/Container';
 import Divider from '@material-ui/core/Divider';
+import Link from '@material-ui/core/Link';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
+import { makeStyles } from '@material-ui/core/styles';
 
 import ChatBubbleOutlineOutlinedIcon from '@material-ui/icons/ChatBubbleOutlineOutlined';
 import ThumbUpAltOutlinedIcon from '@material-ui/icons/ThumbUpAltOutlined';
@@ -27,21 +28,43 @@ import useStateWithLocalStorage from '../util/localStorageHook';
 import formatDate from '../util/formatDate';
 import setUserImageSource from '../util/setUserImageSource';
 import { userDataProp, postProp } from '../util/customPropTypes';
-import useStyles from '../util/useStylesHook';
+
+const useStyles = makeStyles({
+	postSpacing: {
+		marginBottom: 25,
+	},
+	capitalize: {
+		textTransform: 'capitalize',
+	},
+	bottomSpacing: {
+		marginBottom: 10,
+	},
+	postInfo: {
+		display: 'flex',
+		justifyContent: 'space-between',
+
+		'& button ': {
+			margin: '0 15px',
+		},
+	},
+	postActions: {
+		'& button ': {
+			margin: 'auto',
+		},
+	},
+});
 
 const PostCard = ({ userData, post, allPosts, setAllPosts }) => {
+	const { text, postImage, date, comments, likes, user: postUser } = post;
+	const { user } = userData;
 	const [displayOptions] = useStateWithLocalStorage('displayOptions', {
 		showAddComment: true,
 		showLastComment: true,
 	});
-	const { text, postImage, date, comments, likes, user: postUser } = post;
-	const [isCommentsOpen, setIsCommentsOpen] = useState(true);
-	const [isAddCommentOpen, setIsAddCommentsOpen] = useState(
-		displayOptions.showAddComment
-	);
-	const [showMultipleComments, setShowMultipleComments] = useState(
-		displayOptions.showLastComment
-	);
+	const { showAddComment, showLastComment } = displayOptions;
+	const [isAddCommentOpen, setIsAddCommentsOpen] = useState(showAddComment);
+	const [isCommentsOpen, setIsCommentsOpen] = useState(showLastComment);
+	const [showMultipleComments, setShowMultipleComments] = useState(false);
 	const [isToolBarOpen, setIsToolBarOpen] = useState(false);
 	const classes = useStyles();
 
@@ -79,11 +102,11 @@ const PostCard = ({ userData, post, allPosts, setAllPosts }) => {
 	const postLikedNames = (
 		<List disablePadding>
 			{post.likes.map((like) => (
-				<ListItem className={classes.noMargin} disableGutters key={like._id}>
+				<ListItem disableGutters key={like._id}>
 					<ListItemText
-						className={classes.noMargin}
 						primary={`${like.user.firstName} ${like.user.lastName}`}
 						primaryTypographyProps={{ variant: 'subtitle2' }}
+						className={classes.capitalize}
 					/>
 				</ListItem>
 			))}
@@ -94,20 +117,20 @@ const PostCard = ({ userData, post, allPosts, setAllPosts }) => {
 		<Card className={classes.postSpacing}>
 			<CardHeader
 				avatar={
-					<Link to={`/user/${postUser._id}`}>
+					<Link href={`#/user/${postUser._id}`}>
 						<Avatar src={setUserImageSource(postUser)} />
 					</Link>
 				}
 				title={
-					<Link to={`/user/${postUser._id}`}>
-						<Typography className={classes.capitalize}>
+					<Link href={`#/user/${postUser._id}`} underline='none'>
+						<Typography color='textPrimary' className={classes.capitalize}>
 							{`${postUser.firstName} ${postUser.lastName}`}
 						</Typography>
 					</Link>
 				}
 				subheader={formatDate(date)}
 				action={
-					post.user._id === userData.user._id && (
+					post.user._id === user._id && (
 						<MenuOptions
 							isPost
 							post={post}
@@ -119,12 +142,13 @@ const PostCard = ({ userData, post, allPosts, setAllPosts }) => {
 			/>
 
 			{text && (
-				<Container>
+				<Container className={classes.bottomSpacing}>
 					<Typography>{text}</Typography>
 				</Container>
 			)}
 
 			{postImage && (
+				// TODO change url
 				<img
 					src={`http://localhost:5000/static/images/posts/${postImage}`}
 					alt='post'
@@ -132,7 +156,7 @@ const PostCard = ({ userData, post, allPosts, setAllPosts }) => {
 			)}
 
 			{likes.length || comments.length ? (
-				<div className={classes.buttonSpaceEnd}>
+				<div className={classes.postInfo}>
 					<Tooltip title={postLikedNames} open={isToolBarOpen} arrow>
 						<Button
 							startIcon={<ThumbUpAltOutlinedIcon />}
@@ -155,7 +179,7 @@ const PostCard = ({ userData, post, allPosts, setAllPosts }) => {
 
 			<Divider variant='middle' />
 
-			<CardActions>
+			<CardActions className={classes.postActions}>
 				<LikeButton
 					userData={userData}
 					post={post}
@@ -163,8 +187,8 @@ const PostCard = ({ userData, post, allPosts, setAllPosts }) => {
 					setAllPosts={setAllPosts}
 					isPost
 				/>
+
 				<Button
-					className={classes.center}
 					startIcon={<ChatBubbleOutlineOutlinedIcon />}
 					onClick={handleAddCommentOpenToggle}
 				>

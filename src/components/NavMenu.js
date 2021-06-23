@@ -66,6 +66,7 @@ const NavMenu = ({ setUserData, colourModeObject, handleActiveTab }) => {
 	const handleLogOut = () => {
 		setUser({});
 		setToken('');
+		setColourMode('light');
 		localStorage.clear();
 	};
 
@@ -121,15 +122,16 @@ const NavMenu = ({ setUserData, colourModeObject, handleActiveTab }) => {
 					Create Post
 				</MenuItem>
 
-				<MenuItem>
+				<MenuItem
+					onClick={() => {
+						handleActiveTab('');
+						handleMenuClose();
+					}}
+				>
 					<Link
 						href='#/settings'
 						underline='none'
 						color='textPrimary'
-						onClick={() => {
-							handleActiveTab('');
-							handleMenuClose();
-						}}
 						className={classes.settings}
 					>
 						<SettingsIcon className={classes.sideSpacing} />

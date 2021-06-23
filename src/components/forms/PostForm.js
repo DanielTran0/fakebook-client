@@ -12,6 +12,7 @@ import RadioGroup from '@material-ui/core/RadioGroup';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
+import { useSnackbar } from 'notistack';
 
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import SaveOutlinedIcon from '@material-ui/icons/SaveOutlined';
@@ -49,6 +50,7 @@ const PostForm = ({
 	const [formErrors, setFormErrors] = useState({});
 	const history = useHistory();
 	const location = useLocation();
+	const { enqueueSnackbar } = useSnackbar();
 	const classes = useStyles();
 
 	const handleFormChange = (e) => {
@@ -106,7 +108,10 @@ const PostForm = ({
 				setAllPosts(newAllPosts);
 				return handleModalClose();
 			} catch (error) {
-				return checkFormForErrors(error.response.data.errors);
+				if (error.response)
+					return checkFormForErrors(error.response.data.errors);
+
+				return enqueueSnackbar(error.message, { variant: 'error' });
 			}
 		}
 
@@ -125,7 +130,9 @@ const PostForm = ({
 			history.push('/login');
 			return handleModalClose();
 		} catch (error) {
-			return checkFormForErrors(error.response.data.errors);
+			if (error.response) return checkFormForErrors(error.response.data.errors);
+
+			return enqueueSnackbar(error.message, { variant: 'error' });
 		}
 	};
 

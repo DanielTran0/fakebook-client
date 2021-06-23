@@ -13,6 +13,7 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import Modal from '@material-ui/core/Modal';
 import Typography from '@material-ui/core/Typography';
+import { useSnackbar } from 'notistack';
 
 import CloseIcon from '@material-ui/icons/Close';
 import DeleteOutlineOutlinedIcon from '@material-ui/icons/DeleteOutlineOutlined';
@@ -30,6 +31,7 @@ const MenuOptions = ({ isPost, post, allPosts, setAllPosts, comment }) => {
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [isFormTypeEdit, setIsFormTypeEdit] = useState(true);
 	const [deleteError, setDeleteError] = useState([]);
+	const { enqueueSnackbar } = useSnackbar();
 	const classes = useStyles();
 
 	const handleMenuOpen = (e) => {
@@ -65,7 +67,9 @@ const MenuOptions = ({ isPost, post, allPosts, setAllPosts, comment }) => {
 				newAllPosts.splice(deletePostIndex, 1);
 				return setAllPosts(newAllPosts);
 			} catch (error) {
-				return setDeleteError(error.response.data.errors);
+				if (error.response) return setDeleteError(error.response.data.errors);
+
+				return enqueueSnackbar(error.message, { variant: 'error' });
 			}
 		}
 
@@ -86,7 +90,9 @@ const MenuOptions = ({ isPost, post, allPosts, setAllPosts, comment }) => {
 
 			return setAllPosts(newAllPosts);
 		} catch (error) {
-			return setDeleteError(error.response.data.errors);
+			if (error.response) return setDeleteError(error.response.data.errors);
+
+			return enqueueSnackbar(error.message, { variant: 'error' });
 		}
 	};
 

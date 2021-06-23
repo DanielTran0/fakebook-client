@@ -95,9 +95,7 @@ const ModalSignUpForm = ({ setUserData }) => {
 			setUser(user);
 			return setToken(token);
 		} catch (error) {
-			if (error.response) {
-				return checkFormForErrors(error.response.data.errors);
-			}
+			if (error.response) return checkFormForErrors(error.response.data.errors);
 
 			return enqueueSnackbar(error.message, { variant: 'error' });
 		}

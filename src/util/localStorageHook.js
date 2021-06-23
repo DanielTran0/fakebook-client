@@ -13,6 +13,8 @@ const useStateWithLocalStorage = (localStorageKey, initialState) => {
 
 	if (localStorageKey === 'token' && value !== '')
 		axiosInstance.defaults.headers.common.Authorization = `Bearer ${value}`;
+	if (localStorageKey === 'token' && value === '')
+		axiosInstance.defaults.headers.common.Authorization = '';
 
 	return [value, setValue];
 };

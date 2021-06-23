@@ -10,7 +10,6 @@ import UserCard from '../components/UserCard';
 import { friendRequests } from '../util/axiosRequests';
 import { setUserDataProp } from '../util/customPropTypes';
 import useStyles from '../util/useStylesHook';
-import handleErrors from '../util/handleErrors';
 
 const Friends = ({ setUserData }) => {
 	const [friendsList, setFriendsList] = useState([]);
@@ -29,7 +28,7 @@ const Friends = ({ setUserData }) => {
 				);
 				setFriendsList(friends);
 			} catch (error) {
-				handleErrors(error, setUserData);
+				console.log(error);
 			}
 		};
 

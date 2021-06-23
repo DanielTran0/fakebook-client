@@ -4,7 +4,6 @@ const setUserImageSource = (user, isBackground) => {
 		let imageUrl = `http://localhost:5000/static/images/users/default-background.jpg`;
 
 		// TODO replace url
-
 		if (userBackgroundImageUrl?.[0] === 'userImage')
 			imageUrl = `http://localhost:5000/static/images/users/${user.backgroundImage}`;
 
