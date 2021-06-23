@@ -4,44 +4,89 @@ import PropTypes from 'prop-types';
 
 import Container from '@material-ui/core/Container';
 import Divider from '@material-ui/core/Divider';
+import Grid from '@material-ui/core/Grid';
+import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
+import { makeStyles } from '@material-ui/core/styles';
 
 import FacebookSignIn from '../components/FacebookSignIn';
 import SignInForm from '../components/forms/SignInForm';
 import ModalSignUpForm from '../components/forms/ModalSignUpForm';
 
 import { userDataProp, setUserDataProp } from '../util/customPropTypes';
-import useStyles from '../util/useStylesHook';
+
+const useStyles = makeStyles({
+	grid: { marginTop: 60 },
+	bold: { fontWeight: 'bold' },
+	forms: {
+		marginTop: 40,
+		padding: '15px 0px',
+	},
+	marginBottom: {
+		marginBottom: 20,
+	},
+	width: {
+		maxWidth: 450,
+	},
+});
 
 const Login = ({ userData, setUserData }) => {
 	const { token } = userData;
+	const isSmallScreen = useMediaQuery('(max-width: 599px)');
+	const isMediumScreen = useMediaQuery('(max-width:959px)');
+	const isLargeScreen = useMediaQuery('(min-width:1100px)');
 	const classes = useStyles();
 
 	if (token) return <Redirect to='/' />;
 
 	return (
-		<div className='login'>
-			<Container maxWidth='sm'>
-				<Typography variant='h4' color='primary' align='center'>
-					fakebook
-				</Typography>
-				<Typography variant='body1' align='center'>
-					Connect with friends and the world around you on Facebook.
-				</Typography>
-			</Container>
-
-			<Container maxWidth='xs'>
-				<SignInForm setUserData={setUserData} />
-
-				<Divider className={classes.bottomSpacing} />
-
+		<Grid
+			container
+			alignItems='center'
+			spacing={isLargeScreen ? 3 : 0}
+			className={classes.grid}
+		>
+			<Grid item xs={12} md={6}>
 				<Container>
-					<ModalSignUpForm setUserData={setUserData} />
+					<Grid container justify={isLargeScreen ? 'flex-end' : 'center'}>
+						<div className={classes.width}>
+							<Typography
+								variant={isSmallScreen ? 'h4' : 'h2'}
+								align={isMediumScreen ? 'center' : 'left'}
+								color='primary'
+								className={classes.bold}
+							>
+								fakebook
+							</Typography>
 
-					<FacebookSignIn setUserData={setUserData} />
+							<Typography
+								variant={isSmallScreen ? 'body1' : 'h5'}
+								align={isMediumScreen ? 'center' : 'left'}
+							>
+								Connect with friends and the world around you on Fakebook.
+							</Typography>
+						</div>
+					</Grid>
 				</Container>
-			</Container>
-		</div>
+			</Grid>
+
+			<Grid item xs={12} md={6}>
+				<Grid container justify={isLargeScreen ? 'flex-start' : 'center'}>
+					<Paper elevation={3} className={classes.forms}>
+						<Container maxWidth='xs'>
+							<SignInForm setUserData={setUserData} />
+
+							<Divider className={classes.marginBottom} />
+
+							<ModalSignUpForm setUserData={setUserData} />
+
+							<FacebookSignIn setUserData={setUserData} />
+						</Container>
+					</Paper>
+				</Grid>
+			</Grid>
+		</Grid>
 	);
 };
 

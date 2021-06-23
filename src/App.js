@@ -1,25 +1,18 @@
 import React from 'react';
 import { HashRouter as Router, Route, Switch } from 'react-router-dom';
 
+import CssBaseline from '@material-ui/core/CssBaseline';
+import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
+import { SnackbarProvider } from 'notistack';
+
 import AuthenticatedRoutes from './AuthenticatedRoutes';
 import Login from './pages/Login';
 
 import useStateWithLocalStorage from './util/localStorageHook';
-import './styles/App.css';
 
-/* TODO
-CLIENT
-	handle errors and forms
-
-	fix all use effects/ use state combos
-	change router link to material ui link
-
-SERVER
-	test user
-	auto add my account
-
-chat
-*/
+const theme = createMuiTheme({
+	palette: { primary: { main: '#1877f2' }, background: { default: '#f0f2f5' } },
+});
 
 const App = () => {
 	const [user, setUser] = useStateWithLocalStorage('user', {});
@@ -28,25 +21,32 @@ const App = () => {
 	const setUserData = { setUser, setToken };
 
 	return (
-		<div className='app'>
-			<Router>
-				<Switch>
-					<Route
-						exact
-						path='/login'
-						render={(routeProps) => (
-							<Login
-								{...routeProps}
-								userData={userData}
-								setUserData={setUserData}
-							/>
-						)}
-					/>
-
-					<AuthenticatedRoutes userData={userData} setUserData={setUserData} />
-				</Switch>
-			</Router>
-		</div>
+		<ThemeProvider theme={theme}>
+			<SnackbarProvider
+				maxSnack={2}
+				anchorOrigin={{
+					vertical: 'bottom',
+					horizontal: 'center',
+				}}
+			>
+				<CssBaseline />
+				<Router>
+					<Switch>
+						<Route
+							exact
+							path='/login'
+							render={() => (
+								<Login userData={userData} setUserData={setUserData} />
+							)}
+						/>
+						<AuthenticatedRoutes
+							userData={userData}
+							setUserData={setUserData}
+						/>
+					</Switch>
+				</Router>
+			</SnackbarProvider>
+		</ThemeProvider>
 	);
 };
 

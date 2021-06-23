@@ -4,15 +4,26 @@ import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
+import { makeStyles } from '@material-ui/core/styles';
+import { useSnackbar } from 'notistack';
 
 import { sessionRequests } from '../../util/axiosRequests';
 import { setUserDataProp } from '../../util/customPropTypes';
-import useStyles from '../../util/useStylesHook';
+
+const useStyles = makeStyles({
+	bottomSpacing: {
+		marginBottom: 15,
+	},
+	unbold: {
+		fontWeight: 'normal',
+	},
+});
 
 const SignIn = ({ setUserData }) => {
 	const { setUser, setToken } = setUserData;
 	const [formValues, setFormValues] = useState({ email: '', password: '' });
 	const [formErrors, setFormErrors] = useState({});
+	const { enqueueSnackbar } = useSnackbar();
 	const classes = useStyles();
 
 	const handleFormChange = (e) => {
@@ -26,10 +37,16 @@ const SignIn = ({ setUserData }) => {
 		if (!formValues.email) errorMsgs = { email: 'Required field' };
 		if (!formValues.password)
 			errorMsgs = { ...errorMsgs, password: 'Required field' };
-		if (responseError?.[0].param === 'email')
-			errorMsgs = { ...errorMsgs, email: responseError[0].msg };
-		if (responseError?.[0].param === 'password')
-			errorMsgs = { ...errorMsgs, password: responseError[0].msg };
+		if (responseError) {
+			responseError.forEach((error) => {
+				errorMsgs = {
+					...errorMsgs,
+					[error.param]: `${
+						errorMsgs[error.param] ? errorMsgs[error.param] : ''
+					} ${error.msg}`,
+				};
+			});
+		}
 		if (Object.keys(errorMsgs).length === 0) return false;
 
 		setFormErrors(errorMsgs);
@@ -51,18 +68,17 @@ const SignIn = ({ setUserData }) => {
 			setUser(user);
 			return setToken(token);
 		} catch (error) {
-			if (error.response.data) {
+			if (error.response) {
 				return checkFormForErrors(error.response.data.errors);
 			}
 
-			return console.log(error.response);
+			return enqueueSnackbar(error.message, { variant: 'error' });
 		}
 	};
 
 	return (
 		<form noValidate onSubmit={handleFormSubmit}>
 			<TextField
-				className={classes.bottomSpacing}
 				variant='outlined'
 				label='Email'
 				name='email'
@@ -73,9 +89,10 @@ const SignIn = ({ setUserData }) => {
 				onChange={handleFormChange}
 				error={Boolean(formErrors.email)}
 				helperText={formErrors.email}
-			/>
-			<TextField
 				className={classes.bottomSpacing}
+			/>
+
+			<TextField
 				variant='outlined'
 				label='Password'
 				name='password'
@@ -86,16 +103,19 @@ const SignIn = ({ setUserData }) => {
 				onChange={handleFormChange}
 				error={Boolean(formErrors.password)}
 				helperText={formErrors.password}
+				className={classes.bottomSpacing}
 			/>
 
 			<Button
-				className={`${classes.buttonPadding} ${classes.bottomSpacing}`}
 				variant='contained'
 				type='submit'
 				color='primary'
 				fullWidth
+				className={classes.bottomSpacing}
 			>
-				<Typography variant='h6'>Log In</Typography>
+				<Typography variant='h6' className={classes.unbold}>
+					Log In
+				</Typography>
 			</Button>
 		</form>
 	);

@@ -2,9 +2,7 @@ import { useEffect, useState } from 'react';
 
 import axiosInstance from './axiosRequests';
 
-const useStateWithLocalStorage = (localStorageKey, initialValue) => {
-	const initialState = initialValue;
-
+const useStateWithLocalStorage = (localStorageKey, initialState) => {
 	const [value, setValue] = useState(
 		JSON.parse(localStorage.getItem(localStorageKey)) || initialState
 	);

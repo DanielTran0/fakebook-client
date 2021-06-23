@@ -10,10 +10,27 @@ import Divider from '@material-ui/core/Divider';
 import Modal from '@material-ui/core/Modal';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
+import { makeStyles } from '@material-ui/core/styles';
+import { useSnackbar } from 'notistack';
 
 import { sessionRequests, userRequests } from '../../util/axiosRequests';
 import { setUserDataProp } from '../../util/customPropTypes';
-import useStyles from '../../util/useStylesHook';
+
+const useStyles = makeStyles({
+	bottomSpacing: {
+		marginBottom: 15,
+	},
+	modal: {
+		position: 'absolute',
+		top: '50%',
+		left: '50%',
+		transform: `translate(-50%, -50%)`,
+	},
+	button: {
+		background: '#42b72a',
+		color: 'white',
+	},
+});
 
 const ModalSignUpForm = ({ setUserData }) => {
 	const { setUser, setToken } = setUserData;
@@ -26,6 +43,7 @@ const ModalSignUpForm = ({ setUserData }) => {
 		passwordConfirmation: '',
 	});
 	const [formErrors, setFormErrors] = useState({});
+	const { enqueueSnackbar } = useSnackbar();
 	const classes = useStyles();
 
 	const handleModalOpen = () => {
@@ -44,16 +62,6 @@ const ModalSignUpForm = ({ setUserData }) => {
 	const checkFormForErrors = (responseError) => {
 		let errorMsgs = {};
 
-		if (!formValues.firstName) errorMsgs = { firstName: 'Required Field' };
-		if (!formValues.lastName)
-			errorMsgs = { ...errorMsgs, lastName: 'Required Field' };
-		if (!formValues.email)
-			errorMsgs = { ...errorMsgs, email: 'Required Field' };
-		if (!formValues.password)
-			errorMsgs = { ...errorMsgs, password: 'Required Field' };
-		if (!formValues.passwordConfirmation)
-			errorMsgs = { ...errorMsgs, passwordConfirmation: 'Required Field' };
-
 		if (responseError) {
 			responseError.forEach((error) => {
 				errorMsgs = {
@@ -64,7 +72,6 @@ const ModalSignUpForm = ({ setUserData }) => {
 				};
 			});
 		}
-
 		if (Object.keys(errorMsgs).length === 0) return false;
 
 		setFormErrors(errorMsgs);
@@ -89,7 +96,11 @@ const ModalSignUpForm = ({ setUserData }) => {
 			setUser(user);
 			return setToken(token);
 		} catch (error) {
-			return checkFormForErrors(error.response.data.errors);
+			if (error.response) {
+				return checkFormForErrors(error.response.data.errors);
+			}
+
+			return enqueueSnackbar(error.message, { variant: 'error' });
 		}
 	};
 
@@ -103,7 +114,6 @@ const ModalSignUpForm = ({ setUserData }) => {
 				<CardContent>
 					<form noValidate onSubmit={handleFormSubmit}>
 						<TextField
-							className={classes.bottomSpacing}
 							variant='outlined'
 							label='First name'
 							name='firstName'
@@ -113,9 +123,10 @@ const ModalSignUpForm = ({ setUserData }) => {
 							onChange={handleFormChange}
 							error={Boolean(formErrors.firstName)}
 							helperText={formErrors.firstName}
-						/>
-						<TextField
 							className={classes.bottomSpacing}
+						/>
+
+						<TextField
 							variant='outlined'
 							label='Last name'
 							name='lastName'
@@ -125,9 +136,10 @@ const ModalSignUpForm = ({ setUserData }) => {
 							onChange={handleFormChange}
 							error={Boolean(formErrors.lastName)}
 							helperText={formErrors.lastName}
-						/>
-						<TextField
 							className={classes.bottomSpacing}
+						/>
+
+						<TextField
 							variant='outlined'
 							label='Email'
 							name='email'
@@ -138,10 +150,10 @@ const ModalSignUpForm = ({ setUserData }) => {
 							onChange={handleFormChange}
 							error={Boolean(formErrors.email)}
 							helperText={formErrors.email}
-						/>
-						<Typography>Min Length 8, 1 Capital Letter, 1 Number</Typography>
-						<TextField
 							className={classes.bottomSpacing}
+						/>
+
+						<TextField
 							variant='outlined'
 							label='Password'
 							name='password'
@@ -152,9 +164,10 @@ const ModalSignUpForm = ({ setUserData }) => {
 							onChange={handleFormChange}
 							error={Boolean(formErrors.password)}
 							helperText={formErrors.password}
-						/>
-						<TextField
 							className={classes.bottomSpacing}
+						/>
+
+						<TextField
 							variant='outlined'
 							label='Password confirmation'
 							name='passwordConfirmation'
@@ -165,10 +178,16 @@ const ModalSignUpForm = ({ setUserData }) => {
 							onChange={handleFormChange}
 							error={Boolean(formErrors.passwordConfirmation)}
 							helperText={formErrors.passwordConfirmation}
+							className={classes.bottomSpacing}
 						/>
 
-						<Button variant='contained' type='submit' color='primary' fullWidth>
-							Sign Up
+						<Button
+							variant='contained'
+							type='submit'
+							fullWidth
+							className={classes.button}
+						>
+							<Typography>Sign Up</Typography>
 						</Button>
 					</form>
 				</CardContent>
@@ -177,14 +196,14 @@ const ModalSignUpForm = ({ setUserData }) => {
 	);
 
 	return (
-		<div className='modal-sign-up'>
+		<div>
 			<Button
-				className={classes.bottomSpacing}
 				variant='contained'
 				onClick={handleModalOpen}
 				fullWidth
+				className={`${classes.bottomSpacing} ${classes.button}`}
 			>
-				Create New Account
+				<Typography>Create New Account</Typography>
 			</Button>
 
 			<Modal open={isModalOpen} onClose={handleModalClose}>
