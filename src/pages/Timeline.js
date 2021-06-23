@@ -5,20 +5,49 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
+import { makeStyles } from '@material-ui/core/styles';
+import { useSnackbar } from 'notistack';
 
 import PostCard from '../components/PostCard';
 
 import { postRequests } from '../util/axiosRequests';
 import { userDataProp, setUserDataProp } from '../util/customPropTypes';
-import useStyles from '../util/useStylesHook';
-import handleErrors from '../util/handleErrors';
+
+const useStyles = makeStyles({});
 
 const Timeline = ({ userData, setUserData }) => {
+	const { setUser, setToken } = setUserData;
 	const [allPosts, setAllPosts] = useState([]);
 	const [skip, setSkip] = useState(0);
 	const [isLoading, setILoading] = useState(true);
-	const isMobile = useMediaQuery('(max-width: 425px)');
+	const isSmallScreen = useMediaQuery('(max-width: 599px)');
+	const { enqueueSnackbar } = useSnackbar();
 	const classes = useStyles();
+
+	useEffect(() => {
+		const fetchData = async () => {
+			try {
+				const postsResponse = await postRequests.getUserAndFriendPosts(skip);
+				const { posts } = postsResponse.data;
+
+				if (skip === 0) setAllPosts(posts);
+				if (skip !== 0)
+					setAllPosts((oldAllPosts) => [...oldAllPosts, ...posts]);
+
+				return setILoading(false);
+			} catch (error) {
+				if ([401, 500].includes(error.response?.status)) {
+					setUser({});
+					setToken('');
+					return localStorage.clear();
+				}
+
+				return enqueueSnackbar(error.message, { variant: 'error' });
+			}
+		};
+
+		fetchData();
+	}, [skip, enqueueSnackbar, setUser, setToken]);
 
 	useEffect(() => {
 		const handleScrollLoading = () => {
@@ -34,28 +63,7 @@ const Timeline = ({ userData, setUserData }) => {
 		window.addEventListener('scroll', handleScrollLoading);
 
 		return () => window.removeEventListener('scroll', handleScrollLoading);
-	}, [allPosts.length, skip]);
-
-	useEffect(() => {
-		setILoading(true);
-
-		const fetchData = async () => {
-			try {
-				const postsResponse = await postRequests.getUserAndFriendPosts(skip);
-				const { posts } = postsResponse.data;
-
-				if (skip === 0) setAllPosts(posts);
-				if (skip !== 0)
-					setAllPosts((oldAllPosts) => [...oldAllPosts, ...posts]);
-
-				setILoading(false);
-			} catch (error) {
-				handleErrors(error, setUserData);
-			}
-		};
-
-		fetchData();
-	}, [skip, setUserData]);
+	}, [allPosts, skip]);
 
 	const postCardComponents = allPosts.map((post) => (
 		<PostCard
@@ -68,22 +76,20 @@ const Timeline = ({ userData, setUserData }) => {
 	));
 
 	return (
-		<div className='timeline'>
-			<Container disableGutters={isMobile} maxWidth='sm'>
-				{allPosts.length === 0 && !isLoading && (
-					<Typography variant={isMobile ? 'h6' : 'h5'} align='center'>
-						No Posts Available. Create one or add friends to view posts.
-					</Typography>
-				)}
-				{postCardComponents}
+		<Container disableGutters={isSmallScreen} maxWidth='sm'>
+			{allPosts.length === 0 && !isLoading && (
+				<Typography variant={isSmallScreen ? 'h6' : 'h5'} align='center'>
+					No Posts Available. Create one or add friends to view posts.
+				</Typography>
+			)}
+			{postCardComponents}
 
-				{isLoading && (
-					<div className={classes.flex}>
-						<CircularProgress className={classes.center} />
-					</div>
-				)}
-			</Container>
-		</div>
+			{isLoading && (
+				<div className={classes.flex}>
+					<CircularProgress className={classes.center} />
+				</div>
+			)}
+		</Container>
 	);
 };
 

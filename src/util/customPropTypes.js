@@ -39,10 +39,16 @@ const friendsListProp = {
 	status: PropTypes.string.isRequired,
 };
 
+const colourModeObjectProp = {
+	colourMode: PropTypes.string.isRequired,
+	setColourMode: PropTypes.func.isRequired,
+};
+
 export {
 	userDataProp,
 	setUserDataProp,
 	postProp,
 	commentProp,
 	friendsListProp,
+	colourModeObjectProp,
 };

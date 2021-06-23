@@ -26,8 +26,7 @@ const useStyles = makeStyles({
 		left: '50%',
 		transform: `translate(-50%, -50%)`,
 	},
-	button: {
-		background: '#42b72a',
+	buttonText: {
 		color: 'white',
 	},
 });
@@ -199,11 +198,14 @@ const ModalSignUpForm = ({ setUserData }) => {
 		<div>
 			<Button
 				variant='contained'
+				color='secondary'
 				onClick={handleModalOpen}
 				fullWidth
-				className={`${classes.bottomSpacing} ${classes.button}`}
+				className={classes.bottomSpacing}
 			>
-				<Typography>Create New Account</Typography>
+				<Typography className={classes.buttonText}>
+					Create New Account
+				</Typography>
 			</Button>
 
 			<Modal open={isModalOpen} onClose={handleModalClose}>

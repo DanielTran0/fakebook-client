@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useHistory, useLocation } from 'react-router-dom';
+import { Redirect, useLocation, useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import Button from '@material-ui/core/Button';
@@ -11,21 +11,36 @@ import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
+import { makeStyles } from '@material-ui/core/styles';
 
+import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import SaveOutlinedIcon from '@material-ui/icons/SaveOutlined';
 
 import { postRequests } from '../../util/axiosRequests';
-import useStyles from '../../util/useStylesHook';
 import { postProp } from '../../util/customPropTypes';
 
+const useStyles = makeStyles({
+	sideSpacing: {
+		marginRight: 10,
+	},
+	bottomSpacing: {
+		marginBottom: 15,
+	},
+	buttonText: {
+		color: 'white',
+	},
+});
+
 const PostForm = ({
-	post,
 	handleModalClose,
+	post,
 	allPosts,
 	setAllPosts,
 	isEdit,
+	handleActiveTab,
 }) => {
 	const { _id, text } = post || {};
+	const [isNewPostSent, setIsNewPostSent] = useState(false);
 	const [formValues, setFormValues] = useState({
 		text: text || '',
 		lastImage: 'keep',
@@ -58,7 +73,6 @@ const PostForm = ({
 				};
 			});
 		}
-
 		if (Object.keys(errorMsgs).length === 0) return false;
 
 		setFormErrors(errorMsgs);
@@ -102,32 +116,37 @@ const PostForm = ({
 				postImage: imageFile,
 			});
 
-			handleModalClose();
+			if (location.pathname !== '/') {
+				handleActiveTab('home');
+				setIsNewPostSent(true);
+				return handleModalClose();
+			}
 
-			if (location.pathname !== '/') return history.push('/');
-
-			return window.location.reload();
+			history.push('/login');
+			return handleModalClose();
 		} catch (error) {
 			return checkFormForErrors(error.response.data.errors);
 		}
 	};
 
+	if (isNewPostSent) return <Redirect to='/' />;
+
 	return (
 		<form noValidate onSubmit={handleFormSubmit}>
 			{formErrors.general && (
-				<Typography className={classes.bottomSpacing} color='secondary'>
+				<Typography className={classes.bottomSpacing} color='error'>
 					{formErrors.general}
 				</Typography>
 			)}
 
 			<TextField
-				className={classes.bottomSpacing}
 				variant='outlined'
 				label='Text'
 				name='text'
 				fullWidth
 				value={formValues.text}
 				onChange={handleFormChange}
+				className={classes.bottomSpacing}
 			/>
 
 			{isEdit && (
@@ -159,8 +178,16 @@ const PostForm = ({
 
 			{(!isEdit || formValues.lastImage === 'new') && (
 				<div>
-					<Button variant='contained' component='label' fullWidth>
-						Upload Image
+					<Button
+						variant='contained'
+						component='label'
+						color='secondary'
+						startIcon={<CloudUploadIcon className={classes.buttonText} />}
+						fullWidth
+						className={classes.bottomSpacing}
+					>
+						<Typography className={classes.buttonText}>Upload Image</Typography>
+
 						<input
 							name='postImage'
 							type='file'
@@ -169,9 +196,12 @@ const PostForm = ({
 							hidden
 						/>
 					</Button>
-					<Typography className={classes.bottomSpacing} noWrap>
-						{imageFile && imageFile.name}
-					</Typography>
+
+					{imageFile && (
+						<Typography noWrap align='center' className={classes.bottomSpacing}>
+							{imageFile.name}
+						</Typography>
+					)}
 				</div>
 			)}
 
@@ -180,21 +210,23 @@ const PostForm = ({
 			<Button
 				variant='contained'
 				type='submit'
+				color='primary'
 				startIcon={isEdit && <SaveOutlinedIcon />}
 				fullWidth
 			>
-				{isEdit ? 'Save' : 'Post'}
+				<Typography>{isEdit ? 'Save' : 'Post'}</Typography>
 			</Button>
 		</form>
 	);
 };
 
 PostForm.propTypes = {
-	post: PropTypes.shape(postProp),
 	handleModalClose: PropTypes.func.isRequired,
+	post: PropTypes.shape(postProp),
 	allPosts: PropTypes.arrayOf(PropTypes.shape(postProp)),
 	setAllPosts: PropTypes.func,
 	isEdit: PropTypes.bool,
+	handleActiveTab: PropTypes.func,
 };
 
 PostForm.defaultProps = {
@@ -202,6 +234,7 @@ PostForm.defaultProps = {
 	allPosts: null,
 	setAllPosts: null,
 	isEdit: false,
+	handleActiveTab: null,
 };
 
 export default PostForm;

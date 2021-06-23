@@ -3,81 +3,74 @@ import PropTypes from 'prop-types';
 
 import AppBar from '@material-ui/core/AppBar';
 import Avatar from '@material-ui/core/Avatar';
-import Card from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
-import CardContent from '@material-ui/core/CardContent';
-import Container from '@material-ui/core/Container';
-import Divider from '@material-ui/core/Divider';
 import Link from '@material-ui/core/Link';
 import IconButton from '@material-ui/core/IconButton';
-import Modal from '@material-ui/core/Modal';
-import Paper from '@material-ui/core/Paper';
 import Toolbar from '@material-ui/core/Toolbar';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
+import { makeStyles } from '@material-ui/core/styles';
 
-import AddCircleIcon from '@material-ui/icons/AddCircle';
 import ChatIcon from '@material-ui/icons/Chat';
-import CloseIcon from '@material-ui/icons/Close';
 import HomeIcon from '@material-ui/icons/Home';
 import PeopleIcon from '@material-ui/icons/People';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 
 import NavMenu from './NavMenu';
-import PostForm from './forms/PostForm';
 
 import setUserImageSource from '../util/setUserImageSource';
-import { userDataProp, setUserDataProp } from '../util/customPropTypes';
-import useStyles from '../util/useStylesHook';
+import {
+	userDataProp,
+	setUserDataProp,
+	colourModeObjectProp,
+} from '../util/customPropTypes';
+
+const useStyles = makeStyles({
+	bottomSpacing: {
+		marginBottom: 10,
+	},
+	center: {
+		display: 'flex',
+		alignItems: 'center',
+		justifyContent: 'center',
+	},
+	avatar: {
+		width: 30,
+		height: 30,
+	},
+	capitalize: {
+		textTransform: 'capitalize',
+	},
+});
 
 const Navbar = ({ children, userData, setUserData, colourModeObject }) => {
-	const [isModalOpen, setIsModalOpen] = useState(false);
-	const isMobile = useMediaQuery('(max-width: 425px)');
+	const { colourMode } = colourModeObject;
+	const { firstName, lastName } = userData.user;
+	const [activeTab, setActiveTab] = useState('home');
+	const isSmallScreen = useMediaQuery('(max-width: 599px)');
 	const classes = useStyles();
 
-	const handleModalOpen = () => {
-		setIsModalOpen(true);
+	const handleActiveTab = (tabName) => {
+		setActiveTab(tabName);
 	};
-
-	const handleModalClose = () => {
-		setIsModalOpen(false);
-	};
-
-	const modalBody = (
-		<Container maxWidth='sm' className={classes.modal}>
-			<Card>
-				<CardHeader
-					title='Create Post'
-					subheader='Max image size of 1.5 MB'
-					action={
-						<IconButton onClick={handleModalClose}>
-							<CloseIcon />
-						</IconButton>
-					}
-				/>
-
-				<Divider />
-
-				<CardContent>
-					<PostForm handleModalClose={handleModalClose} />
-				</CardContent>
-			</Card>
-		</Container>
-	);
 
 	return (
 		<div>
 			<AppBar
-				className={classes.bottomSpacing}
-				position={isMobile ? 'static' : 'sticky'}
-				color='default'
+				position={isSmallScreen ? 'static' : 'sticky'}
+				color={colourMode === 'dark' ? 'default' : 'inherit'}
 				elevation={0}
+				className={classes.bottomSpacing}
 			>
-				<Toolbar>
+				<Toolbar className={classes.center}>
 					<Tooltip title={<Typography variant='body2'>Home</Typography>}>
-						<Link href='/'>
-							<IconButton>
+						<Link href='#/'>
+							<IconButton
+								color={activeTab === 'home' ? 'primary' : 'default'}
+								onClick={() => {
+									handleActiveTab('home');
+								}}
+							>
 								<HomeIcon />
 							</IconButton>
 						</Link>
@@ -85,7 +78,12 @@ const Navbar = ({ children, userData, setUserData, colourModeObject }) => {
 
 					<Tooltip title={<Typography variant='body2'>Friends</Typography>}>
 						<Link href='#/friends'>
-							<IconButton>
+							<IconButton
+								color={activeTab === 'friends' ? 'primary' : 'default'}
+								onClick={() => {
+									handleActiveTab('friends');
+								}}
+							>
 								<PeopleIcon />
 							</IconButton>
 						</Link>
@@ -93,7 +91,12 @@ const Navbar = ({ children, userData, setUserData, colourModeObject }) => {
 
 					<Tooltip title={<Typography variant='body2'>All Users</Typography>}>
 						<Link href='#/users'>
-							<IconButton>
+							<IconButton
+								color={activeTab === 'users' ? 'primary' : 'default'}
+								onClick={() => {
+									handleActiveTab('users');
+								}}
+							>
 								<PersonAddIcon />
 							</IconButton>
 						</Link>
@@ -101,7 +104,12 @@ const Navbar = ({ children, userData, setUserData, colourModeObject }) => {
 
 					<Tooltip title={<Typography variant='body2'>Chat</Typography>}>
 						<Link href='#/chat'>
-							<IconButton>
+							<IconButton
+								color={activeTab === 'chat' ? 'primary' : 'default'}
+								onClick={() => {
+									handleActiveTab('chat');
+								}}
+							>
 								<ChatIcon />
 							</IconButton>
 						</Link>
@@ -109,41 +117,38 @@ const Navbar = ({ children, userData, setUserData, colourModeObject }) => {
 
 					<Tooltip
 						title={<Typography variant='body2'>Profile Page</Typography>}
+						onClick={() => {
+							handleActiveTab('');
+						}}
 					>
-						<Link href={`#/user/${userData.user._id}`}>
-							<Paper className={classes.userCardSpacing}>
-								<IconButton>
-									<Avatar
-										className={classes.avatarNav}
-										src={setUserImageSource(userData.user)}
-									/>
-								</IconButton>
-								{!isMobile && (
-									<Typography className={classes.capitalize}>
-										{userData.user.firstName} {userData.user.lastName}
-									</Typography>
-								)}
-							</Paper>
-						</Link>
-					</Tooltip>
+						<Link
+							href={`#/user/${userData.user._id}`}
+							underline='none'
+							className={classes.center}
+						>
+							<IconButton>
+								<Avatar
+									src={setUserImageSource(userData.user)}
+									className={classes.avatar}
+								/>
+							</IconButton>
 
-					<Tooltip title={<Typography variant='body2'>Create Post</Typography>}>
-						<IconButton onClick={handleModalOpen}>
-							<AddCircleIcon />
-						</IconButton>
+							{!isSmallScreen && (
+								<Typography color='textPrimary' className={classes.capitalize}>
+									{firstName} {lastName}
+								</Typography>
+							)}
+						</Link>
 					</Tooltip>
 
 					<NavMenu
 						userData={userData}
 						setUserData={setUserData}
 						colourModeObject={colourModeObject}
+						handleActiveTab={handleActiveTab}
 					/>
 				</Toolbar>
 			</AppBar>
-
-			<Modal open={isModalOpen} onClose={handleModalClose}>
-				{modalBody}
-			</Modal>
 
 			<div>{children}</div>
 		</div>
@@ -154,10 +159,7 @@ Navbar.propTypes = {
 	children: PropTypes.element.isRequired,
 	userData: PropTypes.shape(userDataProp).isRequired,
 	setUserData: PropTypes.shape(setUserDataProp).isRequired,
-	colourModeObject: PropTypes.shape({
-		colourMode: PropTypes.string,
-		setColourMode: PropTypes.func,
-	}).isRequired,
+	colourModeObject: PropTypes.shape(colourModeObjectProp).isRequired,
 };
 
 export default Navbar;
