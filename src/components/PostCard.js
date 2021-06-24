@@ -34,10 +34,14 @@ const useStyles = makeStyles({
 		marginBottom: 25,
 	},
 	capitalize: {
+		display: 'inline-block',
 		textTransform: 'capitalize',
 	},
 	bottomSpacing: {
 		marginBottom: 10,
+	},
+	topSpacing: {
+		marginTop: 20,
 	},
 	postInfo: {
 		display: 'flex',
@@ -209,9 +213,11 @@ const PostCard = ({ userData, post, allPosts, setAllPosts }) => {
 				</Container>
 			)}
 
-			{isCommentsOpen && showMultipleComments
-				? commentComponents
-				: isCommentsOpen && commentComponents[post.comments.length - 1]}
+			{isCommentsOpen && showMultipleComments ? (
+				<div className={classes.topSpacing}>{commentComponents}</div>
+			) : (
+				isCommentsOpen && commentComponents[post.comments.length - 1]
+			)}
 
 			{isAddCommentOpen && (
 				<Container>

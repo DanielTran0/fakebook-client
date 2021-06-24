@@ -16,16 +16,38 @@ import Typography from '@material-ui/core/Typography';
 import { useSnackbar } from 'notistack';
 
 import CloseIcon from '@material-ui/icons/Close';
-import DeleteOutlineOutlinedIcon from '@material-ui/icons/DeleteOutlineOutlined';
+import DeleteIcon from '@material-ui/icons/Delete';
+import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
+import EditIcon from '@material-ui/icons/Edit';
 import MoreHorizOutlinedIcon from '@material-ui/icons/MoreHorizOutlined';
+import { makeStyles } from '@material-ui/core/styles';
 
 import PostForm from './forms/PostForm';
 import CommentForm from './forms/CommentForm';
 
 import { postRequests, commentRequests } from '../util/axiosRequests';
 import { postProp, commentProp } from '../util/customPropTypes';
-import useStyles from '../util/useStylesHook';
 
+const useStyles = makeStyles({
+	sideSpacing: {
+		marginRight: 10,
+	},
+	settings: {
+		display: 'flex',
+		alignItems: 'center',
+	},
+	modal: {
+		position: 'absolute',
+		top: '50%',
+		left: '50%',
+		transform: `translate(-50%, -50%)`,
+	},
+	deleteButton: {
+		backgroundColor: '#d32f2f',
+		color: '#fff',
+		marginLeft: 'auto',
+	},
+});
 const MenuOptions = ({ isPost, post, allPosts, setAllPosts, comment }) => {
 	const [menuAnchor, setMenuAnchor] = useState(null);
 	const [isModalOpen, setIsModalOpen] = useState(false);
@@ -154,9 +176,9 @@ const MenuOptions = ({ isPost, post, allPosts, setAllPosts, comment }) => {
 					<CardActions>
 						<Button
 							variant='contained'
-							startIcon={<DeleteOutlineOutlinedIcon />}
+							startIcon={<DeleteForeverIcon />}
 							onClick={handleDeleteClick}
-							fullWidth
+							className={classes.deleteButton}
 						>
 							Delete
 						</Button>
@@ -167,7 +189,7 @@ const MenuOptions = ({ isPost, post, allPosts, setAllPosts, comment }) => {
 	);
 
 	return (
-		<div className='menu-options'>
+		<div>
 			<IconButton onClick={handleMenuOpen}>
 				<MoreHorizOutlinedIcon />
 			</IconButton>
@@ -178,10 +200,12 @@ const MenuOptions = ({ isPost, post, allPosts, setAllPosts, comment }) => {
 				onClose={handleMenuClose}
 			>
 				<MenuItem onClick={() => handleModalOpen(true)}>
+					<EditIcon className={classes.sideSpacing} />
 					Edit {phrasing}
 				</MenuItem>
 
 				<MenuItem onClick={() => handleModalOpen(false)}>
+					<DeleteIcon className={classes.sideSpacing} />
 					Delete {phrasing}
 				</MenuItem>
 			</Menu>

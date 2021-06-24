@@ -3,13 +3,20 @@ import PropTypes from 'prop-types';
 
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
+import { makeStyles } from '@material-ui/core/styles';
+import { useSnackbar } from 'notistack';
 
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import ThumbUpAltOutlinedIcon from '@material-ui/icons/ThumbUpAltOutlined';
 
 import { likeRequests } from '../util/axiosRequests';
 import { userDataProp, postProp, commentProp } from '../util/customPropTypes';
-import useStyles from '../util/useStylesHook';
+
+const useStyles = makeStyles({
+	sideSpacing: {
+		marginRight: 5,
+	},
+});
 
 const LikeButton = ({
 	userData,
@@ -20,6 +27,7 @@ const LikeButton = ({
 	comment,
 }) => {
 	const [isLiked, setIsLiked] = useState(false);
+	const { enqueueSnackbar } = useSnackbar();
 	const classes = useStyles();
 
 	useEffect(() => {
@@ -59,8 +67,7 @@ const LikeButton = ({
 				setIsLiked(!isLiked);
 				return setAllPosts(newAllPosts);
 			} catch (error) {
-				// TODO handle error
-				return console.log(error);
+				return enqueueSnackbar(error.message, { variant: 'error' });
 			}
 		}
 
@@ -88,8 +95,7 @@ const LikeButton = ({
 			setIsLiked(!isLiked);
 			return setAllPosts(newAllPosts);
 		} catch (error) {
-			// TODO handle error
-			return console.log(error);
+			return enqueueSnackbar(error.message, { variant: 'error' });
 		}
 	};
 
@@ -104,10 +110,10 @@ const LikeButton = ({
 		</Button>
 	) : (
 		<IconButton
-			className={classes.sideSpacing}
 			onClick={handleLikeToggle}
 			color={isLiked ? 'primary' : 'default'}
 			size='small'
+			className={classes.sideSpacing}
 		>
 			<ThumbUpIcon fontSize='inherit' />
 		</IconButton>

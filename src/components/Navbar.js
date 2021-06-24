@@ -34,9 +34,13 @@ const useStyles = makeStyles({
 		alignItems: 'center',
 		justifyContent: 'center',
 	},
-	avatar: {
+	smallAvatar: {
 		width: 30,
 		height: 30,
+	},
+	bigAvatar: {
+		width: 35,
+		height: 35,
 	},
 	capitalize: {
 		textTransform: 'capitalize',
@@ -71,7 +75,7 @@ const Navbar = ({ children, userData, setUserData, colourModeObject }) => {
 									handleActiveTab('home');
 								}}
 							>
-								<HomeIcon />
+								<HomeIcon fontSize={isSmallScreen ? 'default' : 'large'} />
 							</IconButton>
 						</Link>
 					</Tooltip>
@@ -84,7 +88,7 @@ const Navbar = ({ children, userData, setUserData, colourModeObject }) => {
 									handleActiveTab('friends');
 								}}
 							>
-								<PeopleIcon />
+								<PeopleIcon fontSize={isSmallScreen ? 'default' : 'large'} />
 							</IconButton>
 						</Link>
 					</Tooltip>
@@ -97,7 +101,7 @@ const Navbar = ({ children, userData, setUserData, colourModeObject }) => {
 									handleActiveTab('users');
 								}}
 							>
-								<PersonAddIcon />
+								<PersonAddIcon fontSize={isSmallScreen ? 'default' : 'large'} />
 							</IconButton>
 						</Link>
 					</Tooltip>
@@ -110,7 +114,7 @@ const Navbar = ({ children, userData, setUserData, colourModeObject }) => {
 									handleActiveTab('chat');
 								}}
 							>
-								<ChatIcon />
+								<ChatIcon fontSize={isSmallScreen ? 'default' : 'large'} />
 							</IconButton>
 						</Link>
 					</Tooltip>
@@ -129,12 +133,18 @@ const Navbar = ({ children, userData, setUserData, colourModeObject }) => {
 							<IconButton>
 								<Avatar
 									src={setUserImageSource(userData.user)}
-									className={classes.avatar}
+									className={
+										isSmallScreen ? classes.smallAvatar : classes.bigAvatar
+									}
 								/>
 							</IconButton>
 
 							{!isSmallScreen && (
-								<Typography color='textPrimary' className={classes.capitalize}>
+								<Typography
+									variant='body1'
+									color='textPrimary'
+									className={classes.capitalize}
+								>
 									{firstName} {lastName}
 								</Typography>
 							)}
