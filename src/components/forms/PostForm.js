@@ -145,7 +145,11 @@ const PostForm = ({
 	return (
 		<form noValidate onSubmit={handleFormSubmit}>
 			{formErrors.general && (
-				<Typography className={classes.bottomSpacing} color='error'>
+				<Typography
+					color='error'
+					align='center'
+					className={classes.bottomSpacing}
+				>
 					{formErrors.general}
 				</Typography>
 			)}

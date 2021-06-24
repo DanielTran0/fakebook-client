@@ -10,16 +10,26 @@ import RadioGroup from '@material-ui/core/RadioGroup';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
+import { makeStyles } from '@material-ui/core/styles';
+import { useSnackbar } from 'notistack';
+
+import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 
 import useStateWithLocalStorage from '../../util/localStorageHook';
 import { userRequests } from '../../util/axiosRequests';
 import { setUserDataProp } from '../../util/customPropTypes';
-import useStyles from '../../util/useStylesHook';
+
+const useStyles = makeStyles({
+	bottomSpacing: { marginBottom: 15 },
+	flex: { display: 'flex' },
+	uploadText: {
+		color: '#fff',
+	},
+});
 
 const UserUpdateForm = ({ setUserData }) => {
 	const [userDetails] = useStateWithLocalStorage('user', {});
 	const [showPasswordChange, setShowPasswordChange] = useState(false);
-	const [successMessage, setSuccessMessage] = useState(false);
 	const [formValues, setFormValues] = useState({
 		firstName: userDetails.firstName,
 		lastName: userDetails.lastName,
@@ -31,7 +41,8 @@ const UserUpdateForm = ({ setUserData }) => {
 	});
 	const [imageFile, setImageFile] = useState(null);
 	const [formErrors, setFormErrors] = useState({});
-	const isMobile = useMediaQuery('(max-width: 425px)');
+	const isSmallScreen = useMediaQuery('(max-width: 599px)');
+	const { enqueueSnackbar } = useSnackbar();
 	const classes = useStyles();
 
 	const handleShowPasswordChange = () => {
@@ -40,7 +51,6 @@ const UserUpdateForm = ({ setUserData }) => {
 
 	const handleFormChange = (e) => {
 		const { name, value, files } = e.target;
-		setSuccessMessage(false);
 
 		if (name === 'userImage') return setImageFile(files[0]);
 
@@ -92,7 +102,6 @@ const UserUpdateForm = ({ setUserData }) => {
 	const handleFormSubmit = async (e) => {
 		e.preventDefault();
 		setFormErrors({});
-		setSuccessMessage(false);
 
 		if (checkFormForErrors()) return null;
 
@@ -108,25 +117,38 @@ const UserUpdateForm = ({ setUserData }) => {
 			const { user: updatedUser } = userUpdateResponse.data;
 
 			setShowPasswordChange(false);
+			setFormValues({
+				...formValues,
+				password: '',
+				newPassword: '',
+				newPasswordConfirmation: '',
+			});
 			setImageFile(null);
-			setSuccessMessage(true);
-			return setUserData.setUser(updatedUser);
+			setUserData.setUser(updatedUser);
+			return enqueueSnackbar('Successfully updated account', {
+				variant: 'success',
+			});
 		} catch (error) {
-			return checkFormForErrors(error.response.data.errors);
+			if (error.response) return checkFormForErrors(error.response.data.errors);
+
+			return enqueueSnackbar(error.message, { variant: 'error' });
 		}
 	};
 
 	return (
 		<form noValidate onSubmit={handleFormSubmit}>
 			{formErrors.general && (
-				<Typography className={classes.bottomSpacing} color='secondary'>
+				<Typography
+					color='error'
+					align='center'
+					className={classes.bottomSpacing}
+				>
 					{formErrors.general}
 				</Typography>
 			)}
 
-			<div className={!isMobile ? classes.userCardSpacing : ''}>
+			<div className={isSmallScreen ? '' : classes.flex}>
 				<TextField
-					className={`${classes.bottomSpacing} `}
 					variant='outlined'
 					label='First name'
 					name='firstName'
@@ -137,9 +159,9 @@ const UserUpdateForm = ({ setUserData }) => {
 					onChange={handleFormChange}
 					error={Boolean(formErrors.firstName)}
 					helperText={formErrors.firstName}
+					className={classes.bottomSpacing}
 				/>
 				<TextField
-					className={`${classes.bottomSpacing} `}
 					variant='outlined'
 					label='Last name'
 					name='lastName'
@@ -150,12 +172,12 @@ const UserUpdateForm = ({ setUserData }) => {
 					onChange={handleFormChange}
 					error={Boolean(formErrors.lastName)}
 					helperText={formErrors.lastName}
+					className={classes.bottomSpacing}
 				/>
 			</div>
 
 			{!userDetails.facebookId && (
 				<TextField
-					className={classes.bottomSpacing}
 					variant='outlined'
 					label='Email'
 					name='email'
@@ -167,6 +189,7 @@ const UserUpdateForm = ({ setUserData }) => {
 					onChange={handleFormChange}
 					error={Boolean(formErrors.email)}
 					helperText={formErrors.email}
+					className={classes.bottomSpacing}
 				/>
 			)}
 
@@ -193,9 +216,12 @@ const UserUpdateForm = ({ setUserData }) => {
 						className={classes.bottomSpacing}
 						variant='contained'
 						component='label'
+						color='secondary'
+						startIcon={<CloudUploadIcon className={classes.uploadText} />}
 						fullWidth
 					>
-						Upload Image
+						<Typography className={classes.uploadText}>Upload Image</Typography>
+
 						<input
 							name='userImage'
 							type='file'
@@ -204,17 +230,18 @@ const UserUpdateForm = ({ setUserData }) => {
 							hidden
 						/>
 					</Button>
-					<Typography className={classes.bottomSpacing} noWrap>
+
+					<Typography noWrap align='center' className={classes.bottomSpacing}>
 						{imageFile && imageFile.name}
 					</Typography>
 				</div>
 			)}
 
-			{!userDetails.facebookId && (
+			{!userDetails.facebookId && !showPasswordChange && (
 				<Button
-					className={classes.bottomSpacing}
 					variant='contained'
 					onClick={handleShowPasswordChange}
+					className={classes.bottomSpacing}
 				>
 					Change Password
 				</Button>
@@ -223,11 +250,10 @@ const UserUpdateForm = ({ setUserData }) => {
 			{showPasswordChange && !userDetails.facebookId && (
 				<div>
 					<Typography className={classes.bottomSpacing}>
-						Min Length 8, 1 Capital Letter, 1 Number
+						Min Length 5, 1 Capital Letter, 1 Number
 					</Typography>
 
 					<TextField
-						className={classes.bottomSpacing}
 						variant='outlined'
 						label='Old Password'
 						name='password'
@@ -238,10 +264,10 @@ const UserUpdateForm = ({ setUserData }) => {
 						onChange={handleFormChange}
 						error={Boolean(formErrors.password)}
 						helperText={formErrors.password}
+						className={classes.bottomSpacing}
 					/>
 
 					<TextField
-						className={classes.bottomSpacing}
 						variant='outlined'
 						label='New Password'
 						name='newPassword'
@@ -252,9 +278,9 @@ const UserUpdateForm = ({ setUserData }) => {
 						onChange={handleFormChange}
 						error={Boolean(formErrors.newPassword)}
 						helperText={formErrors.newPassword}
+						className={classes.bottomSpacing}
 					/>
 					<TextField
-						className={classes.bottomSpacing}
 						variant='outlined'
 						label='New Password Confirmation'
 						name='newPasswordConfirmation'
@@ -265,6 +291,7 @@ const UserUpdateForm = ({ setUserData }) => {
 						onChange={handleFormChange}
 						error={Boolean(formErrors.newPasswordConfirmation)}
 						helperText={formErrors.newPasswordConfirmation}
+						className={classes.bottomSpacing}
 					/>
 				</div>
 			)}
@@ -273,16 +300,11 @@ const UserUpdateForm = ({ setUserData }) => {
 				className={classes.bottomSpacing}
 				variant='contained'
 				type='submit'
+				color='primary'
 				fullWidth
 			>
 				Save Changes
 			</Button>
-
-			{successMessage && (
-				<Typography align='center'>
-					Your account has been successfully updated
-				</Typography>
-			)}
 		</form>
 	);
 };

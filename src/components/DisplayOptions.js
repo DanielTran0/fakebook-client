@@ -4,16 +4,23 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 import Typography from '@material-ui/core/Typography';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
+import { makeStyles } from '@material-ui/core/styles';
 
 import useStateWithLocalStorage from '../util/localStorageHook';
-import useStyles from '../util/useStylesHook';
+
+const useStyles = makeStyles({
+	header: {
+		fontWeight: 'normal',
+		marginBottom: 10,
+	},
+});
 
 const DisplayOptions = () => {
 	const [displayOptions, setDisplayOptions] = useStateWithLocalStorage(
 		'displayOptions',
 		{ showAddComment: true, showLastComment: true }
 	);
-	const isMobile = useMediaQuery('(max-width: 425px)');
+	const isSmallScreen = useMediaQuery('(max-width: 599px)');
 	const classes = useStyles();
 
 	const handleDisplayToggle = (e) => {
@@ -24,8 +31,8 @@ const DisplayOptions = () => {
 	return (
 		<div>
 			<Typography
-				className={classes.bottomSpacing}
-				variant={isMobile ? 'h6' : 'h5'}
+				className={classes.header}
+				variant={isSmallScreen ? 'h6' : 'h5'}
 			>
 				Home/Timeline
 			</Typography>
@@ -36,6 +43,7 @@ const DisplayOptions = () => {
 						checked={displayOptions.showAddComment}
 						onChange={handleDisplayToggle}
 						name='showAddComment'
+						color='primary'
 					/>
 				}
 				label='Always show add comment'
@@ -48,6 +56,7 @@ const DisplayOptions = () => {
 						checked={displayOptions.showLastComment}
 						onChange={handleDisplayToggle}
 						name='showLastComment'
+						color='primary'
 					/>
 				}
 				label='Always show last comment'

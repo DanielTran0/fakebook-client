@@ -9,15 +9,23 @@ import TabContext from '@material-ui/lab/TabContext';
 import TabPanel from '@material-ui/lab/TabPanel';
 import Typography from '@material-ui/core/Typography';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
+import { makeStyles } from '@material-ui/core/styles';
 
 import DisplayOptions from '../components/DisplayOptions';
 import UserUpdateForm from '../components/forms/UserUpdateForm';
 
 import { setUserDataProp } from '../util/customPropTypes';
 
+const useStyles = makeStyles({
+	bottomSpacing: {
+		marginBottom: 10,
+	},
+});
+
 const Settings = ({ setUserData, setActiveTab }) => {
 	const [tabValue, setTabValue] = useState('0');
-	const isMobile = useMediaQuery('(max-width: 425px)');
+	const isSmallScreen = useMediaQuery('(max-width: 599px)');
+	const classes = useStyles();
 
 	useEffect(() => {
 		setActiveTab('');
@@ -29,13 +37,22 @@ const Settings = ({ setUserData, setActiveTab }) => {
 
 	return (
 		<Container maxWidth='sm'>
-			<Typography variant={isMobile ? 'h5' : 'h4'} align='center'>
+			<Typography
+				variant={isSmallScreen ? 'h5' : 'h4'}
+				align='center'
+				className={classes.bottomSpacing}
+			>
 				Settings
 			</Typography>
 
 			<Paper>
 				<TabContext value={tabValue}>
-					<Tabs value={tabValue} onChange={handleTabChange} centered>
+					<Tabs
+						value={tabValue}
+						onChange={handleTabChange}
+						indicatorColor='primary'
+						centered
+					>
 						<Tab label='Display' value='0' />
 						<Tab label='Account' value='1' />
 					</Tabs>
