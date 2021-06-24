@@ -1,39 +1,72 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import Avatar from '@material-ui/core/Avatar';
 import Container from '@material-ui/core/Container';
+import Link from '@material-ui/core/Link';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
+import { makeStyles } from '@material-ui/core/styles';
 
 import FriendOptions from './FriendOptions';
 
 import setUserImageSource from '../util/setUserImageSource';
 import { userDataProp, friendsListProp } from '../util/customPropTypes';
-import useStyles from '../util/useStylesHook';
 
-const UserCard = ({ user, friendsList, setFriendsList }) => {
+const useStyles = makeStyles({
+	bottomSpacing: {
+		marginBottom: 15,
+	},
+	paperPadding: {
+		padding: '15px 0',
+	},
+	cardSpacing: {
+		display: 'flex',
+		alignItems: 'center',
+		justifyContent: 'space-between',
+	},
+	cardInfo: {
+		display: 'flex',
+		alignItems: 'center',
+		maxWidth: '65%',
+	},
+	sideSpacing: {
+		marginRight: 10,
+	},
+	capitalize: {
+		textTransform: 'capitalize',
+	},
+});
+
+const UserCard = ({ user, friendsList, setFriendsList, setActiveTab }) => {
 	const { firstName, lastName } = user;
-	const isMobile = useMediaQuery('(max-width: 425px)');
+	const isSmallScreen = useMediaQuery('(max-width: 599px)');
 	const classes = useStyles();
 
 	return (
 		<Container
-			className={classes.bottomSpacing}
 			maxWidth='xs'
-			disableGutters={isMobile}
+			disableGutters={isSmallScreen}
+			className={classes.bottomSpacing}
 		>
-			<Paper className={classes.userCardPaper}>
-				<Container className={classes.userCardSpacing}>
-					<Link to={`/user/${user._id}`} className={classes.userCardInfo}>
+			<Paper className={classes.paperPadding}>
+				<Container className={classes.cardSpacing}>
+					<Link
+						href={`#/user/${user._id}`}
+						underline='none'
+						color='textPrimary'
+						className={classes.cardInfo}
+						onClick={() => {
+							setActiveTab('');
+						}}
+					>
 						<Avatar
 							className={classes.sideSpacing}
 							src={setUserImageSource(user)}
 						/>
 						<Typography className={classes.capitalize} noWrap>
-							{`${firstName} ${lastName}`}
+							{firstName} {lastName}
 						</Typography>
 					</Link>
 
@@ -51,6 +84,7 @@ const UserCard = ({ user, friendsList, setFriendsList }) => {
 UserCard.propTypes = {
 	user: PropTypes.shape(userDataProp.user).isRequired,
 	friendsList: PropTypes.arrayOf(PropTypes.shape(friendsListProp)).isRequired,
+	setActiveTab: PropTypes.func.isRequired,
 	setFriendsList: PropTypes.func,
 };
 

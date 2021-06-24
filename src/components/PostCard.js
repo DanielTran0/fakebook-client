@@ -58,7 +58,7 @@ const useStyles = makeStyles({
 	},
 });
 
-const PostCard = ({ userData, post, allPosts, setAllPosts }) => {
+const PostCard = ({ userData, post, allPosts, setAllPosts, setActiveTab }) => {
 	const { text, postImage, date, comments, likes, user: postUser } = post;
 	const { user } = userData;
 	const [displayOptions] = useStateWithLocalStorage('displayOptions', {
@@ -121,12 +121,23 @@ const PostCard = ({ userData, post, allPosts, setAllPosts }) => {
 		<Card className={classes.postSpacing}>
 			<CardHeader
 				avatar={
-					<Link href={`#/user/${postUser._id}`}>
+					<Link
+						href={`#/user/${postUser._id}`}
+						onClick={() => {
+							setActiveTab('');
+						}}
+					>
 						<Avatar src={setUserImageSource(postUser)} />
 					</Link>
 				}
 				title={
-					<Link href={`#/user/${postUser._id}`} underline='none'>
+					<Link
+						href={`#/user/${postUser._id}`}
+						underline='none'
+						onClick={() => {
+							setActiveTab('');
+						}}
+					>
 						<Typography color='textPrimary' className={classes.capitalize}>
 							{`${postUser.firstName} ${postUser.lastName}`}
 						</Typography>
@@ -238,6 +249,7 @@ PostCard.propTypes = {
 	post: PropTypes.shape(postProp).isRequired,
 	allPosts: PropTypes.arrayOf(PropTypes.shape(postProp)).isRequired,
 	setAllPosts: PropTypes.func.isRequired,
+	setActiveTab: PropTypes.func.isRequired,
 };
 
 export default PostCard;

@@ -55,6 +55,8 @@ const useStyles = makeStyles((theme) => {
 	};
 });
 
+// TODO leak
+
 const UserPage = ({ match, userData, setUserData }) => {
 	const { params } = match;
 	const [isLoading, setILoading] = useState(true);

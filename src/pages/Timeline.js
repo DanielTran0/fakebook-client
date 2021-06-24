@@ -30,18 +30,18 @@ const useStyles = makeStyles({
 	},
 });
 
-const Timeline = ({ userData, setUserData }) => {
+const Timeline = ({ userData, setUserData, setActiveTab }) => {
 	const { setUser, setToken } = setUserData;
 	const { firstName } = userData.user;
 	const [allPosts, setAllPosts] = useState([]);
 	const [skip, setSkip] = useState(0);
-	const [isLoading, setILoading] = useState(true);
+	const [isLoading, setIsLoading] = useState(true);
 	const isSmallScreen = useMediaQuery('(max-width: 599px)');
 	const { enqueueSnackbar } = useSnackbar();
 	const classes = useStyles();
 
 	useEffect(() => {
-		setILoading(true);
+		setIsLoading(true);
 
 		const fetchData = async () => {
 			try {
@@ -52,7 +52,7 @@ const Timeline = ({ userData, setUserData }) => {
 				if (skip !== 0)
 					setAllPosts((oldAllPosts) => [...oldAllPosts, ...posts]);
 
-				return setILoading(false);
+				return setIsLoading(false);
 			} catch (error) {
 				if ([401, 500].includes(error.response?.status)) {
 					setUser({});
@@ -90,6 +90,7 @@ const Timeline = ({ userData, setUserData }) => {
 			post={post}
 			allPosts={allPosts}
 			setAllPosts={setAllPosts}
+			setActiveTab={setActiveTab}
 		/>
 	));
 
@@ -100,6 +101,7 @@ const Timeline = ({ userData, setUserData }) => {
 					<Typography variant='subtitle2' className={classes.bottomSpacing}>
 						Max image size of 1.5 MB
 					</Typography>
+
 					<PostForm name={capitalizeString(firstName)} />
 				</Container>
 			</Paper>
@@ -124,6 +126,7 @@ const Timeline = ({ userData, setUserData }) => {
 Timeline.propTypes = {
 	userData: PropTypes.shape(userDataProp).isRequired,
 	setUserData: PropTypes.shape(setUserDataProp).isRequired,
+	setActiveTab: PropTypes.func.isRequired,
 };
 
 export default Timeline;

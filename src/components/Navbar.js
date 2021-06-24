@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
 import AppBar from '@material-ui/core/AppBar';
@@ -47,10 +47,16 @@ const useStyles = makeStyles({
 	},
 });
 
-const Navbar = ({ children, userData, setUserData, colourModeObject }) => {
+const Navbar = ({
+	children,
+	userData,
+	setUserData,
+	colourModeObject,
+	activeTab,
+	setActiveTab,
+}) => {
 	const { colourMode } = colourModeObject;
 	const { firstName, lastName } = userData.user;
-	const [activeTab, setActiveTab] = useState('home');
 	const isSmallScreen = useMediaQuery('(max-width: 599px)');
 	const classes = useStyles();
 
@@ -170,6 +176,8 @@ Navbar.propTypes = {
 	userData: PropTypes.shape(userDataProp).isRequired,
 	setUserData: PropTypes.shape(setUserDataProp).isRequired,
 	colourModeObject: PropTypes.shape(colourModeObjectProp).isRequired,
+	activeTab: PropTypes.string.isRequired,
+	setActiveTab: PropTypes.func.isRequired,
 };
 
 export default Navbar;

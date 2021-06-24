@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Route, Switch, Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
@@ -18,6 +18,7 @@ import {
 } from './util/customPropTypes';
 
 const AuthenticatedRoutes = ({ userData, setUserData, colourModeObject }) => {
+	const [activeTab, setActiveTab] = useState('home');
 	const pageRoutes = [
 		{ page: Timeline, path: '/' },
 		{ page: AllUsers, path: '/users' },
@@ -35,6 +36,7 @@ const AuthenticatedRoutes = ({ userData, setUserData, colourModeObject }) => {
 					{...routeProps}
 					userData={userData}
 					setUserData={setUserData}
+					setActiveTab={setActiveTab}
 				/>
 			)}
 			key={pageRoute.path}
@@ -48,6 +50,8 @@ const AuthenticatedRoutes = ({ userData, setUserData, colourModeObject }) => {
 			userData={userData}
 			setUserData={setUserData}
 			colourModeObject={colourModeObject}
+			activeTab={activeTab}
+			setActiveTab={setActiveTab}
 		>
 			<Switch>
 				{pageRouteComponents}

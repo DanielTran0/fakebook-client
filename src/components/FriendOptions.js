@@ -2,13 +2,30 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import Button from '@material-ui/core/Button';
+import { makeStyles } from '@material-ui/core/styles';
+import { useSnackbar } from 'notistack';
 
 import { friendRequests } from '../util/axiosRequests';
 import { userDataProp, friendsListProp } from '../util/customPropTypes';
-import useStyles from '../util/useStylesHook';
+
+const useStyles = makeStyles((theme) => ({
+	deleteButton: {
+		backgroundColor: '#d32f2f',
+		color: '#fff',
+	},
+	acceptButton: {
+		backgroundColor: theme.palette.secondary.main,
+		color: '#fff',
+	},
+	friendIncoming: {
+		display: 'flex',
+		flexDirection: 'column',
+	},
+}));
 
 const FriendOptions = ({ user, friendsList, setFriendsList }) => {
 	const [friendStatus, setFriendStatus] = useState('');
+	const { enqueueSnackbar } = useSnackbar();
 	const classes = useStyles();
 
 	const friendListIndex = friendsList.findIndex(
@@ -20,13 +37,19 @@ const FriendOptions = ({ user, friendsList, setFriendsList }) => {
 			setFriendStatus(friendsList[friendListIndex].status);
 	}, [friendListIndex, friendsList]);
 
-	// TODO handle all errors
 	const handleAddFriend = async () => {
 		try {
 			await friendRequests.postNewFriendRequest(user._id);
-			setFriendStatus('outgoing');
+			return setFriendStatus('outgoing');
 		} catch (error) {
-			console.log(error.response.data.errors);
+			if (error.response) {
+				console.log(error.response);
+				return enqueueSnackbar(error.response.data.errors[0].msg, {
+					variant: 'error',
+				});
+			}
+
+			return enqueueSnackbar(error.message, { variant: 'error' });
 		}
 	};
 
@@ -47,9 +70,16 @@ const FriendOptions = ({ user, friendsList, setFriendsList }) => {
 
 				setFriendsList(newFriendsList);
 			}
+
 			return null;
 		} catch (error) {
-			return console.log(error.response.data.errors);
+			if (error.response) {
+				return enqueueSnackbar(error.response.data.errors[0].msg, {
+					variant: 'error',
+				});
+			}
+
+			return enqueueSnackbar(error.message, { variant: 'error' });
 		}
 	};
 
@@ -70,9 +100,16 @@ const FriendOptions = ({ user, friendsList, setFriendsList }) => {
 
 				setFriendsList(newFriendsList);
 			}
+
 			return null;
 		} catch (error) {
-			return console.log(error.response.data.errors);
+			if (error.response) {
+				return enqueueSnackbar(error.response.data.errors[0].msg, {
+					variant: 'error',
+				});
+			}
+
+			return enqueueSnackbar(error.message, { variant: 'error' });
 		}
 	};
 
@@ -96,7 +133,13 @@ const FriendOptions = ({ user, friendsList, setFriendsList }) => {
 
 			return null;
 		} catch (error) {
-			return console.log(error.response.data.errors);
+			if (error.response) {
+				return enqueueSnackbar(error.response.data.errors[0].msg, {
+					variant: 'error',
+				});
+			}
+
+			return enqueueSnackbar(error.message, { variant: 'error' });
 		}
 	};
 
@@ -116,8 +159,8 @@ const FriendOptions = ({ user, friendsList, setFriendsList }) => {
 			<Button
 				variant='contained'
 				size='small'
-				color='secondary'
 				onClick={handleCancelPendingOrDeleteFriend}
+				className={classes.deleteButton}
 			>
 				Cancel
 			</Button>
@@ -130,12 +173,18 @@ const FriendOptions = ({ user, friendsList, setFriendsList }) => {
 				<Button
 					variant='contained'
 					size='small'
-					color='primary'
+					color='secondary'
 					onClick={handleAcceptFriend}
+					className={classes.acceptButton}
 				>
 					Accept
 				</Button>
-				<Button variant='contained' size='small' onClick={handleRejectFriend}>
+				<Button
+					variant='contained'
+					size='small'
+					onClick={handleRejectFriend}
+					className={classes.deleteButton}
+				>
 					Cancel
 				</Button>
 			</div>
@@ -148,12 +197,13 @@ const FriendOptions = ({ user, friendsList, setFriendsList }) => {
 				variant='contained'
 				size='small'
 				onClick={handleCancelPendingOrDeleteFriend}
+				className={classes.deleteButton}
 			>
 				Remove
 			</Button>
 		);
 	}
-	return <div>{friendOption}</div>;
+	return friendOption;
 };
 
 FriendOptions.propTypes = {
