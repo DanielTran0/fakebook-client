@@ -3,14 +3,17 @@ import PropTypes from 'prop-types';
 
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Container from '@material-ui/core/Container';
+import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { makeStyles } from '@material-ui/core/styles';
 import { useSnackbar } from 'notistack';
 
 import PostCard from '../components/PostCard';
+import PostForm from '../components/forms/PostForm';
 
 import { postRequests } from '../util/axiosRequests';
+import capitalizeString from '../util/capitalizeString';
 import { userDataProp, setUserDataProp } from '../util/customPropTypes';
 
 const useStyles = makeStyles({
@@ -18,10 +21,18 @@ const useStyles = makeStyles({
 		display: 'flex',
 		justifyContent: 'center',
 	},
+	addPost: {
+		padding: '20px 0px',
+		marginBottom: 10,
+	},
+	bottomSpacing: {
+		marginBottom: 10,
+	},
 });
 
 const Timeline = ({ userData, setUserData }) => {
 	const { setUser, setToken } = setUserData;
+	const { firstName } = userData.user;
 	const [allPosts, setAllPosts] = useState([]);
 	const [skip, setSkip] = useState(0);
 	const [isLoading, setILoading] = useState(true);
@@ -84,6 +95,15 @@ const Timeline = ({ userData, setUserData }) => {
 
 	return (
 		<Container disableGutters={isSmallScreen} maxWidth='sm'>
+			<Paper className={classes.addPost}>
+				<Container>
+					<Typography variant='subtitle2' className={classes.bottomSpacing}>
+						Max image size of 1.5 MB
+					</Typography>
+					<PostForm name={capitalizeString(firstName)} />
+				</Container>
+			</Paper>
+
 			{allPosts.length === 0 && !isLoading && (
 				<Typography variant={isSmallScreen ? 'h6' : 'h5'} align='center'>
 					No Posts Available. Create one or add friends to view posts.

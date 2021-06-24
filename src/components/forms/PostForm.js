@@ -39,6 +39,7 @@ const PostForm = ({
 	setAllPosts,
 	isEdit,
 	handleActiveTab,
+	name,
 }) => {
 	const { _id, text } = post || {};
 	const [isNewPostSent, setIsNewPostSent] = useState(false);
@@ -54,12 +55,12 @@ const PostForm = ({
 	const classes = useStyles();
 
 	const handleFormChange = (e) => {
-		const { name, value, files } = e.target;
+		const { name: fieldName, value, files } = e.target;
 
-		if (name !== 'text') setImageFile(null);
-		if (name === 'postImage') return setImageFile(files[0]);
+		if (fieldName !== 'text') setImageFile(null);
+		if (fieldName === 'postImage') return setImageFile(files[0]);
 
-		return setFormValues({ ...formValues, [name]: value });
+		return setFormValues({ ...formValues, [fieldName]: value });
 	};
 
 	const checkFormForErrors = (responseError) => {
@@ -105,8 +106,9 @@ const PostForm = ({
 
 				newAllPosts[updatedPostIndex] = updatedPost;
 
-				setAllPosts(newAllPosts);
-				return handleModalClose();
+				if (handleModalClose) handleModalClose();
+
+				return setAllPosts(newAllPosts);
 			} catch (error) {
 				if (error.response)
 					return checkFormForErrors(error.response.data.errors);
@@ -122,13 +124,15 @@ const PostForm = ({
 			});
 
 			if (location.pathname !== '/') {
+				if (handleModalClose) handleModalClose();
+
 				handleActiveTab('home');
-				setIsNewPostSent(true);
-				return handleModalClose();
+				return setIsNewPostSent(true);
 			}
 
-			history.push('/login');
-			return handleModalClose();
+			if (handleModalClose) handleModalClose();
+
+			return history.push('/login');
 		} catch (error) {
 			if (error.response) return checkFormForErrors(error.response.data.errors);
 
@@ -148,7 +152,7 @@ const PostForm = ({
 
 			<TextField
 				variant='outlined'
-				label='Text'
+				label={isEdit ? 'Text' : `What's on your mind, ${name}?`}
 				name='text'
 				fullWidth
 				value={formValues.text}
@@ -228,20 +232,23 @@ const PostForm = ({
 };
 
 PostForm.propTypes = {
-	handleModalClose: PropTypes.func.isRequired,
+	handleModalClose: PropTypes.func,
 	post: PropTypes.shape(postProp),
 	allPosts: PropTypes.arrayOf(PropTypes.shape(postProp)),
 	setAllPosts: PropTypes.func,
 	isEdit: PropTypes.bool,
 	handleActiveTab: PropTypes.func,
+	name: PropTypes.string,
 };
 
 PostForm.defaultProps = {
+	handleModalClose: null,
 	post: null,
 	allPosts: null,
 	setAllPosts: null,
 	isEdit: false,
 	handleActiveTab: null,
+	name: null,
 };
 
 export default PostForm;

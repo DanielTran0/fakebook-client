@@ -15,20 +15,27 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
-import CloseIcon from '@material-ui/icons/Close';
 import Brightness2Icon from '@material-ui/icons/Brightness2';
+import CloseIcon from '@material-ui/icons/Close';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import GitHubIcon from '@material-ui/icons/GitHub';
 import SettingsIcon from '@material-ui/icons/Settings';
 
 import PostForm from './forms/PostForm';
 
-import { setUserDataProp, colourModeObjectProp } from '../util/customPropTypes';
+import capitalizeString from '../util/capitalizeString';
+
+import {
+	userDataProp,
+	setUserDataProp,
+	colourModeObjectProp,
+} from '../util/customPropTypes';
 
 const useStyles = makeStyles({
 	sideSpacing: {
 		marginRight: 10,
 	},
-	settings: {
+	menuLink: {
 		display: 'flex',
 		alignItems: 'center',
 	},
@@ -40,8 +47,14 @@ const useStyles = makeStyles({
 	},
 });
 
-const NavMenu = ({ setUserData, colourModeObject, handleActiveTab }) => {
+const NavMenu = ({
+	userData,
+	setUserData,
+	colourModeObject,
+	handleActiveTab,
+}) => {
 	const { setUser, setToken } = setUserData;
+	const { firstName } = userData.user;
 	const { colourMode, setColourMode } = colourModeObject;
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [menuAnchor, setMenuAnchor] = useState(null);
@@ -95,6 +108,7 @@ const NavMenu = ({ setUserData, colourModeObject, handleActiveTab }) => {
 					<PostForm
 						handleModalClose={handleModalClose}
 						handleActiveTab={handleActiveTab}
+						name={capitalizeString(firstName)}
 					/>
 				</CardContent>
 			</Card>
@@ -132,7 +146,7 @@ const NavMenu = ({ setUserData, colourModeObject, handleActiveTab }) => {
 						href='#/settings'
 						underline='none'
 						color='textPrimary'
-						className={classes.settings}
+						className={classes.menuLink}
 					>
 						<SettingsIcon className={classes.sideSpacing} />
 						Settings
@@ -142,6 +156,20 @@ const NavMenu = ({ setUserData, colourModeObject, handleActiveTab }) => {
 				<MenuItem onClick={handleDarkModeToggle}>
 					<Brightness2Icon className={classes.sideSpacing} />
 					Dark Mode
+				</MenuItem>
+
+				<MenuItem>
+					<Link
+						href='https://github.com/DanielTran0'
+						underline='none'
+						color='textPrimary'
+						target='_blank'
+						rel='noopener'
+						className={classes.menuLink}
+					>
+						<GitHubIcon className={classes.sideSpacing} />
+						GitHub
+					</Link>
 				</MenuItem>
 
 				<MenuItem onClick={handleLogOut}>
@@ -158,6 +186,7 @@ const NavMenu = ({ setUserData, colourModeObject, handleActiveTab }) => {
 };
 
 NavMenu.propTypes = {
+	userData: PropTypes.shape(userDataProp).isRequired,
 	setUserData: PropTypes.shape(setUserDataProp).isRequired,
 	colourModeObject: PropTypes.shape(colourModeObjectProp).isRequired,
 	handleActiveTab: PropTypes.func.isRequired,
