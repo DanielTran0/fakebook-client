@@ -18,7 +18,7 @@ import {
 } from './util/customPropTypes';
 
 const AuthenticatedRoutes = ({ userData, setUserData, colourModeObject }) => {
-	const [activeTab, setActiveTab] = useState('home');
+	const [activeTab, setActiveTab] = useState('');
 	const pageRoutes = [
 		{ page: Timeline, path: '/' },
 		{ page: AllUsers, path: '/users' },
@@ -63,11 +63,16 @@ const AuthenticatedRoutes = ({ userData, setUserData, colourModeObject }) => {
 							{...routeProps}
 							userData={userData}
 							setUserData={setUserData}
+							setActiveTab={setActiveTab}
 						/>
 					)}
 				/>
 
-				<Route component={NotFound} />
+				<Route
+					render={(routeProps) => (
+						<NotFound {...routeProps} setActiveTab={setActiveTab} />
+					)}
+				/>
 			</Switch>
 		</Navbar>
 	);

@@ -39,7 +39,7 @@ const useStyles = makeStyles({
 	},
 });
 
-const UserCard = ({ user, friendsList, setFriendsList, setActiveTab }) => {
+const UserCard = ({ user, friendsList, setFriendsList }) => {
 	const { firstName, lastName } = user;
 	const isSmallScreen = useMediaQuery('(max-width: 599px)');
 	const classes = useStyles();
@@ -57,9 +57,6 @@ const UserCard = ({ user, friendsList, setFriendsList, setActiveTab }) => {
 						underline='none'
 						color='textPrimary'
 						className={classes.cardInfo}
-						onClick={() => {
-							setActiveTab('');
-						}}
 					>
 						<Avatar
 							className={classes.sideSpacing}
@@ -84,7 +81,6 @@ const UserCard = ({ user, friendsList, setFriendsList, setActiveTab }) => {
 UserCard.propTypes = {
 	user: PropTypes.shape(userDataProp.user).isRequired,
 	friendsList: PropTypes.arrayOf(PropTypes.shape(friendsListProp)).isRequired,
-	setActiveTab: PropTypes.func.isRequired,
 	setFriendsList: PropTypes.func,
 };
 

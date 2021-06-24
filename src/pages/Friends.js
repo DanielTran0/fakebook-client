@@ -39,8 +39,9 @@ const Friends = ({ setUserData, setActiveTab }) => {
 			}
 		};
 
+		setActiveTab('friends');
 		fetchData();
-	}, [setUserData, enqueueSnackbar]);
+	}, [setUserData, enqueueSnackbar, setActiveTab]);
 
 	useEffect(() => {
 		const current = [];
@@ -61,7 +62,6 @@ const Friends = ({ setUserData, setActiveTab }) => {
 			user={friend.user}
 			friendsList={friendsList}
 			setFriendsList={setFriendsList}
-			setActiveTab={setActiveTab}
 			key={friend.user._id}
 		/>
 	));
@@ -71,7 +71,6 @@ const Friends = ({ setUserData, setActiveTab }) => {
 			user={friend.user}
 			friendsList={friendsList}
 			setFriendsList={setFriendsList}
-			setActiveTab={setActiveTab}
 			key={friend.user._id}
 		/>
 	));

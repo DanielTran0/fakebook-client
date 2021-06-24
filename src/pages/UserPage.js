@@ -57,7 +57,7 @@ const useStyles = makeStyles((theme) => {
 
 // TODO leak
 
-const UserPage = ({ match, userData, setUserData }) => {
+const UserPage = ({ match, userData, setUserData, setActiveTab }) => {
 	const { params } = match;
 	const [isLoading, setILoading] = useState(true);
 	const [userInfo, setUserInfo] = useState({});
@@ -88,8 +88,9 @@ const UserPage = ({ match, userData, setUserData }) => {
 			}
 		};
 
+		setActiveTab('');
 		fetchData();
-	}, [params]);
+	}, [params, setActiveTab]);
 
 	const handleTabChange = (e, newTabValue) => {
 		setTabValue(newTabValue);
@@ -166,6 +167,7 @@ UserPage.propTypes = {
 	}).isRequired,
 	userData: PropTypes.shape(userDataProp).isRequired,
 	setUserData: PropTypes.shape(setUserDataProp).isRequired,
+	setActiveTab: PropTypes.func.isRequired,
 };
 
 export default UserPage;

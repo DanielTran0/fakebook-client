@@ -53,16 +53,11 @@ const Navbar = ({
 	setUserData,
 	colourModeObject,
 	activeTab,
-	setActiveTab,
 }) => {
 	const { colourMode } = colourModeObject;
 	const { firstName, lastName } = userData.user;
 	const isSmallScreen = useMediaQuery('(max-width: 599px)');
 	const classes = useStyles();
-
-	const handleActiveTab = (tabName) => {
-		setActiveTab(tabName);
-	};
 
 	return (
 		<div>
@@ -75,12 +70,7 @@ const Navbar = ({
 				<Toolbar className={classes.center}>
 					<Tooltip title={<Typography variant='body2'>Home</Typography>}>
 						<Link href='#/'>
-							<IconButton
-								color={activeTab === 'home' ? 'primary' : 'default'}
-								onClick={() => {
-									handleActiveTab('home');
-								}}
-							>
+							<IconButton color={activeTab === 'home' ? 'primary' : 'default'}>
 								<HomeIcon fontSize={isSmallScreen ? 'default' : 'large'} />
 							</IconButton>
 						</Link>
@@ -90,9 +80,6 @@ const Navbar = ({
 						<Link href='#/friends'>
 							<IconButton
 								color={activeTab === 'friends' ? 'primary' : 'default'}
-								onClick={() => {
-									handleActiveTab('friends');
-								}}
 							>
 								<PeopleIcon fontSize={isSmallScreen ? 'default' : 'large'} />
 							</IconButton>
@@ -101,12 +88,7 @@ const Navbar = ({
 
 					<Tooltip title={<Typography variant='body2'>All Users</Typography>}>
 						<Link href='#/users'>
-							<IconButton
-								color={activeTab === 'users' ? 'primary' : 'default'}
-								onClick={() => {
-									handleActiveTab('users');
-								}}
-							>
+							<IconButton color={activeTab === 'users' ? 'primary' : 'default'}>
 								<PersonAddIcon fontSize={isSmallScreen ? 'default' : 'large'} />
 							</IconButton>
 						</Link>
@@ -114,12 +96,7 @@ const Navbar = ({
 
 					<Tooltip title={<Typography variant='body2'>Chat</Typography>}>
 						<Link href='#/chat'>
-							<IconButton
-								color={activeTab === 'chat' ? 'primary' : 'default'}
-								onClick={() => {
-									handleActiveTab('chat');
-								}}
-							>
+							<IconButton color={activeTab === 'chat' ? 'primary' : 'default'}>
 								<ChatIcon fontSize={isSmallScreen ? 'default' : 'large'} />
 							</IconButton>
 						</Link>
@@ -127,9 +104,6 @@ const Navbar = ({
 
 					<Tooltip
 						title={<Typography variant='body2'>Profile Page</Typography>}
-						onClick={() => {
-							handleActiveTab('');
-						}}
 					>
 						<Link
 							href={`#/user/${userData.user._id}`}
@@ -161,7 +135,6 @@ const Navbar = ({
 						userData={userData}
 						setUserData={setUserData}
 						colourModeObject={colourModeObject}
-						handleActiveTab={handleActiveTab}
 					/>
 				</Toolbar>
 			</AppBar>
@@ -177,7 +150,6 @@ Navbar.propTypes = {
 	setUserData: PropTypes.shape(setUserDataProp).isRequired,
 	colourModeObject: PropTypes.shape(colourModeObjectProp).isRequired,
 	activeTab: PropTypes.string.isRequired,
-	setActiveTab: PropTypes.func.isRequired,
 };
 
 export default Navbar;

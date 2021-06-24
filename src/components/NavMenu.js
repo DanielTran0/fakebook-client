@@ -47,12 +47,7 @@ const useStyles = makeStyles({
 	},
 });
 
-const NavMenu = ({
-	userData,
-	setUserData,
-	colourModeObject,
-	handleActiveTab,
-}) => {
+const NavMenu = ({ userData, setUserData, colourModeObject }) => {
 	const { setUser, setToken } = setUserData;
 	const { firstName } = userData.user;
 	const { colourMode, setColourMode } = colourModeObject;
@@ -107,7 +102,6 @@ const NavMenu = ({
 				<CardContent>
 					<PostForm
 						handleModalClose={handleModalClose}
-						handleActiveTab={handleActiveTab}
 						name={capitalizeString(firstName)}
 					/>
 				</CardContent>
@@ -138,7 +132,6 @@ const NavMenu = ({
 
 				<MenuItem
 					onClick={() => {
-						handleActiveTab('');
 						handleMenuClose();
 					}}
 				>
@@ -189,7 +182,6 @@ NavMenu.propTypes = {
 	userData: PropTypes.shape(userDataProp).isRequired,
 	setUserData: PropTypes.shape(setUserDataProp).isRequired,
 	colourModeObject: PropTypes.shape(colourModeObjectProp).isRequired,
-	handleActiveTab: PropTypes.func.isRequired,
 };
 
 export default NavMenu;

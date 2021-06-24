@@ -41,8 +41,6 @@ const Timeline = ({ userData, setUserData, setActiveTab }) => {
 	const classes = useStyles();
 
 	useEffect(() => {
-		setIsLoading(true);
-
 		const fetchData = async () => {
 			try {
 				const postsResponse = await postRequests.getUserAndFriendPosts(skip);
@@ -64,8 +62,10 @@ const Timeline = ({ userData, setUserData, setActiveTab }) => {
 			}
 		};
 
+		setIsLoading(true);
+		setActiveTab('home');
 		fetchData();
-	}, [skip, enqueueSnackbar, setUser, setToken]);
+	}, [skip, enqueueSnackbar, setUser, setToken, setActiveTab]);
 
 	useEffect(() => {
 		const handleScrollLoading = () => {
@@ -90,7 +90,6 @@ const Timeline = ({ userData, setUserData, setActiveTab }) => {
 			post={post}
 			allPosts={allPosts}
 			setAllPosts={setAllPosts}
-			setActiveTab={setActiveTab}
 		/>
 	));
 

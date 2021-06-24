@@ -54,16 +54,12 @@ const AllUsers = ({ userData, setUserData, setActiveTab }) => {
 			}
 		};
 
+		setActiveTab('users');
 		fetchData();
-	}, [userData, setUserData, enqueueSnackbar]);
+	}, [userData, setUserData, enqueueSnackbar, setActiveTab]);
 
 	const userCardComponents = users.map((user) => (
-		<UserCard
-			user={user}
-			key={user._id}
-			friendsList={friendsList}
-			setActiveTab={setActiveTab}
-		/>
+		<UserCard user={user} key={user._id} friendsList={friendsList} />
 	));
 
 	return (

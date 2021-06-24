@@ -42,7 +42,7 @@ const useStyles = makeStyles({
 	},
 });
 
-const Chatroom = ({ userData }) => {
+const Chatroom = ({ userData, setActiveTab }) => {
 	const { _id, firstName, lastName, profileImage } = userData.user;
 	const [messages, setMessages] = useState([]);
 	const [currentMessage, setCurrentMessage] = useState('');
@@ -51,6 +51,7 @@ const Chatroom = ({ userData }) => {
 	const classes = useStyles();
 
 	useEffect(() => {
+		setActiveTab('chat');
 		socket.connect();
 		socket.emit('joinRoom', { firstName, lastName, profileImage });
 		socket.on('currentUsers', (users) => {
@@ -70,7 +71,7 @@ const Chatroom = ({ userData }) => {
 		return () => {
 			socket.disconnect();
 		};
-	}, [_id, firstName, lastName, profileImage]);
+	}, [_id, firstName, lastName, profileImage, setActiveTab]);
 
 	const handleMessageChange = (e) => {
 		const { value } = e.target;
@@ -169,6 +170,9 @@ const Chatroom = ({ userData }) => {
 	);
 };
 
-Chatroom.propTypes = { userData: PropTypes.shape(userDataProp).isRequired };
+Chatroom.propTypes = {
+	userData: PropTypes.shape(userDataProp).isRequired,
+	setActiveTab: PropTypes.func.isRequired,
+};
 
 export default Chatroom;

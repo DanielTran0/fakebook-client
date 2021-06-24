@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import Container from '@material-ui/core/Container';
@@ -15,9 +15,13 @@ import UserUpdateForm from '../components/forms/UserUpdateForm';
 
 import { setUserDataProp } from '../util/customPropTypes';
 
-const Settings = ({ setUserData }) => {
+const Settings = ({ setUserData, setActiveTab }) => {
 	const [tabValue, setTabValue] = useState('0');
 	const isMobile = useMediaQuery('(max-width: 425px)');
+
+	useEffect(() => {
+		setActiveTab('');
+	}, [setActiveTab]);
 
 	const handleTabChange = (e, newTabValue) => {
 		setTabValue(newTabValue);
@@ -51,6 +55,7 @@ const Settings = ({ setUserData }) => {
 
 Settings.propTypes = {
 	setUserData: PropTypes.shape(setUserDataProp).isRequired,
+	setActiveTab: PropTypes.func.isRequired,
 };
 
 export default Settings;
