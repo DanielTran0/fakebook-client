@@ -10,8 +10,8 @@ import formatTime from '../util/formatTime';
 import setUserImageSource from '../util/setUserImageSource';
 import { userDataProp } from '../util/customPropTypes';
 
-const useStyles = makeStyles({
-	flex: { display: 'flex', marginBottom: 10 },
+const useStyles = makeStyles((theme) => ({
+	flex: { display: 'flex' },
 	flexColumn: {
 		display: 'flex',
 		flexDirection: 'column',
@@ -20,25 +20,39 @@ const useStyles = makeStyles({
 		alignSelf: 'flex-end',
 		height: 30,
 		width: 30,
-		marginRight: 20,
+		marginRight: 10,
 	},
 	textBackground: {
 		display: 'inline-block',
-		padding: '0px 10px',
-		background: '#545454',
-		color: 'white',
+		padding: '7px 13px',
+		borderRadius: 20,
+		background: (props) => {
+			if (props.isCurrentUser) return theme.palette.primary.main;
+			if (theme.palette.type === 'dark') return '#333';
+			return '#ddd';
+		},
+		color: (props) => {
+			if (props.isCurrentUser) return 'white';
+			if (theme.palette.type === 'dark') return 'white';
+			return 'black';
+		},
 	},
 	username: {
 		alignSelf: (props) => props.alignSelf,
+		textTransform: 'capitalize',
+		marginBottom: 3,
 	},
 	currentUserMessage: {
 		alignSelf: (props) => props.alignSelf,
 	},
-});
+}));
 
 const Message = ({ userInfo, message, date, isCurrentUser }) => {
 	const { firstName, lastName } = userInfo;
-	const styleProps = { alignSelf: isCurrentUser ? 'flex-end' : 'flex-start' };
+	const styleProps = {
+		alignSelf: isCurrentUser ? 'flex-end' : 'flex-start',
+		isCurrentUser,
+	};
 	const classes = useStyles(styleProps);
 
 	return (

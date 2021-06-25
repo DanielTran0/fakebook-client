@@ -6,9 +6,11 @@ import Avatar from '@material-ui/core/Avatar';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
+import Link from '@material-ui/core/Link';
 import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { makeStyles } from '@material-ui/core';
 
 import Message from '../components/Message';
@@ -19,11 +21,29 @@ import { userDataProp } from '../util/customPropTypes';
 
 const useStyles = makeStyles({
 	loading: { display: 'flex', justifyContent: 'center' },
+	bottomSpacing: {
+		marginBottom: 10,
+	},
+	paperPadding: {
+		padding: '15px 0',
+	},
+	capitalize: {
+		textTransform: 'capitalize',
+	},
+	unbold: {
+		fontWeight: 'normal',
+	},
+	userInfo: { display: 'flex', alignItems: 'center', marginTop: 10 },
+	avatar: {
+		width: (props) => props.avatarSize,
+		height: (props) => props.avatarSize,
+		marginRight: 15,
+	},
 	mainDisplay: {
 		display: 'flex',
 		flexDirection: 'column',
 		justifyContent: 'space-between',
-		height: 400,
+		height: (props) => props.displayHeight,
 	},
 	messageDisplay: {
 		display: 'flex',
@@ -33,14 +53,10 @@ const useStyles = makeStyles({
 	},
 	yourMessage: {
 		alignSelf: 'flex-end',
-		marginRight: 10,
+		marginTop: 10,
 	},
 	userMessage: {
-		marginLeft: 10,
-	},
-	userInfo: { display: 'flex', alignItems: 'center', marginBottom: 10 },
-	userImage: {
-		marginRight: 10,
+		marginTop: 10,
 	},
 });
 
@@ -51,12 +67,17 @@ const Chatroom = ({ userData, setActiveTab }) => {
 	const [allUsers, setAllUsers] = useState([]);
 	const [isLoading, setIsLoading] = useState(true);
 	const messageEndRef = useRef(null);
-	const classes = useStyles();
+	const isSmallScreen = useMediaQuery('(max-width: 599px)');
+	const styleProps = {
+		avatarSize: isSmallScreen ? 40 : 45,
+		displayHeight: isSmallScreen ? 350 : 550,
+	};
+	const classes = useStyles(styleProps);
 
 	useEffect(() => {
 		setActiveTab('chat');
 		socket.connect();
-		socket.emit('joinRoom', { firstName, lastName, profileImage });
+		socket.emit('joinRoom', { _id, firstName, lastName, profileImage });
 		socket.on('currentUsers', (users) => {
 			setAllUsers(users);
 		});
@@ -65,10 +86,6 @@ const Chatroom = ({ userData, setActiveTab }) => {
 			messageEndRef.current?.scrollIntoView({ behavior: 'smooth' });
 		});
 		setIsLoading(false);
-		// TODO remove
-		socket.onAny((event, ...args) => {
-			console.log(event, args);
-		});
 
 		return () => {
 			socket.disconnect();
@@ -95,38 +112,39 @@ const Chatroom = ({ userData, setActiveTab }) => {
 		return socket.emit('send message', messageObject);
 	};
 
-	const displayMessages = () => {
-		return messages.map((message) => {
-			return (
-				<div
-					className={
-						message.user._id === userData.user._id
-							? classes.yourMessage
-							: classes.userMessage
-					}
-					key={message._id}
-				>
-					<Message
-						userInfo={message.user}
-						message={message.text}
-						date={message.date}
-						isCurrentUser={message.user._id === userData.user._id}
-					/>
-				</div>
-			);
-		});
-	};
+	const messageComponents = messages.map((message) => (
+		<div
+			className={
+				message.user._id === userData.user._id
+					? classes.yourMessage
+					: classes.userMessage
+			}
+			key={message._id}
+		>
+			<Message
+				userInfo={message.user}
+				message={message.text}
+				date={message.date}
+				isCurrentUser={message.user._id === userData.user._id}
+			/>
+		</div>
+	));
 
-	const displayUsers = () => {
-		return allUsers.map((user) => (
-			<div className={classes.userInfo}>
-				<Avatar className={classes.userImage} src={setUserImageSource(user)} />
-				<Typography key={user.id}>
-					{user.firstName} {user.firstName}
-				</Typography>
-			</div>
-		));
-	};
+	const userComponents = allUsers.map((user) => (
+		<Link
+			href={`#/user/${user._id}`}
+			underline='none'
+			color='textPrimary'
+			className={classes.userInfo}
+			key={user._id}
+		>
+			<Avatar className={classes.avatar} src={setUserImageSource(user)} />
+
+			<Typography className={classes.capitalize}>
+				{user.firstName} {user.firstName}
+			</Typography>
+		</Link>
+	));
 
 	return isLoading ? (
 		<div className={classes.loading}>
@@ -134,28 +152,49 @@ const Chatroom = ({ userData, setActiveTab }) => {
 		</div>
 	) : (
 		<div>
-			<Typography variant='h4' align='center'>
+			<Typography
+				variant={isSmallScreen ? 'h5' : 'h4'}
+				align='center'
+				className={classes.bottomSpacing}
+			>
 				Chat
 			</Typography>
 
 			<Grid container>
-				<Grid item xs={12} sm={3}>
-					<Paper>
-						<Container>
-							<Typography variant='h6' align='center'>
-								Current People
-							</Typography>
-							{displayUsers()}
-						</Container>
-					</Paper>
+				<Grid item md={1} lg={2} xl={3} />
+
+				<Grid
+					item
+					xs={12}
+					md={4}
+					lg={3}
+					xl={2}
+					className={classes.bottomSpacing}
+				>
+					<Container maxWidth='xs'>
+						<Paper className={classes.paperPadding}>
+							<Container>
+								<Typography
+									variant={isSmallScreen ? 'h6' : 'h5'}
+									align='center'
+									className={classes.unbold}
+								>
+									Active People
+								</Typography>
+								{userComponents}
+							</Container>
+						</Paper>
+					</Container>
 				</Grid>
-				<Grid item xs={12} sm={9} md={6}>
+
+				<Grid item xs={12} md={7} lg={5} xl={3}>
 					<Container maxWidth='sm'>
 						<Paper className={classes.mainDisplay}>
-							<div className={classes.messageDisplay}>
-								{displayMessages()}
+							<Container className={classes.messageDisplay}>
+								{messageComponents}
 								<div ref={messageEndRef} />
-							</div>
+							</Container>
+
 							<div>
 								<form onSubmit={handleMessageSubmit}>
 									<TextField
@@ -172,7 +211,6 @@ const Chatroom = ({ userData, setActiveTab }) => {
 						</Paper>
 					</Container>
 				</Grid>
-				<Grid item xs={12} md={3} />
 			</Grid>
 		</div>
 	);

@@ -31,7 +31,7 @@ import { userDataProp, postProp } from '../util/customPropTypes';
 
 const useStyles = makeStyles({
 	postSpacing: {
-		marginBottom: 25,
+		marginBottom: 20,
 	},
 	capitalize: {
 		display: 'inline-block',

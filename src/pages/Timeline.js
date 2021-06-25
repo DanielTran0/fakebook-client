@@ -23,7 +23,7 @@ const useStyles = makeStyles({
 	},
 	addPost: {
 		padding: '20px 0px',
-		marginBottom: 10,
+		marginBottom: 20,
 	},
 	bottomSpacing: {
 		marginBottom: 10,
