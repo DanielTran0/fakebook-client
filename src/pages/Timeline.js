@@ -101,7 +101,12 @@ const Timeline = ({ userData, setUserData, setActiveTab }) => {
 						Max image size of 1.5 MB
 					</Typography>
 
-					<PostForm name={capitalizeString(firstName)} />
+					<PostForm
+						name={capitalizeString(firstName)}
+						setAllPosts={setAllPosts}
+						setSkip={setSkip}
+						isTimeline
+					/>
 				</Container>
 			</Paper>
 

@@ -93,7 +93,8 @@ const ModalSignUpForm = ({ setUserData }) => {
 			const { user, token } = loginResponse.data;
 
 			setUser(user);
-			return setToken(token);
+			setToken(token);
+			return setIsModalOpen(false);
 		} catch (error) {
 			if (error.response) return checkFormForErrors(error.response.data.errors);
 

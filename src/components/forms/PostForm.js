@@ -38,8 +38,8 @@ const PostForm = ({
 	allPosts,
 	setAllPosts,
 	isEdit,
-	handleActiveTab,
 	name,
+	isTimeline,
 }) => {
 	const { _id, text } = post || {};
 	const [isNewPostSent, setIsNewPostSent] = useState(false);
@@ -118,21 +118,30 @@ const PostForm = ({
 		}
 
 		try {
-			await postRequests.postNewPost({
+			const postResponse = await postRequests.postNewPost({
 				text: formValues.text,
 				postImage: imageFile,
 			});
 
-			if (location.pathname !== '/') {
-				if (handleModalClose) handleModalClose();
-
-				handleActiveTab('home');
-				return setIsNewPostSent(true);
+			if (isTimeline) {
+				setFormValues({ text: '' });
+				setImageFile(null);
+				return setAllPosts((oldAllPosts) => {
+					const newAllPosts = [...oldAllPosts];
+					newAllPosts.unshift(postResponse.data.post);
+					return newAllPosts;
+				});
 			}
 
-			if (handleModalClose) handleModalClose();
+			if (location.pathname !== '/') {
+				setIsNewPostSent(true);
+				return handleModalClose();
+			}
 
-			return history.push('/login');
+			console.log(2);
+
+			history.push('/login');
+			return handleModalClose();
 		} catch (error) {
 			if (error.response) return checkFormForErrors(error.response.data.errors);
 
@@ -241,8 +250,8 @@ PostForm.propTypes = {
 	allPosts: PropTypes.arrayOf(PropTypes.shape(postProp)),
 	setAllPosts: PropTypes.func,
 	isEdit: PropTypes.bool,
-	handleActiveTab: PropTypes.func,
 	name: PropTypes.string,
+	isTimeline: PropTypes.bool,
 };
 
 PostForm.defaultProps = {
@@ -251,8 +260,8 @@ PostForm.defaultProps = {
 	allPosts: null,
 	setAllPosts: null,
 	isEdit: false,
-	handleActiveTab: null,
 	name: null,
+	isTimeline: false,
 };
 
 export default PostForm;

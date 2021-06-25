@@ -11,8 +11,9 @@ import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { makeStyles } from '@material-ui/core/styles';
 
 import FacebookSignIn from '../components/FacebookSignIn';
-import SignInForm from '../components/forms/SignInForm';
 import ModalSignUpForm from '../components/forms/ModalSignUpForm';
+import SignInForm from '../components/forms/SignInForm';
+import TestUserLogin from '../components/TestUserLogin';
 
 import { userDataProp, setUserDataProp } from '../util/customPropTypes';
 
@@ -82,6 +83,8 @@ const Login = ({ userData, setUserData }) => {
 							<ModalSignUpForm setUserData={setUserData} />
 
 							<FacebookSignIn setUserData={setUserData} />
+
+							<TestUserLogin setUserData={setUserData} />
 						</Container>
 					</Paper>
 				</Grid>
