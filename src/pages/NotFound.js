@@ -5,14 +5,14 @@ import Typography from '@material-ui/core/Typography';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 
 const NotFound = ({ setActiveTab }) => {
-	const isMobile = useMediaQuery('(max-width: 425px)');
+	const isSmallScreen = useMediaQuery('(max-width: 599px)');
 
 	useEffect(() => {
 		setActiveTab('');
 	}, [setActiveTab]);
 
 	return (
-		<Typography variant={isMobile ? 'h4' : 'h2'} align='center'>
+		<Typography variant={isSmallScreen ? 'h5' : 'h4'} align='center'>
 			Page Not Found
 		</Typography>
 	);

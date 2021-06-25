@@ -7,23 +7,50 @@ import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
 import Container from '@material-ui/core/Container';
 import Divider from '@material-ui/core/Divider';
+import IconButton from '@material-ui/core/IconButton';
 import Modal from '@material-ui/core/Modal';
 import Typography from '@material-ui/core/Typography';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
+import { makeStyles } from '@material-ui/core/styles';
+import { useSnackbar } from 'notistack';
+
+import CloudUploadIcon from '@material-ui/icons/CloudUpload';
+import EditIcon from '@material-ui/icons/Edit';
 
 import { userRequests } from '../../util/axiosRequests';
 import { userDataProp, setUserDataProp } from '../../util/customPropTypes';
+
+const useStyles = makeStyles({
+	modal: {
+		position: 'absolute',
+		top: '50%',
+		left: '50%',
+		transform: `translate(-50%, -50%)`,
+	},
+	uploadButton: {
+		color: '#fff',
+	},
+	bottomSpacing: {
+		marginBottom: 10,
+	},
+});
 
 const ModalBackgroundForm = ({ userData, setUserData }) => {
 	const { _id, email, firstName, lastName } = userData.user;
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [imageFile, setImageFile] = useState(null);
 	const [formErrors, setFormErrors] = useState({});
+	const isSmallScreen = useMediaQuery('(max-width: 599px)');
+	const { enqueueSnackbar } = useSnackbar();
+	const classes = useStyles();
 
 	const handleModalOpen = () => {
 		setIsModalOpen(true);
 	};
 
 	const handleModalClose = () => {
+		setImageFile(null);
+		setFormErrors({});
 		setIsModalOpen(false);
 	};
 
@@ -77,44 +104,57 @@ const ModalBackgroundForm = ({ userData, setUserData }) => {
 			});
 			return setImageFile(null);
 		} catch (error) {
-			// TODO handle error
-			console.log(error.response);
-			return checkFormForErrors(error.response.data.errors);
+			if (error.response) return checkFormForErrors(error.response.data.errors);
+
+			return enqueueSnackbar(error.message, { variant: 'error' });
 		}
 	};
 
 	const form = (
-		<Container maxWidth='sm'>
+		<Container maxWidth='sm' className={classes.modal}>
 			<Card>
 				<CardHeader
-					title='Add a background image'
+					title='Add a Background'
 					subheader='Max image size of 1.5 MB'
 				/>
 
 				<Divider />
 
 				{formErrors && (
-					<Typography color='secondary'>{formErrors.general}</Typography>
+					<Typography color='error' align='center'>
+						{formErrors.general}
+					</Typography>
 				)}
 
 				<CardContent>
 					<form noValidate onSubmit={handleFormSubmit}>
-						<div>
-							<Button variant='contained' component='label' fullWidth>
-								Upload Image
+						<div className={classes.bottomSpacing}>
+							<Button
+								variant='contained'
+								component='label'
+								color='secondary'
+								startIcon={<CloudUploadIcon className={classes.uploadButton} />}
+								fullWidth
+								className={classes.bottomSpacing}
+							>
+								<Typography className={classes.uploadButton}>
+									Upload Image
+								</Typography>
 								<input
-									name='postImage'
+									name='userImage'
 									type='file'
 									accept='image/png, image/gif, image/jpeg'
 									onChange={handleFormChange}
 									hidden
 								/>
 							</Button>
-							<Typography noWrap>{imageFile && imageFile.name}</Typography>
+							<Typography noWrap align='center'>
+								{imageFile && imageFile.name}
+							</Typography>
 						</div>
 
 						<Button variant='contained' type='submit' color='primary' fullWidth>
-							Upload
+							<Typography>Upload</Typography>
 						</Button>
 					</form>
 				</CardContent>
@@ -123,10 +163,10 @@ const ModalBackgroundForm = ({ userData, setUserData }) => {
 	);
 
 	return (
-		<div className='modal-background'>
-			<Button variant='contained' onClick={handleModalOpen}>
-				Add Background
-			</Button>
+		<div>
+			<IconButton color='primary' onClick={handleModalOpen}>
+				<EditIcon fontSize={isSmallScreen ? 'default' : 'large'} />
+			</IconButton>
 
 			<Modal open={isModalOpen} onClose={handleModalClose}>
 				{form}

@@ -11,6 +11,7 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import FriendOptions from './FriendOptions';
 
+import useStateWithLocalStorage from '../util/localStorageHook';
 import setUserImageSource from '../util/setUserImageSource';
 import { userDataProp, friendsListProp } from '../util/customPropTypes';
 
@@ -41,6 +42,7 @@ const useStyles = makeStyles({
 
 const UserCard = ({ user, friendsList, setFriendsList }) => {
 	const { firstName, lastName } = user;
+	const [currentUser] = useStateWithLocalStorage('user', {});
 	const isSmallScreen = useMediaQuery('(max-width: 599px)');
 	const classes = useStyles();
 
@@ -67,11 +69,13 @@ const UserCard = ({ user, friendsList, setFriendsList }) => {
 						</Typography>
 					</Link>
 
-					<FriendOptions
-						user={user}
-						friendsList={friendsList}
-						setFriendsList={setFriendsList}
-					/>
+					{currentUser._id !== user._id && (
+						<FriendOptions
+							user={user}
+							friendsList={friendsList}
+							setFriendsList={setFriendsList}
+						/>
+					)}
 				</Container>
 			</Paper>
 		</Container>

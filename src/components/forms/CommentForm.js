@@ -3,14 +3,22 @@ import PropTypes from 'prop-types';
 
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
+import { makeStyles } from '@material-ui/core/styles';
+import { useSnackbar } from 'notistack';
 
 import { commentRequests } from '../../util/axiosRequests';
-import useStyles from '../../util/useStylesHook';
 import { postProp, commentProp } from '../../util/customPropTypes';
+
+const useStyles = makeStyles({
+	bottomSpacing: {
+		marginBottom: 10,
+	},
+});
 
 const CommentForm = ({ post, allPosts, setAllPosts, comment, isEdit }) => {
 	const [formValues, setFormValues] = useState({ text: '' });
 	const [formErrors, setFormErrors] = useState({});
+	const { enqueueSnackbar } = useSnackbar();
 	const classes = useStyles();
 
 	useEffect(() => {
@@ -67,7 +75,10 @@ const CommentForm = ({ post, allPosts, setAllPosts, comment, isEdit }) => {
 
 				return setAllPosts(newAllPosts);
 			} catch (error) {
-				return checkFormForErrors(error.response.data.errors);
+				if (error.response)
+					return checkFormForErrors(error.response.data.errors);
+
+				return enqueueSnackbar(error.message, { variant: 'error' });
 			}
 		}
 
@@ -88,14 +99,16 @@ const CommentForm = ({ post, allPosts, setAllPosts, comment, isEdit }) => {
 			setAllPosts(newAllPosts);
 			return setFormValues({ text: '' });
 		} catch (error) {
-			return checkFormForErrors(error.response.data.errors);
+			if (error.response) return checkFormForErrors(error.response.data.errors);
+
+			return enqueueSnackbar(error.message, { variant: 'error' });
 		}
 	};
 
 	return (
 		<form noValidate onSubmit={handleFormSubmit}>
 			{formErrors.general && (
-				<Typography className={classes.bottomSpacing} color='secondary'>
+				<Typography className={classes.bottomSpacing} color='error'>
 					{formErrors.general}
 				</Typography>
 			)}

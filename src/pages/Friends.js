@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
+import CircularProgress from '@material-ui/core/CircularProgress';
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
@@ -15,12 +16,17 @@ import { setUserDataProp } from '../util/customPropTypes';
 const useStyles = makeStyles({
 	bottomSpacing: { marginBottom: 15 },
 	unbold: { fontWeight: 'normal' },
+	center: {
+		display: 'flex',
+		justifyContent: 'center',
+	},
 });
 
 const Friends = ({ setUserData, setActiveTab }) => {
 	const [friendsList, setFriendsList] = useState([]);
 	const [currentFriends, setCurrentFriends] = useState([]);
 	const [pendingFriends, setPendingFriends] = useState([]);
+	const [isLoading, setIsLoading] = useState(true);
 	const isSmallScreen = useMediaQuery('(max-width: 599px)');
 	const { enqueueSnackbar } = useSnackbar();
 	const classes = useStyles();
@@ -33,6 +39,8 @@ const Friends = ({ setUserData, setActiveTab }) => {
 				friends.sort((a, b) =>
 					a.user.lastName.toUpperCase() > b.user.lastName.toUpperCase() ? 1 : -1
 				);
+
+				setIsLoading(false);
 				setFriendsList(friends);
 			} catch (error) {
 				enqueueSnackbar(error.message, { variant: 'error' });
@@ -75,7 +83,11 @@ const Friends = ({ setUserData, setActiveTab }) => {
 		/>
 	));
 
-	return (
+	return isLoading ? (
+		<div className={classes.center}>
+			<CircularProgress />
+		</div>
+	) : (
 		<Container maxWidth='sm'>
 			<div className={classes.bottomSpacing}>
 				<Typography

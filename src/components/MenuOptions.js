@@ -180,7 +180,7 @@ const MenuOptions = ({ isPost, post, allPosts, setAllPosts, comment }) => {
 							onClick={handleDeleteClick}
 							className={classes.deleteButton}
 						>
-							Delete
+							<Typography>Delete</Typography>
 						</Button>
 					</CardActions>
 				)}

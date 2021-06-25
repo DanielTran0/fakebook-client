@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { v4 as uuid } from 'uuid';
 
 import Avatar from '@material-ui/core/Avatar';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
@@ -17,6 +18,7 @@ import setUserImageSource from '../util/setUserImageSource';
 import { userDataProp } from '../util/customPropTypes';
 
 const useStyles = makeStyles({
+	loading: { display: 'flex', justifyContent: 'center' },
 	mainDisplay: {
 		display: 'flex',
 		flexDirection: 'column',
@@ -47,6 +49,7 @@ const Chatroom = ({ userData, setActiveTab }) => {
 	const [messages, setMessages] = useState([]);
 	const [currentMessage, setCurrentMessage] = useState('');
 	const [allUsers, setAllUsers] = useState([]);
+	const [isLoading, setIsLoading] = useState(true);
 	const messageEndRef = useRef(null);
 	const classes = useStyles();
 
@@ -57,12 +60,11 @@ const Chatroom = ({ userData, setActiveTab }) => {
 		socket.on('currentUsers', (users) => {
 			setAllUsers(users);
 		});
-
 		socket.on('message', (message) => {
 			setMessages((oldMessages) => [...oldMessages, message]);
 			messageEndRef.current?.scrollIntoView({ behavior: 'smooth' });
 		});
-
+		setIsLoading(false);
 		// TODO remove
 		socket.onAny((event, ...args) => {
 			console.log(event, args);
@@ -126,7 +128,11 @@ const Chatroom = ({ userData, setActiveTab }) => {
 		));
 	};
 
-	return (
+	return isLoading ? (
+		<div className={classes.loading}>
+			<CircularProgress />
+		</div>
+	) : (
 		<div>
 			<Typography variant='h4' align='center'>
 				Chat
@@ -134,12 +140,14 @@ const Chatroom = ({ userData, setActiveTab }) => {
 
 			<Grid container>
 				<Grid item xs={12} sm={3}>
-					<Container>
-						<Typography variant='h6' align='center'>
-							Current People
-						</Typography>
-						{displayUsers()}
-					</Container>
+					<Paper>
+						<Container>
+							<Typography variant='h6' align='center'>
+								Current People
+							</Typography>
+							{displayUsers()}
+						</Container>
+					</Paper>
 				</Grid>
 				<Grid item xs={12} sm={9} md={6}>
 					<Container maxWidth='sm'>

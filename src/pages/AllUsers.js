@@ -62,7 +62,11 @@ const AllUsers = ({ userData, setUserData, setActiveTab }) => {
 		<UserCard user={user} key={user._id} friendsList={friendsList} />
 	));
 
-	return (
+	return isLoading ? (
+		<div className={classes.center}>
+			<CircularProgress />
+		</div>
+	) : (
 		<Container maxWidth='sm'>
 			<Typography
 				variant={isSmallScreen ? 'h5' : 'h4'}
@@ -73,12 +77,6 @@ const AllUsers = ({ userData, setUserData, setActiveTab }) => {
 			</Typography>
 
 			{userCardComponents}
-
-			{isLoading && (
-				<div className={classes.center}>
-					<CircularProgress />
-				</div>
-			)}
 		</Container>
 	);
 };

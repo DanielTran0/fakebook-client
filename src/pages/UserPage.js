@@ -12,6 +12,7 @@ import TabPanel from '@material-ui/lab/TabPanel';
 import Typography from '@material-ui/core/Typography';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { makeStyles } from '@material-ui/core';
+import { useSnackbar } from 'notistack';
 
 import PostCard from '../components/PostCard';
 import UserCard from '../components/UserCard';
@@ -25,37 +26,44 @@ import {
 import setUserImageSource from '../util/setUserImageSource';
 import { userDataProp, setUserDataProp } from '../util/customPropTypes';
 
-const useStyles = makeStyles((theme) => {
-	return {
-		flex: {
-			display: 'flex',
-		},
-		capitalize: {
-			textTransform: 'capitalize',
-		},
-		center: {
-			margin: 'auto',
-		},
-		avatarLargeMobile: {
-			margin: 'auto',
-			marginTop: -theme.spacing(8),
-			width: theme.spacing(13),
-			height: theme.spacing(13),
-			marginBottom: theme.spacing(1),
-			border: '3px solid black',
-		},
-		background: {
-			position: 'relative',
-		},
-		imageButton: {
-			position: 'absolute',
-			bottom: '5%',
-			right: '2%',
-		},
-	};
-});
-
-// TODO leak
+const useStyles = makeStyles((theme) => ({
+	center: {
+		display: 'flex',
+		justifyContent: 'center',
+	},
+	imageBackgroundBody: {
+		display: 'flex',
+		flexDirection: 'column',
+	},
+	buttonAnchor: {
+		position: 'relative',
+		alignSelf: 'flex-end',
+	},
+	changeButton: {
+		display: 'inline-block',
+		position: 'absolute',
+		bottom: 0,
+		right: 0,
+	},
+	avatarAnchor: {
+		position: 'relative',
+		alignSelf: 'center',
+	},
+	avatar: {
+		position: 'absolute',
+		width: (props) => props.avatarSize,
+		height: (props) => props.avatarSize,
+		transform: `translate(-50%, -80%)`,
+	},
+	name: {
+		marginTop: (props) => props.nameMargin,
+		marginBottom: 10,
+		textTransform: 'capitalize',
+	},
+	paperBackground: {
+		background: theme.palette.type === 'dark' ? ' #222' : '#ddd',
+	},
+}));
 
 const UserPage = ({ match, userData, setUserData, setActiveTab }) => {
 	const { params } = match;
@@ -65,8 +73,13 @@ const UserPage = ({ match, userData, setUserData, setActiveTab }) => {
 	const [userFriends, setUserFriends] = useState([]);
 	const [currentUserFriends, setCurrentUserFriends] = useState([]);
 	const [tabValue, setTabValue] = useState('0');
-	const isMobile = useMediaQuery('(max-width: 425px)');
-	const classes = useStyles();
+	const isSmallScreen = useMediaQuery('(max-width: 599px)');
+	const { enqueueSnackbar } = useSnackbar();
+	const styleProps = {
+		avatarSize: isSmallScreen ? 75 : 150,
+		nameMargin: isSmallScreen ? 20 : 35,
+	};
+	const classes = useStyles(styleProps);
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -84,13 +97,13 @@ const UserPage = ({ match, userData, setUserData, setActiveTab }) => {
 				setCurrentUserFriends(response[3].data.friends);
 				setILoading(false);
 			} catch (error) {
-				console.log(error);
+				enqueueSnackbar(error.message, { variant: 'error' });
 			}
 		};
 
 		setActiveTab('');
 		fetchData();
-	}, [params, setActiveTab]);
+	}, [params, setActiveTab, enqueueSnackbar]);
 
 	const handleTabChange = (e, newTabValue) => {
 		setTabValue(newTabValue);
@@ -115,36 +128,49 @@ const UserPage = ({ match, userData, setUserData, setActiveTab }) => {
 	));
 
 	return isLoading ? (
-		<div className={classes.flex}>
-			<CircularProgress className={classes.center} />
+		<div className={classes.center}>
+			<CircularProgress />
 		</div>
 	) : (
-		<Container maxWidth='sm' disableGutters={isMobile}>
-			<div className={classes.background}>
+		<Container maxWidth='sm' disableGutters={isSmallScreen}>
+			<div className={classes.imageBackgroundBody}>
 				<img src={setUserImageSource(userInfo, true)} alt='background' />
 
-				{userData.user._id === userInfo._id && (
-					<div className={classes.imageButton}>
-						<ModalBackgroundForm
-							userData={userData}
-							setUserData={setUserData}
-						/>
-					</div>
-				)}
+				<div className={classes.buttonAnchor}>
+					{userData.user._id === userInfo._id && (
+						<div className={classes.changeButton}>
+							<ModalBackgroundForm
+								userData={userData}
+								setUserData={setUserData}
+							/>
+						</div>
+					)}
+				</div>
+
+				<div className={classes.avatarAnchor}>
+					<Avatar
+						className={classes.avatar}
+						src={setUserImageSource(userInfo)}
+					/>
+				</div>
 			</div>
 
-			<Avatar
-				className={classes.avatarLargeMobile}
-				src={setUserImageSource(userInfo)}
-			/>
-
-			<Typography className={classes.capitalize} variant='h6' align='center'>
+			<Typography
+				variant={isSmallScreen ? 'h5' : 'h4'}
+				align='center'
+				className={classes.name}
+			>
 				{userInfo.firstName} {userInfo.lastName}
 			</Typography>
 
-			<Paper>
+			<Paper className={classes.paperBackground}>
 				<TabContext value={tabValue}>
-					<Tabs value={tabValue} onChange={handleTabChange} centered>
+					<Tabs
+						value={tabValue}
+						onChange={handleTabChange}
+						indicatorColor='primary'
+						centered
+					>
 						<Tab label='Posts' value='0' />
 						<Tab label='Friends' value='1' />
 					</Tabs>
