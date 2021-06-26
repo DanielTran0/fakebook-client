@@ -98,7 +98,7 @@ const Timeline = ({ userData, setUserData, setActiveTab }) => {
 			<Paper className={classes.addPost}>
 				<Container>
 					<Typography variant='subtitle2' className={classes.bottomSpacing}>
-						Max image size of 1.5 MB
+						Max image size of 5 MB
 					</Typography>
 
 					<PostForm

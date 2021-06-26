@@ -89,7 +89,7 @@ const NavMenu = ({ userData, setUserData, colourModeObject }) => {
 			<Card>
 				<CardHeader
 					title='Create Post'
-					subheader='Max image size of 1.5 MB'
+					subheader='Max image size of 5 MB'
 					action={
 						<IconButton onClick={handleModalClose}>
 							<CloseIcon />
