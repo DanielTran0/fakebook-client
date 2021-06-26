@@ -23,7 +23,7 @@ import {
 	postRequests,
 	friendRequests,
 } from '../util/axiosRequests';
-import setUserImageSource from '../util/setUserImageSource';
+import setUserBackgroundSource from '../util/setUserBackgroundSource';
 import { userDataProp, setUserDataProp } from '../util/customPropTypes';
 
 const useStyles = makeStyles((theme) => ({
@@ -134,7 +134,7 @@ const UserPage = ({ match, userData, setUserData, setActiveTab }) => {
 	) : (
 		<Container maxWidth='sm' disableGutters={isSmallScreen}>
 			<div className={classes.imageBackgroundBody}>
-				<img src={setUserImageSource(userInfo, true)} alt='background' />
+				<img src={setUserBackgroundSource(userInfo)} alt='background' />
 
 				<div className={classes.buttonAnchor}>
 					{userData.user._id === userInfo._id && (
@@ -148,10 +148,7 @@ const UserPage = ({ match, userData, setUserData, setActiveTab }) => {
 				</div>
 
 				<div className={classes.avatarAnchor}>
-					<Avatar
-						className={classes.avatar}
-						src={setUserImageSource(userInfo)}
-					/>
+					<Avatar className={classes.avatar} src={userInfo.profileImageUrl} />
 				</div>
 			</div>
 

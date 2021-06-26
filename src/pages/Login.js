@@ -24,7 +24,7 @@ const useStyles = makeStyles({
 		marginTop: 40,
 		padding: '15px 0px',
 	},
-	marginBottom: {
+	bottomSpacing: {
 		marginBottom: 20,
 	},
 	width: {
@@ -75,10 +75,10 @@ const Login = ({ userData, setUserData }) => {
 			<Grid item xs={12} md={6}>
 				<Grid container justify={isLargeScreen ? 'flex-start' : 'center'}>
 					<Paper elevation={3} className={classes.forms}>
-						<Container maxWidth='xs'>
+						<Container maxWidth='xs' className={classes.bottomSpacing}>
 							<SignInForm setUserData={setUserData} />
 
-							<Divider className={classes.marginBottom} />
+							<Divider className={classes.bottomSpacing} />
 
 							<ModalSignUpForm setUserData={setUserData} />
 
@@ -86,6 +86,10 @@ const Login = ({ userData, setUserData }) => {
 
 							<TestUserLogin setUserData={setUserData} />
 						</Container>
+
+						<Typography variant='body1' align='center'>
+							Allow a few seconds for Heroku Dyno to start up for login
+						</Typography>
 					</Paper>
 				</Grid>
 			</Grid>

@@ -26,7 +26,6 @@ import LikeButton from './LikeButton';
 
 import useStateWithLocalStorage from '../util/localStorageHook';
 import formatDate from '../util/formatDate';
-import setUserImageSource from '../util/setUserImageSource';
 import { userDataProp, postProp } from '../util/customPropTypes';
 
 const useStyles = makeStyles({
@@ -59,7 +58,7 @@ const useStyles = makeStyles({
 });
 
 const PostCard = ({ userData, post, allPosts, setAllPosts }) => {
-	const { text, postImage, date, comments, likes, user: postUser } = post;
+	const { text, postImageUrl, date, comments, likes, user: postUser } = post;
 	const { user } = userData;
 	const [displayOptions] = useStateWithLocalStorage('displayOptions', {
 		showAddComment: true,
@@ -122,7 +121,7 @@ const PostCard = ({ userData, post, allPosts, setAllPosts }) => {
 			<CardHeader
 				avatar={
 					<Link href={`#/user/${postUser._id}`}>
-						<Avatar src={setUserImageSource(postUser)} />
+						<Avatar src={postUser.profileImageUrl} />
 					</Link>
 				}
 				title={
@@ -151,13 +150,7 @@ const PostCard = ({ userData, post, allPosts, setAllPosts }) => {
 				</Container>
 			)}
 
-			{postImage && (
-				// TODO change url
-				<img
-					src={`http://localhost:5000/static/images/posts/${postImage}`}
-					alt='post'
-				/>
-			)}
+			{postImageUrl && <img src={postImageUrl} alt='post' />}
 
 			{likes.length || comments.length ? (
 				<div className={classes.postInfo}>

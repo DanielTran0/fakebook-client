@@ -1,8 +1,12 @@
 import axios from 'axios';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const axiosInstance = axios.create({
-	// TODO replace url
-	baseURL: 'https://fakebook-api-daniel-tran.herokuapp.com/api',
+	baseURL: process.env.REACT_APP_API_URL
+		? `${process.env.REACT_APP_API_URL}/api`
+		: 'http://localhost:5000/api',
 });
 
 // User requests

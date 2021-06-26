@@ -12,7 +12,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import FriendOptions from './FriendOptions';
 
 import useStateWithLocalStorage from '../util/localStorageHook';
-import setUserImageSource from '../util/setUserImageSource';
 import { userDataProp, friendsListProp } from '../util/customPropTypes';
 
 const useStyles = makeStyles({
@@ -62,7 +61,7 @@ const UserCard = ({ user, friendsList, setFriendsList }) => {
 					>
 						<Avatar
 							className={classes.sideSpacing}
-							src={setUserImageSource(user)}
+							src={user.profileImageUrl}
 						/>
 						<Typography className={classes.capitalize} noWrap>
 							{firstName} {lastName}

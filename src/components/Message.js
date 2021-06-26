@@ -7,7 +7,6 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core';
 
 import formatTime from '../util/formatTime';
-import setUserImageSource from '../util/setUserImageSource';
 import { userDataProp } from '../util/customPropTypes';
 
 const useStyles = makeStyles((theme) => ({
@@ -58,7 +57,7 @@ const Message = ({ userInfo, message, date, isCurrentUser }) => {
 	return (
 		<div className={classes.flex}>
 			{!isCurrentUser && (
-				<Avatar className={classes.avatar} src={setUserImageSource(userInfo)} />
+				<Avatar className={classes.avatar} src={userInfo.profileImageUrl} />
 			)}
 
 			<div className={classes.flexColumn}>

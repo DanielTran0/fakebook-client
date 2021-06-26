@@ -18,7 +18,6 @@ import PersonAddIcon from '@material-ui/icons/PersonAdd';
 
 import NavMenu from './NavMenu';
 
-import setUserImageSource from '../util/setUserImageSource';
 import {
 	userDataProp,
 	setUserDataProp,
@@ -112,7 +111,7 @@ const Navbar = ({
 						>
 							<IconButton>
 								<Avatar
-									src={setUserImageSource(userData.user)}
+									src={userData.user.profileImageUrl}
 									className={
 										isSmallScreen ? classes.smallAvatar : classes.bigAvatar
 									}

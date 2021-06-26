@@ -16,7 +16,6 @@ import { makeStyles } from '@material-ui/core';
 import Message from '../components/Message';
 
 import socket from '../util/socket';
-import setUserImageSource from '../util/setUserImageSource';
 import { userDataProp } from '../util/customPropTypes';
 
 const useStyles = makeStyles({
@@ -139,7 +138,7 @@ const Chatroom = ({ userData, setActiveTab }) => {
 			className={classes.userInfo}
 			key={user._id}
 		>
-			<Avatar className={classes.avatar} src={setUserImageSource(user)} />
+			<Avatar className={classes.avatar} src={user.profileImageUrl} />
 
 			<Typography className={classes.capitalize}>
 				{user.firstName} {user.firstName}

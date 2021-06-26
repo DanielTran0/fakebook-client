@@ -14,7 +14,6 @@ import LikeButton from './LikeButton';
 
 import useStateWithLocalStorage from '../util/localStorageHook';
 import formatDate from '../util/formatDate';
-import setUserImageSource from '../util/setUserImageSource';
 import { userDataProp, postProp, commentProp } from '../util/customPropTypes';
 
 const useStyles = makeStyles((theme) => ({
@@ -86,7 +85,7 @@ const Comments = ({ userData, post, allPosts, setAllPosts, comment }) => {
 	return (
 		<Container className={classes.commentBody}>
 			<Link href={`#/user/${user._id}`}>
-				<Avatar src={setUserImageSource(user)} />
+				<Avatar src={user.profileImageUrl} />
 			</Link>
 
 			<div>

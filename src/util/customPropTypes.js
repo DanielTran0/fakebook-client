@@ -6,7 +6,8 @@ const userDataProp = {
 		email: PropTypes.string,
 		firstName: PropTypes.string,
 		lastName: PropTypes.string,
-		profileImage: PropTypes.string,
+		profileImageUrl: PropTypes.string,
+		backgroundImageUrl: PropTypes.string,
 	}).isRequired,
 	token: PropTypes.string.isRequired,
 };
@@ -19,7 +20,7 @@ const setUserDataProp = {
 const postProp = {
 	_id: PropTypes.string.isRequired,
 	text: PropTypes.string.isRequired,
-	postImage: PropTypes.string.isRequired,
+	postImageUrl: PropTypes.string.isRequired,
 	date: PropTypes.string.isRequired,
 	comments: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
 	likes: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
