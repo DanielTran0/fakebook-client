@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const axiosInstance = axios.create({
 	// TODO replace url
-	baseURL: 'http://localhost:5000/api',
+	baseURL: 'https://fakebook-api-daniel-tran.herokuapp.com/api',
 });
 
 // User requests
@@ -53,28 +53,29 @@ const putUpdateUser = (
 	});
 };
 
-// const deleteUser = (password) => {
-// 	return axiosInstance.delete('/users', { data: { password } });
-// };
+const deleteUser = (password) => {
+	return axiosInstance.delete('/users', { data: { password } });
+};
 
 const userRequests = {
 	getAllUsers,
 	getAnotherUser,
 	postNewUser,
 	putUpdateUser,
+	deleteUser,
 };
 
-// Session requests
-const postNewSession = (loginDetails) => {
-	return axiosInstance.post(`/sessions/email`, { ...loginDetails });
+// token requests
+const postNewToken = (loginDetails) => {
+	return axiosInstance.post(`/tokens/email`, { ...loginDetails });
 };
 
 const postFacebookLogin = () => {
-	return axiosInstance.post(`/sessions/facebook`);
+	return axiosInstance.post(`/tokens/facebook`);
 };
 
-const sessionRequests = {
-	postNewSession,
+const tokenRequests = {
+	postNewToken,
 	postFacebookLogin,
 };
 
@@ -187,7 +188,7 @@ const likeRequests = { putLikePost, putLikeComment };
 export default axiosInstance;
 export {
 	userRequests,
-	sessionRequests,
+	tokenRequests,
 	friendRequests,
 	postRequests,
 	commentRequests,

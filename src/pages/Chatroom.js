@@ -89,6 +89,7 @@ const Chatroom = ({ userData, setActiveTab }) => {
 
 		return () => {
 			socket.disconnect();
+			setMessages([]);
 		};
 	}, [_id, firstName, lastName, profileImage, setActiveTab]);
 

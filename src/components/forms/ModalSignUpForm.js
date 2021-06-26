@@ -13,7 +13,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import { useSnackbar } from 'notistack';
 
-import { sessionRequests, userRequests } from '../../util/axiosRequests';
+import { tokenRequests, userRequests } from '../../util/axiosRequests';
 import { setUserDataProp } from '../../util/customPropTypes';
 
 const useStyles = makeStyles({
@@ -86,7 +86,7 @@ const ModalSignUpForm = ({ setUserData }) => {
 		try {
 			await userRequests.postNewUser({ ...formValues });
 			const { email, password } = formValues;
-			const loginResponse = await sessionRequests.postNewSession({
+			const loginResponse = await tokenRequests.postNewToken({
 				email,
 				password,
 			});

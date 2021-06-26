@@ -7,7 +7,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import { useSnackbar } from 'notistack';
 
-import { sessionRequests } from '../../util/axiosRequests';
+import { tokenRequests } from '../../util/axiosRequests';
 import { setUserDataProp } from '../../util/customPropTypes';
 
 const useStyles = makeStyles({
@@ -60,7 +60,7 @@ const SignIn = ({ setUserData }) => {
 		if (checkFormForErrors()) return null;
 
 		try {
-			const loginResponse = await sessionRequests.postNewSession({
+			const loginResponse = await tokenRequests.postNewToken({
 				...formValues,
 			});
 			const { user, token } = loginResponse.data;

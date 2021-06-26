@@ -7,7 +7,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import { useSnackbar } from 'notistack';
 
-import { sessionRequests } from '../util/axiosRequests';
+import { tokenRequests } from '../util/axiosRequests';
 import { setUserDataProp } from '../util/customPropTypes';
 
 const useStyles = makeStyles({
@@ -28,7 +28,7 @@ const FacebookSignIn = ({ setUserData }) => {
 		setToken(response.accessToken);
 
 		try {
-			const userDataResponse = await sessionRequests.postFacebookLogin();
+			const userDataResponse = await tokenRequests.postFacebookLogin();
 			const { user } = userDataResponse.data;
 
 			return setUser(user);

@@ -138,11 +138,10 @@ const PostForm = ({
 				return handleModalClose();
 			}
 
-			console.log(2);
-
 			history.push('/login');
 			return handleModalClose();
 		} catch (error) {
+			console.log(error.response);
 			if (error.response) return checkFormForErrors(error.response.data.errors);
 
 			return enqueueSnackbar(error.message, { variant: 'error' });
