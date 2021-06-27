@@ -13,6 +13,7 @@ import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { makeStyles } from '@material-ui/core/styles';
 import { useSnackbar } from 'notistack';
 
+import CircularProgress from '@material-ui/core/CircularProgress';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 
 import useStateWithLocalStorage from '../../util/localStorageHook';
@@ -41,6 +42,7 @@ const UserUpdateForm = ({ setUserData }) => {
 	});
 	const [imageFile, setImageFile] = useState(null);
 	const [formErrors, setFormErrors] = useState({});
+	const [isLoading, setIsLoading] = useState(false);
 	const isSmallScreen = useMediaQuery('(max-width: 599px)');
 	const { enqueueSnackbar } = useSnackbar();
 	const classes = useStyles();
@@ -101,6 +103,7 @@ const UserUpdateForm = ({ setUserData }) => {
 
 	const handleFormSubmit = async (e) => {
 		e.preventDefault();
+		setIsLoading(true);
 		setFormErrors({});
 
 		if (checkFormForErrors()) return null;
@@ -125,6 +128,7 @@ const UserUpdateForm = ({ setUserData }) => {
 			});
 			setImageFile(null);
 			setUserData.setUser(updatedUser);
+			setIsLoading(false);
 			return enqueueSnackbar('Successfully updated account', {
 				variant: 'success',
 			});
@@ -302,8 +306,13 @@ const UserUpdateForm = ({ setUserData }) => {
 				type='submit'
 				color='primary'
 				fullWidth
+				disabled={isLoading}
 			>
-				Save Changes
+				{isLoading ? (
+					<CircularProgress color='secondary' />
+				) : (
+					<Typography>Save Changes</Typography>
+				)}
 			</Button>
 		</form>
 	);
