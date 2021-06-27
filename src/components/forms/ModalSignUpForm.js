@@ -14,6 +14,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import { useSnackbar } from 'notistack';
 
+import CircularProgress from '@material-ui/core/CircularProgress';
 import CloseIcon from '@material-ui/icons/Close';
 
 import { tokenRequests, userRequests } from '../../util/axiosRequests';
@@ -45,6 +46,7 @@ const ModalSignUpForm = ({ setUserData }) => {
 		passwordConfirmation: '',
 	});
 	const [formErrors, setFormErrors] = useState({});
+	const [isLoading, setIsLoading] = useState(false);
 	const { enqueueSnackbar } = useSnackbar();
 	const classes = useStyles();
 
@@ -82,9 +84,13 @@ const ModalSignUpForm = ({ setUserData }) => {
 
 	const handleFormSubmit = async (e) => {
 		e.preventDefault();
+		setIsLoading(true);
 		setFormErrors({});
 
-		if (checkFormForErrors()) return null;
+		if (checkFormForErrors()) {
+			setIsLoading(false);
+			return null;
+		}
 
 		try {
 			await userRequests.postNewUser({ ...formValues });
@@ -95,10 +101,14 @@ const ModalSignUpForm = ({ setUserData }) => {
 			});
 			const { user, token } = loginResponse.data;
 
+			setIsLoading(false);
 			setUser(user);
 			setToken(token);
-			return setIsModalOpen(false);
+			setIsModalOpen(false);
+			return enqueueSnackbar('Welcome to fakebook', { variant: 'success' });
 		} catch (error) {
+			setIsLoading(false);
+
 			if (error.response) return checkFormForErrors(error.response.data.errors);
 
 			return enqueueSnackbar(error.message, { variant: 'error' });
@@ -194,9 +204,14 @@ const ModalSignUpForm = ({ setUserData }) => {
 							variant='contained'
 							type='submit'
 							fullWidth
+							disabled={isLoading}
 							className={classes.button}
 						>
-							<Typography>Sign Up</Typography>
+							{isLoading ? (
+								<CircularProgress color='secondary' />
+							) : (
+								<Typography>Sign Up</Typography>
+							)}
 						</Button>
 					</form>
 				</CardContent>

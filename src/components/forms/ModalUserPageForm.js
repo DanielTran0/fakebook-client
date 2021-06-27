@@ -88,7 +88,10 @@ const ModalUserPageForm = ({ userData, setUserData, isProfile }) => {
 		setIsLoading(true);
 		setFormErrors({});
 
-		if (checkFormForErrors()) return null;
+		if (checkFormForErrors()) {
+			setIsLoading(false);
+			return null;
+		}
 
 		try {
 			const updateResponse = await userRequests.putUpdateUser(_id, {
@@ -118,6 +121,8 @@ const ModalUserPageForm = ({ userData, setUserData, isProfile }) => {
 			handleModalClose();
 			return setImageFile(null);
 		} catch (error) {
+			setIsLoading(false);
+
 			if (error.response) return checkFormForErrors(error.response.data.errors);
 
 			return enqueueSnackbar(error.message, { variant: 'error' });

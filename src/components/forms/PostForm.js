@@ -89,7 +89,10 @@ const PostForm = ({
 		setIsLoading(true);
 		setFormErrors({});
 
-		if (checkFormForErrors()) return null;
+		if (checkFormForErrors()) {
+			setIsLoading(false);
+			return null;
+		}
 
 		if (isEdit) {
 			try {
@@ -105,7 +108,10 @@ const PostForm = ({
 					(singlePost) => singlePost._id === _id
 				);
 
-				if (updatedPostIndex === -1) return null;
+				if (updatedPostIndex === -1) {
+					setIsLoading(false);
+					return null;
+				}
 
 				newAllPosts[updatedPostIndex] = updatedPost;
 

@@ -7,6 +7,8 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import { useSnackbar } from 'notistack';
 
+import CircularProgress from '@material-ui/core/CircularProgress';
+
 import { tokenRequests } from '../../util/axiosRequests';
 import { setUserDataProp } from '../../util/customPropTypes';
 
@@ -23,6 +25,7 @@ const SignIn = ({ setUserData }) => {
 	const { setUser, setToken } = setUserData;
 	const [formValues, setFormValues] = useState({ email: '', password: '' });
 	const [formErrors, setFormErrors] = useState({});
+	const [isLoading, setIsLoading] = useState(false);
 	const { enqueueSnackbar } = useSnackbar();
 	const classes = useStyles();
 
@@ -55,9 +58,13 @@ const SignIn = ({ setUserData }) => {
 
 	const handleFormSubmit = async (e) => {
 		e.preventDefault();
+		setIsLoading(true);
 		setFormErrors({});
 
-		if (checkFormForErrors()) return null;
+		if (checkFormForErrors()) {
+			setIsLoading(false);
+			return null;
+		}
 
 		try {
 			const loginResponse = await tokenRequests.postNewToken({
@@ -65,9 +72,12 @@ const SignIn = ({ setUserData }) => {
 			});
 			const { user, token } = loginResponse.data;
 
+			setIsLoading(false);
 			setUser(user);
 			return setToken(token);
 		} catch (error) {
+			setIsLoading(false);
+
 			if (error.response) return checkFormForErrors(error.response.data.errors);
 
 			return enqueueSnackbar(error.message, { variant: 'error' });
@@ -109,11 +119,16 @@ const SignIn = ({ setUserData }) => {
 				type='submit'
 				color='primary'
 				fullWidth
+				disabled={isLoading}
 				className={classes.bottomSpacing}
 			>
-				<Typography variant='h6' className={classes.unbold}>
-					Log In
-				</Typography>
+				{isLoading ? (
+					<CircularProgress color='secondary' />
+				) : (
+					<Typography variant='h6' className={classes.unbold}>
+						Log In
+					</Typography>
+				)}
 			</Button>
 		</form>
 	);

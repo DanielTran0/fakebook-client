@@ -7,6 +7,8 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import { useSnackbar } from 'notistack';
 
+import CircularProgress from '@material-ui/core/CircularProgress';
+
 import { tokenRequests } from '../util/axiosRequests';
 import { setUserDataProp } from '../util/customPropTypes';
 
@@ -19,12 +21,14 @@ const useStyles = makeStyles({
 
 const FacebookSignIn = ({ setUserData }) => {
 	const { setUser, setToken } = setUserData;
+	const [isLoading, setIsLoading] = useState(false);
 	const [counter, setCounter] = useState(0);
 	const { enqueueSnackbar } = useSnackbar();
 	const classes = useStyles();
 
 	const responseFacebook = async (response) => {
 		if (!response.id || counter === 1) return null;
+		setIsLoading(true);
 		setCounter(1);
 
 		setToken(response.accessToken);
@@ -33,8 +37,10 @@ const FacebookSignIn = ({ setUserData }) => {
 			const userDataResponse = await tokenRequests.postFacebookLogin();
 			const { user } = userDataResponse.data;
 
+			setIsLoading(false);
 			return setUser(user);
 		} catch (error) {
+			setIsLoading(false);
 			return enqueueSnackbar(error.message, { variant: 'error' });
 		}
 	};
@@ -49,9 +55,14 @@ const FacebookSignIn = ({ setUserData }) => {
 					variant='contained'
 					fullWidth
 					onClick={renderProps.onClick}
+					disabled={isLoading}
 					className={classes.button}
 				>
-					<Typography>Login With Facebook</Typography>
+					{isLoading ? (
+						<CircularProgress color='secondary' />
+					) : (
+						<Typography>Login With Facebook</Typography>
+					)}{' '}
 				</Button>
 			)}
 		/>
