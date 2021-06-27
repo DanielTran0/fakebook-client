@@ -15,6 +15,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { useSnackbar } from 'notistack';
 
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
+import CloseIcon from '@material-ui/icons/Close';
 import EditIcon from '@material-ui/icons/Edit';
 
 import { userRequests } from '../../util/axiosRequests';
@@ -115,7 +116,12 @@ const ModalBackgroundForm = ({ userData, setUserData }) => {
 			<Card>
 				<CardHeader
 					title='Add a Background'
-					subheader='Max image size of 1.5 MB'
+					subheader='Max image size of 5 MB'
+					action={
+						<IconButton onClick={handleModalClose}>
+							<CloseIcon />
+						</IconButton>
+					}
 				/>
 
 				<Divider />

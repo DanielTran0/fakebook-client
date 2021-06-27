@@ -60,7 +60,7 @@ const useStyles = makeStyles({
 });
 
 const Chatroom = ({ userData, setActiveTab }) => {
-	const { _id, firstName, lastName, profileImage } = userData.user;
+	const { _id, firstName, lastName, profileImageUrl } = userData.user;
 	const [messages, setMessages] = useState([]);
 	const [currentMessage, setCurrentMessage] = useState('');
 	const [allUsers, setAllUsers] = useState([]);
@@ -76,7 +76,7 @@ const Chatroom = ({ userData, setActiveTab }) => {
 	useEffect(() => {
 		setActiveTab('chat');
 		socket.connect();
-		socket.emit('joinRoom', { _id, firstName, lastName, profileImage });
+		socket.emit('joinRoom', { _id, firstName, lastName, profileImageUrl });
 		socket.on('currentUsers', (users) => {
 			setAllUsers(users);
 		});
@@ -90,7 +90,7 @@ const Chatroom = ({ userData, setActiveTab }) => {
 			socket.disconnect();
 			setMessages([]);
 		};
-	}, [_id, firstName, lastName, profileImage, setActiveTab]);
+	}, [_id, firstName, lastName, profileImageUrl, setActiveTab]);
 
 	const handleMessageChange = (e) => {
 		const { value } = e.target;
@@ -104,7 +104,7 @@ const Chatroom = ({ userData, setActiveTab }) => {
 
 		const messageObject = {
 			_id: uuid(),
-			user: { _id, firstName, lastName, profileImage },
+			user: { _id, firstName, lastName, profileImageUrl },
 			text: currentMessage,
 			date: Date.now(),
 		};
@@ -141,7 +141,7 @@ const Chatroom = ({ userData, setActiveTab }) => {
 			<Avatar className={classes.avatar} src={user.profileImageUrl} />
 
 			<Typography className={classes.capitalize}>
-				{user.firstName} {user.firstName}
+				{user.firstName} {user.lastName}
 			</Typography>
 		</Link>
 	));

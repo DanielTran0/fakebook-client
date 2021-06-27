@@ -55,6 +55,10 @@ const useStyles = makeStyles({
 			margin: 'auto',
 		},
 	},
+	postImage: {
+		display: 'flex',
+		justifyContent: 'center',
+	},
 });
 
 const PostCard = ({ userData, post, allPosts, setAllPosts }) => {
@@ -150,7 +154,11 @@ const PostCard = ({ userData, post, allPosts, setAllPosts }) => {
 				</Container>
 			)}
 
-			{postImageUrl && <img src={postImageUrl} alt='post' />}
+			{postImageUrl && (
+				<div className={classes.postImage}>
+					<img src={postImageUrl} alt='post' />
+				</div>
+			)}
 
 			{likes.length || comments.length ? (
 				<div className={classes.postInfo}>

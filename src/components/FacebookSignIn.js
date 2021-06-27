@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props';
 import PropTypes from 'prop-types';
 
@@ -19,11 +19,13 @@ const useStyles = makeStyles({
 
 const FacebookSignIn = ({ setUserData }) => {
 	const { setUser, setToken } = setUserData;
+	const [counter, setCounter] = useState(0);
 	const { enqueueSnackbar } = useSnackbar();
 	const classes = useStyles();
 
 	const responseFacebook = async (response) => {
-		if (!response.id) return null;
+		if (!response.id || counter === 1) return null;
+		setCounter(1);
 
 		setToken(response.accessToken);
 
