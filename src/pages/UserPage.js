@@ -16,7 +16,7 @@ import { useSnackbar } from 'notistack';
 
 import PostCard from '../components/PostCard';
 import UserCard from '../components/UserCard';
-import ModalBackgroundForm from '../components/forms/ModalBackgroundForm';
+import ModalUserPageForm from '../components/forms/ModalUserPageForm';
 
 import {
 	userRequests,
@@ -40,10 +40,9 @@ const useStyles = makeStyles((theme) => ({
 		alignSelf: 'flex-end',
 	},
 	changeButton: {
-		display: 'inline-block',
 		position: 'absolute',
-		bottom: 0,
-		right: 0,
+		bottom: -10,
+		right: -10,
 	},
 	avatarAnchor: {
 		position: 'relative',
@@ -56,6 +55,8 @@ const useStyles = makeStyles((theme) => ({
 		transform: `translate(-50%, -80%)`,
 	},
 	name: {
+		display: 'flex',
+		alignItems: 'center',
 		marginTop: (props) => props.nameMargin,
 		marginBottom: 10,
 		textTransform: 'capitalize',
@@ -139,7 +140,7 @@ const UserPage = ({ match, userData, setUserData, setActiveTab }) => {
 				<div className={classes.buttonAnchor}>
 					{userData.user._id === userInfo._id && (
 						<div className={classes.changeButton}>
-							<ModalBackgroundForm
+							<ModalUserPageForm
 								userData={userData}
 								setUserData={setUserData}
 							/>
@@ -152,13 +153,21 @@ const UserPage = ({ match, userData, setUserData, setActiveTab }) => {
 				</div>
 			</div>
 
-			<Typography
-				variant={isSmallScreen ? 'h5' : 'h4'}
-				align='center'
-				className={classes.name}
-			>
-				{userInfo.firstName} {userInfo.lastName}
-			</Typography>
+			<div className={classes.center}>
+				<Typography
+					variant={isSmallScreen ? 'h5' : 'h4'}
+					className={classes.name}
+				>
+					{userInfo.firstName} {userInfo.lastName}
+					{userData.user._id === userInfo._id && (
+						<ModalUserPageForm
+							userData={userData}
+							setUserData={setUserData}
+							isProfile
+						/>
+					)}
+				</Typography>
+			</div>
 
 			<Paper className={classes.paperBackground}>
 				<TabContext value={tabValue}>

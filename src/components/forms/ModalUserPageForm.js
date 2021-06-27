@@ -14,9 +14,10 @@ import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { makeStyles } from '@material-ui/core/styles';
 import { useSnackbar } from 'notistack';
 
+import AddAPhotoIcon from '@material-ui/icons/AddAPhoto';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import CloseIcon from '@material-ui/icons/Close';
-import EditIcon from '@material-ui/icons/Edit';
+import CameraAltIcon from '@material-ui/icons/CameraAlt';
 
 import { userRequests } from '../../util/axiosRequests';
 import { userDataProp, setUserDataProp } from '../../util/customPropTypes';
@@ -36,7 +37,7 @@ const useStyles = makeStyles({
 	},
 });
 
-const ModalBackgroundForm = ({ userData, setUserData }) => {
+const ModalUserPageForm = ({ userData, setUserData, isProfile }) => {
 	const { _id, email, firstName, lastName } = userData.user;
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [imageFile, setImageFile] = useState(null);
@@ -86,6 +87,33 @@ const ModalBackgroundForm = ({ userData, setUserData }) => {
 
 		if (checkFormForErrors()) return null;
 
+		if (isProfile) {
+			try {
+				const updateResponse = await userRequests.putUpdateUser(_id, {
+					email,
+					firstName,
+					lastName,
+					userImage: imageFile,
+					password: '',
+					newPassword: '',
+					newPasswordConfirmation: '',
+					isProfile,
+				});
+
+				handleModalClose();
+				setUserData.setUser({
+					...userData.user,
+					profileImageUrl: updateResponse.data.user.profileImageUrl,
+				});
+				return setImageFile(null);
+			} catch (error) {
+				if (error.response)
+					return checkFormForErrors(error.response.data.errors);
+
+				return enqueueSnackbar(error.message, { variant: 'error' });
+			}
+		}
+
 		try {
 			const updateResponse = await userRequests.putUpdateUser(_id, {
 				email,
@@ -101,7 +129,7 @@ const ModalBackgroundForm = ({ userData, setUserData }) => {
 			handleModalClose();
 			setUserData.setUser({
 				...userData.user,
-				backgroundImage: updateResponse.data.backgroundImage,
+				backgroundImageUrl: updateResponse.data.backgroundImageUrl,
 			});
 			return setImageFile(null);
 		} catch (error) {
@@ -115,7 +143,7 @@ const ModalBackgroundForm = ({ userData, setUserData }) => {
 		<Container maxWidth='sm' className={classes.modal}>
 			<Card>
 				<CardHeader
-					title='Add a Background'
+					title={isProfile ? 'Add a Profile Image' : 'Add a Background'}
 					subheader='Max image size of 5 MB'
 					action={
 						<IconButton onClick={handleModalClose}>
@@ -171,7 +199,11 @@ const ModalBackgroundForm = ({ userData, setUserData }) => {
 	return (
 		<div>
 			<IconButton color='primary' onClick={handleModalOpen}>
-				<EditIcon fontSize={isSmallScreen ? 'default' : 'large'} />
+				{isProfile ? (
+					<CameraAltIcon fontSize={isSmallScreen ? 'default' : 'large'} />
+				) : (
+					<AddAPhotoIcon fontSize={isSmallScreen ? 'default' : 'large'} />
+				)}
 			</IconButton>
 
 			<Modal open={isModalOpen} onClose={handleModalClose}>
@@ -181,9 +213,14 @@ const ModalBackgroundForm = ({ userData, setUserData }) => {
 	);
 };
 
-ModalBackgroundForm.propTypes = {
+ModalUserPageForm.propTypes = {
 	userData: PropTypes.shape(userDataProp).isRequired,
 	setUserData: PropTypes.shape(setUserDataProp).isRequired,
+	isProfile: PropTypes.bool,
 };
 
-export default ModalBackgroundForm;
+ModalUserPageForm.defaultProps = {
+	isProfile: false,
+};
+
+export default ModalUserPageForm;
