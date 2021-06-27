@@ -203,14 +203,14 @@ const ModalSignUpForm = ({ setUserData }) => {
 						<Button
 							variant='contained'
 							type='submit'
+							color='secondary'
 							fullWidth
 							disabled={isLoading}
-							className={classes.button}
 						>
 							{isLoading ? (
 								<CircularProgress color='secondary' />
 							) : (
-								<Typography>Sign Up</Typography>
+								<Typography className={classes.buttonText}>Sign Up</Typography>
 							)}
 						</Button>
 					</form>
