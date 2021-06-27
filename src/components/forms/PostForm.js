@@ -14,6 +14,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import { useSnackbar } from 'notistack';
 
+import CircularProgress from '@material-ui/core/CircularProgress';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import SaveOutlinedIcon from '@material-ui/icons/SaveOutlined';
 
@@ -49,6 +50,7 @@ const PostForm = ({
 	});
 	const [imageFile, setImageFile] = useState(null);
 	const [formErrors, setFormErrors] = useState({});
+	const [isLoading, setIsLoading] = useState(false);
 	const history = useHistory();
 	const location = useLocation();
 	const { enqueueSnackbar } = useSnackbar();
@@ -84,6 +86,7 @@ const PostForm = ({
 
 	const handleFormSubmit = async (e) => {
 		e.preventDefault();
+		setIsLoading(true);
 		setFormErrors({});
 
 		if (checkFormForErrors()) return null;
@@ -108,8 +111,11 @@ const PostForm = ({
 
 				if (handleModalClose) handleModalClose();
 
+				setIsLoading(false);
 				return setAllPosts(newAllPosts);
 			} catch (error) {
+				setIsLoading(false);
+
 				if (error.response)
 					return checkFormForErrors(error.response.data.errors);
 
@@ -126,6 +132,7 @@ const PostForm = ({
 			if (isTimeline) {
 				setFormValues({ text: '' });
 				setImageFile(null);
+				setIsLoading(false);
 				return setAllPosts((oldAllPosts) => {
 					const newAllPosts = [...oldAllPosts];
 					newAllPosts.unshift(postResponse.data.post);
@@ -135,13 +142,16 @@ const PostForm = ({
 
 			if (location.pathname !== '/') {
 				setIsNewPostSent(true);
+				setIsLoading(false);
 				return handleModalClose();
 			}
 
+			setIsLoading(false);
 			history.push('/login');
 			return handleModalClose();
 		} catch (error) {
-			console.log(error.response);
+			setIsLoading(false);
+
 			if (error.response) return checkFormForErrors(error.response.data.errors);
 
 			return enqueueSnackbar(error.message, { variant: 'error' });
@@ -236,8 +246,13 @@ const PostForm = ({
 				color='primary'
 				startIcon={isEdit && <SaveOutlinedIcon />}
 				fullWidth
+				disabled={isLoading}
 			>
-				<Typography>{isEdit ? 'Save' : 'Post'}</Typography>
+				{isLoading ? (
+					<CircularProgress color='secondary' />
+				) : (
+					<Typography>{isEdit ? 'Save' : 'Post'}</Typography>
+				)}
 			</Button>
 		</form>
 	);

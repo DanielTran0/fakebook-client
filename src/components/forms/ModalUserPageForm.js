@@ -15,6 +15,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { useSnackbar } from 'notistack';
 
 import AddAPhotoIcon from '@material-ui/icons/AddAPhoto';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import CloseIcon from '@material-ui/icons/Close';
 import CameraAltIcon from '@material-ui/icons/CameraAlt';
@@ -42,6 +43,7 @@ const ModalUserPageForm = ({ userData, setUserData, isProfile }) => {
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [imageFile, setImageFile] = useState(null);
 	const [formErrors, setFormErrors] = useState({});
+	const [isLoading, setIsLoading] = useState(false);
 	const isSmallScreen = useMediaQuery('(max-width: 599px)');
 	const { enqueueSnackbar } = useSnackbar();
 	const classes = useStyles();
@@ -83,6 +85,7 @@ const ModalUserPageForm = ({ userData, setUserData, isProfile }) => {
 
 	const handleFormSubmit = async (e) => {
 		e.preventDefault();
+		setIsLoading(true);
 		setFormErrors({});
 
 		if (checkFormForErrors()) return null;
@@ -100,8 +103,6 @@ const ModalUserPageForm = ({ userData, setUserData, isProfile }) => {
 				isProfile,
 			});
 
-			handleModalClose();
-
 			if (isProfile)
 				setUserData.setUser({
 					...userData.user,
@@ -113,6 +114,8 @@ const ModalUserPageForm = ({ userData, setUserData, isProfile }) => {
 					backgroundImageUrl: updateResponse.data.backgroundImageUrl,
 				});
 
+			setIsLoading(false);
+			handleModalClose();
 			return setImageFile(null);
 		} catch (error) {
 			if (error.response) return checkFormForErrors(error.response.data.errors);
@@ -169,8 +172,18 @@ const ModalUserPageForm = ({ userData, setUserData, isProfile }) => {
 							</Typography>
 						</div>
 
-						<Button variant='contained' type='submit' color='primary' fullWidth>
-							<Typography>Upload</Typography>
+						<Button
+							variant='contained'
+							type='submit'
+							color='primary'
+							disabled={isLoading}
+							fullWidth
+						>
+							{isLoading ? (
+								<CircularProgress color='secondary' />
+							) : (
+								<Typography>Upload</Typography>
+							)}
 						</Button>
 					</form>
 				</CardContent>
