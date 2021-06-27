@@ -87,33 +87,6 @@ const ModalUserPageForm = ({ userData, setUserData, isProfile }) => {
 
 		if (checkFormForErrors()) return null;
 
-		if (isProfile) {
-			try {
-				const updateResponse = await userRequests.putUpdateUser(_id, {
-					email,
-					firstName,
-					lastName,
-					userImage: imageFile,
-					password: '',
-					newPassword: '',
-					newPasswordConfirmation: '',
-					isProfile,
-				});
-
-				handleModalClose();
-				setUserData.setUser({
-					...userData.user,
-					profileImageUrl: updateResponse.data.user.profileImageUrl,
-				});
-				return setImageFile(null);
-			} catch (error) {
-				if (error.response)
-					return checkFormForErrors(error.response.data.errors);
-
-				return enqueueSnackbar(error.message, { variant: 'error' });
-			}
-		}
-
 		try {
 			const updateResponse = await userRequests.putUpdateUser(_id, {
 				email,
@@ -123,14 +96,23 @@ const ModalUserPageForm = ({ userData, setUserData, isProfile }) => {
 				password: '',
 				newPassword: '',
 				newPasswordConfirmation: '',
-				isBackground: true,
+				isBackground: !isProfile,
+				isProfile,
 			});
 
 			handleModalClose();
-			setUserData.setUser({
-				...userData.user,
-				backgroundImageUrl: updateResponse.data.backgroundImageUrl,
-			});
+
+			if (isProfile)
+				setUserData.setUser({
+					...userData.user,
+					profileImageUrl: updateResponse.data.user.profileImageUrl,
+				});
+			else
+				setUserData.setUser({
+					...userData.user,
+					backgroundImageUrl: updateResponse.data.backgroundImageUrl,
+				});
+
 			return setImageFile(null);
 		} catch (error) {
 			if (error.response) return checkFormForErrors(error.response.data.errors);
