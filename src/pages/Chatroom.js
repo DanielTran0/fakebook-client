@@ -203,6 +203,7 @@ const Chatroom = ({ userData, setActiveTab }) => {
 										name='message'
 										size='small'
 										fullWidth
+										autoComplete='off'
 										value={currentMessage}
 										onChange={handleMessageChange}
 									/>
