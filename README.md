@@ -14,6 +14,10 @@ From the site name it is obvious what this site is trying to mimic. With that be
 * Hover effects on the number of likes to see which users liked the post (click for mobile).
 * User comments and adding comments can be toggled on the post itself or set permanently to the styled wished for in the settings.
 
+Example:  
+![image](https://user-images.githubusercontent.com/76408883/123696216-7dc12200-d829-11eb-9612-ba5024556e77.png)
+
+
 ### User page
 * Can add or change profile and background images (only if owner).
 * Can view, edit (only if owner), comment on all posts belonging to that specific user.
