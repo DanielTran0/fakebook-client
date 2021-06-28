@@ -150,7 +150,7 @@ const NavMenu = ({ userData, setUserData, colourModeObject }) => {
 					<Brightness2Icon className={classes.sideSpacing} />
 					Dark Mode
 				</MenuItem>
-
+				{/* 
 				<MenuItem>
 					<Link
 						href='https://github.com/DanielTran0'
@@ -163,7 +163,7 @@ const NavMenu = ({ userData, setUserData, colourModeObject }) => {
 						<GitHubIcon className={classes.sideSpacing} />
 						GitHub
 					</Link>
-				</MenuItem>
+				</MenuItem> */}
 
 				<MenuItem onClick={handleLogOut}>
 					<ExitToAppIcon className={classes.sideSpacing} />
