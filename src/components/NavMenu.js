@@ -18,7 +18,6 @@ import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import Brightness2Icon from '@material-ui/icons/Brightness2';
 import CloseIcon from '@material-ui/icons/Close';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import GitHubIcon from '@material-ui/icons/GitHub';
 import SettingsIcon from '@material-ui/icons/Settings';
 
 import PostForm from './forms/PostForm';
@@ -150,6 +149,7 @@ const NavMenu = ({ userData, setUserData, colourModeObject }) => {
 					<Brightness2Icon className={classes.sideSpacing} />
 					Dark Mode
 				</MenuItem>
+
 				{/* 
 				<MenuItem>
 					<Link
