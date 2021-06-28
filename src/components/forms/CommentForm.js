@@ -106,7 +106,7 @@ const CommentForm = ({ post, allPosts, setAllPosts, comment, isEdit }) => {
 	};
 
 	return (
-		<form noValidate onSubmit={handleFormSubmit}>
+		<form noValidate onSubmit={handleFormSubmit} autoComplete='off'>
 			{formErrors.general && (
 				<Typography className={classes.bottomSpacing} color='error'>
 					{formErrors.general}

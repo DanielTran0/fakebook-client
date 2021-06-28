@@ -196,14 +196,13 @@ const Chatroom = ({ userData, setActiveTab }) => {
 							</Container>
 
 							<div>
-								<form onSubmit={handleMessageSubmit}>
+								<form onSubmit={handleMessageSubmit} autoComplete='off'>
 									<TextField
 										variant='outlined'
 										label='Enter Message'
 										name='message'
 										size='small'
 										fullWidth
-										autoComplete='off'
 										value={currentMessage}
 										onChange={handleMessageChange}
 									/>

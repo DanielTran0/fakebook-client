@@ -151,7 +151,7 @@ const ModalUserPageForm = ({ userData, setUserData, isProfile }) => {
 				)}
 
 				<CardContent>
-					<form noValidate onSubmit={handleFormSubmit}>
+					<form noValidate onSubmit={handleFormSubmit} autoComplete='off'>
 						<div className={classes.bottomSpacing}>
 							<Button
 								variant='contained'

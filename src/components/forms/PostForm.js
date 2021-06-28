@@ -167,7 +167,7 @@ const PostForm = ({
 	if (isNewPostSent) return <Redirect to='/' />;
 
 	return (
-		<form noValidate onSubmit={handleFormSubmit}>
+		<form noValidate onSubmit={handleFormSubmit} autoComplete='off'>
 			{formErrors.general && (
 				<Typography
 					color='error'
