@@ -52,7 +52,7 @@ const useStyles = makeStyles((theme) => ({
 		position: 'absolute',
 		width: (props) => props.avatarSize,
 		height: (props) => props.avatarSize,
-		transform: `translate(-50%, -80%)`,
+		transform: `translate(-50%, -50%)`,
 	},
 	name: {
 		display: 'flex',
@@ -78,7 +78,7 @@ const UserPage = ({ match, userData, setUserData, setActiveTab }) => {
 	const { enqueueSnackbar } = useSnackbar();
 	const styleProps = {
 		avatarSize: isSmallScreen ? 75 : 150,
-		nameMargin: isSmallScreen ? 20 : 35,
+		nameMargin: isSmallScreen ? 35 : 85,
 	};
 	const classes = useStyles(styleProps);
 
