@@ -12,9 +12,13 @@ import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import MenuOptions from './MenuOptions';
 import LikeButton from './LikeButton';
 
-import useStateWithLocalStorage from '../util/localStorageHook';
 import formatDate from '../util/formatDate';
-import { userDataProp, postProp, commentProp } from '../util/customPropTypes';
+import {
+	userDataProp,
+	postProp,
+	commentProp,
+	colourModeObjectProp,
+} from '../util/customPropTypes';
 
 const useStyles = makeStyles((theme) => ({
 	commentBody: {
@@ -73,9 +77,16 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-const Comments = ({ userData, post, allPosts, setAllPosts, comment }) => {
+const Comments = ({
+	userData,
+	post,
+	allPosts,
+	setAllPosts,
+	comment,
+	colourModeObject,
+}) => {
 	const { user, text, date, likes } = comment;
-	const [colourMode] = useStateWithLocalStorage('colourMode', 'light');
+	const { colourMode } = colourModeObject;
 	const styleProps = {
 		backgroundColorText: colourMode === 'light' ? '#dedede' : '#555',
 		backgroundColorLike: colourMode === 'light' ? '#ededed' : '#999',
@@ -149,6 +160,7 @@ Comments.propTypes = {
 	allPosts: PropTypes.arrayOf(PropTypes.shape(postProp)).isRequired,
 	setAllPosts: PropTypes.func.isRequired,
 	comment: PropTypes.shape(commentProp).isRequired,
+	colourModeObject: PropTypes.shape(colourModeObjectProp).isRequired,
 };
 
 export default Comments;

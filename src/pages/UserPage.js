@@ -24,7 +24,11 @@ import {
 	friendRequests,
 } from '../util/axiosRequests';
 import setUserBackgroundSource from '../util/setUserBackgroundSource';
-import { userDataProp, setUserDataProp } from '../util/customPropTypes';
+import {
+	userDataProp,
+	setUserDataProp,
+	colourModeObjectProp,
+} from '../util/customPropTypes';
 
 const useStyles = makeStyles((theme) => ({
 	center: {
@@ -66,7 +70,13 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-const UserPage = ({ match, userData, setUserData, setActiveTab }) => {
+const UserPage = ({
+	match,
+	userData,
+	setUserData,
+	setActiveTab,
+	colourModeObject,
+}) => {
 	const { params } = match;
 	const [isLoading, setILoading] = useState(true);
 	const [userInfo, setUserInfo] = useState({});
@@ -117,6 +127,7 @@ const UserPage = ({ match, userData, setUserData, setActiveTab }) => {
 			post={post}
 			allPosts={userPosts}
 			setAllPosts={setUserPosts}
+			colourModeObject={colourModeObject}
 		/>
 	));
 
@@ -200,6 +211,7 @@ UserPage.propTypes = {
 	userData: PropTypes.shape(userDataProp).isRequired,
 	setUserData: PropTypes.shape(setUserDataProp).isRequired,
 	setActiveTab: PropTypes.func.isRequired,
+	colourModeObject: PropTypes.shape(colourModeObjectProp).isRequired,
 };
 
 export default UserPage;

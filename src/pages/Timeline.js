@@ -14,7 +14,11 @@ import PostForm from '../components/forms/PostForm';
 
 import { postRequests } from '../util/axiosRequests';
 import capitalizeString from '../util/capitalizeString';
-import { userDataProp, setUserDataProp } from '../util/customPropTypes';
+import {
+	userDataProp,
+	setUserDataProp,
+	colourModeObjectProp,
+} from '../util/customPropTypes';
 
 const useStyles = makeStyles({
 	center: {
@@ -30,7 +34,12 @@ const useStyles = makeStyles({
 	},
 });
 
-const Timeline = ({ userData, setUserData, setActiveTab }) => {
+const Timeline = ({
+	userData,
+	setUserData,
+	setActiveTab,
+	colourModeObject,
+}) => {
 	const { setUser, setToken } = setUserData;
 	const { firstName } = userData.user;
 	const [allPosts, setAllPosts] = useState([]);
@@ -90,6 +99,7 @@ const Timeline = ({ userData, setUserData, setActiveTab }) => {
 			post={post}
 			allPosts={allPosts}
 			setAllPosts={setAllPosts}
+			colourModeObject={colourModeObject}
 		/>
 	));
 
@@ -131,6 +141,7 @@ Timeline.propTypes = {
 	userData: PropTypes.shape(userDataProp).isRequired,
 	setUserData: PropTypes.shape(setUserDataProp).isRequired,
 	setActiveTab: PropTypes.func.isRequired,
+	colourModeObject: PropTypes.shape(colourModeObjectProp).isRequired,
 };
 
 export default Timeline;

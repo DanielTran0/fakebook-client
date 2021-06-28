@@ -37,6 +37,7 @@ const AuthenticatedRoutes = ({ userData, setUserData, colourModeObject }) => {
 					userData={userData}
 					setUserData={setUserData}
 					setActiveTab={setActiveTab}
+					colourModeObject={colourModeObject}
 				/>
 			)}
 			key={pageRoute.path}
@@ -64,6 +65,7 @@ const AuthenticatedRoutes = ({ userData, setUserData, colourModeObject }) => {
 							userData={userData}
 							setUserData={setUserData}
 							setActiveTab={setActiveTab}
+							colourModeObject={colourModeObject}
 						/>
 					)}
 				/>

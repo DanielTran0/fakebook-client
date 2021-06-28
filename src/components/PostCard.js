@@ -26,7 +26,11 @@ import LikeButton from './LikeButton';
 
 import useStateWithLocalStorage from '../util/localStorageHook';
 import formatDate from '../util/formatDate';
-import { userDataProp, postProp } from '../util/customPropTypes';
+import {
+	userDataProp,
+	postProp,
+	colourModeObjectProp,
+} from '../util/customPropTypes';
 
 const useStyles = makeStyles({
 	postSpacing: {
@@ -61,7 +65,13 @@ const useStyles = makeStyles({
 	},
 });
 
-const PostCard = ({ userData, post, allPosts, setAllPosts }) => {
+const PostCard = ({
+	userData,
+	post,
+	allPosts,
+	setAllPosts,
+	colourModeObject,
+}) => {
 	const { text, postImageUrl, date, comments, likes, user: postUser } = post;
 	const { user } = userData;
 	const [displayOptions] = useStateWithLocalStorage('displayOptions', {
@@ -102,6 +112,7 @@ const PostCard = ({ userData, post, allPosts, setAllPosts }) => {
 			allPosts={allPosts}
 			setAllPosts={setAllPosts}
 			comment={comment}
+			colourModeObject={colourModeObject}
 			key={comment._id}
 		/>
 	));
@@ -239,6 +250,7 @@ PostCard.propTypes = {
 	post: PropTypes.shape(postProp).isRequired,
 	allPosts: PropTypes.arrayOf(PropTypes.shape(postProp)).isRequired,
 	setAllPosts: PropTypes.func.isRequired,
+	colourModeObject: PropTypes.shape(colourModeObjectProp).isRequired,
 };
 
 export default PostCard;
