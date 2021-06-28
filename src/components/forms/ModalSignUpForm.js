@@ -200,6 +200,10 @@ const ModalSignUpForm = ({ setUserData }) => {
 							className={classes.bottomSpacing}
 						/>
 
+						<Typography align='center' className={classes.bottomSpacing}>
+							Password: Min Length 5, 1 Capital Letter, 1 Number
+						</Typography>
+
 						<Button
 							variant='contained'
 							type='submit'
