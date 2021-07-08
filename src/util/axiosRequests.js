@@ -74,8 +74,12 @@ const postNewToken = (loginDetails) => {
 	return axiosInstance.post(`/tokens/email`, { ...loginDetails });
 };
 
-const postFacebookLogin = () => {
-	return axiosInstance.post(`/tokens/facebook`);
+const postFacebookLogin = (token) => {
+	return axiosInstance.post(
+		`/tokens/facebook`,
+		{},
+		{ headers: { Authorization: `Bearer ${token}` } }
+	);
 };
 
 const tokenRequests = {

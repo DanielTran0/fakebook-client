@@ -10,7 +10,7 @@ import { useSnackbar } from 'notistack';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 import { tokenRequests } from '../util/axiosRequests';
-import { userDataProp, setUserDataProp } from '../util/customPropTypes';
+import { setUserDataProp } from '../util/customPropTypes';
 
 const useStyles = makeStyles({
 	button: {
@@ -19,23 +19,26 @@ const useStyles = makeStyles({
 	},
 });
 
-const FacebookSignIn = ({ userData, setUserData }) => {
+const FacebookSignIn = ({ setUserData }) => {
 	const { setUser, setToken } = setUserData;
 	const [isLoading, setIsLoading] = useState(false);
 	const { enqueueSnackbar } = useSnackbar();
 	const classes = useStyles();
 
 	const responseFacebook = async (response) => {
-		if (!response.id || userData.token) return null;
+		if (!response.id) return null;
+
 		setIsLoading(true);
-		setToken(response.accessToken);
 
 		try {
-			const userDataResponse = await tokenRequests.postFacebookLogin();
+			const userDataResponse = await tokenRequests.postFacebookLogin(
+				response.accessToken
+			);
 			const { user } = userDataResponse.data;
 
 			setIsLoading(false);
-			return setUser(user);
+			setUser(user);
+			return setToken(response.accessToken);
 		} catch (error) {
 			setIsLoading(false);
 			return enqueueSnackbar(error.message, { variant: 'error' });
@@ -59,7 +62,7 @@ const FacebookSignIn = ({ userData, setUserData }) => {
 						<CircularProgress color='secondary' />
 					) : (
 						<Typography>Login With Facebook</Typography>
-					)}{' '}
+					)}
 				</Button>
 			)}
 		/>
@@ -67,7 +70,6 @@ const FacebookSignIn = ({ userData, setUserData }) => {
 };
 
 FacebookSignIn.propTypes = {
-	userData: PropTypes.shape(userDataProp).isRequired,
 	setUserData: PropTypes.shape(setUserDataProp).isRequired,
 };
 
