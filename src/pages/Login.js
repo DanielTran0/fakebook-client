@@ -82,7 +82,7 @@ const Login = ({ userData, setUserData }) => {
 
 							<ModalSignUpForm setUserData={setUserData} />
 
-							<FacebookSignIn setUserData={setUserData} />
+							<FacebookSignIn userData={userData} setUserData={setUserData} />
 
 							<TestUserLogin setUserData={setUserData} />
 						</Container>

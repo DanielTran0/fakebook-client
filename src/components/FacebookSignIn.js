@@ -10,7 +10,7 @@ import { useSnackbar } from 'notistack';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 import { tokenRequests } from '../util/axiosRequests';
-import { setUserDataProp } from '../util/customPropTypes';
+import { userDataProp, setUserDataProp } from '../util/customPropTypes';
 
 const useStyles = makeStyles({
 	button: {
@@ -19,18 +19,15 @@ const useStyles = makeStyles({
 	},
 });
 
-const FacebookSignIn = ({ setUserData }) => {
+const FacebookSignIn = ({ userData, setUserData }) => {
 	const { setUser, setToken } = setUserData;
 	const [isLoading, setIsLoading] = useState(false);
-	const [counter, setCounter] = useState(0);
 	const { enqueueSnackbar } = useSnackbar();
 	const classes = useStyles();
 
 	const responseFacebook = async (response) => {
-		if (!response.id || counter === 1) return null;
+		if (!response.id || userData.token) return null;
 		setIsLoading(true);
-		setCounter(1);
-
 		setToken(response.accessToken);
 
 		try {
@@ -70,6 +67,7 @@ const FacebookSignIn = ({ setUserData }) => {
 };
 
 FacebookSignIn.propTypes = {
+	userData: PropTypes.shape(userDataProp).isRequired,
 	setUserData: PropTypes.shape(setUserDataProp).isRequired,
 };
 
